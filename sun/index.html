@@ -2,12 +2,13 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>太阳系天体运动模拟器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>太阳系天体运动模拟器 v1.0.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
-    <script>LA.init({id:"3NJ6qob9tWWEj2g3",ck:"3NJ6qob9tWWEj2g3",autoTrack:true,hashMode:true})</script>
     <script>
         tailwind.config = {
             theme: {
@@ -39,64 +40,100 @@
             .control-btn {
                 @apply bg-primary/20 hover:bg-primary/40 text-white p-2 rounded-full transition-all duration-300;
             }
+            .mobile-control {
+                @apply bg-white/10 backdrop-blur-md text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 active:bg-white/20;
+            }
+            @media (max-width: 768px) {
+                .mobile-hidden { display: none !important; }
+                .mobile-full { height: 100vh !important; }
+                .mobile-control-panel {
+                    @apply flex-col gap-2 p-2;
+                }
+                .mobile-control-row {
+                    @apply flex justify-between items-center w-full;
+                }
+            }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-dark to-dark/90 text-light min-h-screen">
-    <header class="container mx-auto px-4 py-6 flex justify-between items-center">
-        <h1 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-white">
-            <i class="fa fa-globe mr-2"></i>太阳系天体运动模拟器
+<body class="bg-gradient-to-br from-dark to-dark/90 text-light min-h-screen" id="mainBody">
+    <header class="container mx-auto px-4 py-2 md:py-6 flex justify-between items-center" id="mainHeader">
+        <h1 class="text-[clamp(1rem,4vw,2.5rem)] font-bold text-white">
+            <i class="fa fa-sun-o mr-1 md:mr-2 text-yellow-400"></i><span class="hidden sm:inline">太阳系天体运动模拟器</span><span class="sm:hidden">太阳系</span>
         </h1>
         <div class="flex gap-2">
             <button id="fullscreenBtn" class="control-btn" title="全屏模式">
                 <i class="fa fa-expand"></i>
             </button>
-            <button id="infoBtn" class="control-btn" title="天体信息">
-                <i class="fa fa-info-circle"></i>
+            <button id="infoBtn" class="control-btn" title="显示/隐藏信息">
+                <i class="fa fa-eye"></i>
             </button>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-6">
+    <main class="container mx-auto px-4 py-2 md:py-6" id="mainContent">
         <!-- 模拟器主体区域 -->
-        <div class="relative w-full h-[70vh] bg-dark/50 rounded-xl overflow-hidden border border-white/10 shadow-xl mb-6">
-            <canvas id="solarSystem" class="w-full h-full"></canvas>
+        <div class="relative w-full h-[70vh] md:h-[70vh] bg-dark/50 rounded-xl overflow-hidden border border-white/10 shadow-xl mb-6" id="simulatorContainer">
+            <canvas id="solarSystem" class="w-full h-full" touch-action="none"></canvas>
             
             <!-- 控制面板 -->
-            <div class="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-center gap-3 bg-dark/60 backdrop-blur-md rounded-lg p-3 border border-white/10">
-                <button id="pauseBtn" class="bg-secondary hover:bg-secondary/80 text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center">
-                    <i class="fa fa-pause mr-2"></i>暂停
+            <!-- 全屏退出按钮 -->
+            <div class="absolute top-4 right-4 hidden" id="fullscreenExitBtn">
+                <button class="bg-red-500/80 hover:bg-red-600 text-white p-3 rounded-full transition-all duration-300 shadow-lg border border-red-400/50">
+                    <i class="fa fa-compress text-lg"></i>
                 </button>
-                <button id="resetBtn" class="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center">
-                    <i class="fa fa-refresh mr-2"></i>重置
+            </div>
+            
+            <!-- 工具栏切换按钮 -->
+            <div class="absolute top-4 left-4 hidden" id="toolbarToggleBtn">
+                <button class="bg-blue-500/80 hover:bg-blue-600 text-white p-3 rounded-full transition-all duration-300 shadow-lg backdrop-blur-md border border-blue-400/50">
+                    <i class="fa fa-sliders text-lg"></i>
                 </button>
+            </div>
+            
+            <!-- 控制面板 -->
+            <div class="absolute bottom-2 md:bottom-4 left-2 md:left-4 right-2 md:right-4 flex flex-wrap items-center justify-center gap-2 md:gap-3 bg-dark/80 backdrop-blur-md rounded-lg p-2 md:p-3 border border-white/10 mobile-control-panel transition-all duration-300" id="controlPanel">
+                <div class="mobile-control-row md:contents">
+                    <button id="pauseBtn" class="mobile-control md:bg-orange-500 md:hover:bg-orange-600 md:px-4 md:py-2 flex items-center shadow-lg">
+                        <i class="fa fa-pause mr-1 md:mr-2"></i><span class="hidden md:inline">暂停</span>
+                    </button>
+                    <button id="resetBtn" class="mobile-control md:bg-blue-500 md:hover:bg-blue-600 md:px-4 md:py-2 flex items-center shadow-lg">
+                        <i class="fa fa-undo mr-1 md:mr-2"></i><span class="hidden md:inline">重置</span>
+                    </button>
+                </div>
                 
-                <div class="flex items-center gap-2">
-                    <label for="speedRange" class="text-sm">速度:</label>
+                <div class="mobile-control-row md:flex md:items-center md:gap-2">
+                    <label for="speedRange" class="text-xs md:text-sm flex items-center">
+                        <i class="fa fa-tachometer mr-1 text-green-400"></i>速度:
+                    </label>
                     <input type="range" id="speedRange" min="0.1" max="5" step="0.1" value="1" 
-                        class="w-32 accent-primary">
-                    <span id="speedValue" class="text-sm">1x</span>
+                        class="w-20 md:w-32 accent-green-500">
+                    <span id="speedValue" class="text-xs md:text-sm font-mono bg-green-500/20 px-2 py-1 rounded">1x</span>
                 </div>
                 
-                <div class="flex items-center gap-2">
-                    <label for="zoomRange" class="text-sm">缩放:</label>
-                    <input type="range" id="zoomRange" min="0.5" max="2" step="0.1" value="1" 
-                        class="w-32 accent-primary">
-                    <span id="zoomValue" class="text-sm">1x</span>
+                <div class="mobile-control-row md:flex md:items-center md:gap-2">
+                    <label for="zoomRange" class="text-xs md:text-sm flex items-center">
+                        <i class="fa fa-search mr-1 text-purple-400"></i>缩放:
+                    </label>
+                    <input type="range" id="zoomRange" min="0.5" max="3" step="0.1" value="1" 
+                        class="w-20 md:w-32 accent-purple-500">
+                    <span id="zoomValue" class="text-xs md:text-sm font-mono bg-purple-500/20 px-2 py-1 rounded">1x</span>
                 </div>
                 
-                <div class="flex items-center gap-2">
-                    <label for="labelsToggle" class="text-sm">显示标签:</label>
+                <div class="mobile-control-row md:flex md:items-center md:gap-2">
+                    <label for="labelsToggle" class="text-xs md:text-sm flex items-center">
+                        <i class="fa fa-tag mr-1 text-yellow-400"></i>标签:
+                    </label>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="labelsToggle" class="sr-only peer" checked>
-                        <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                        <div class="w-8 h-4 md:w-9 md:h-5 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[1px] md:after:top-[2px] after:left-[1px] md:after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 md:after:h-4 md:after:w-4 after:transition-all peer-checked:bg-yellow-500 shadow-inner"></div>
                     </label>
                 </div>
             </div>
         </div>
 
         <!-- 行星信息卡片 -->
-        <div id="planetInfo" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div id="planetInfo" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
             <div class="info-card">
                 <h3 class="text-lg font-bold mb-2 flex items-center">
                     <div class="w-5 h-5 rounded-full bg-[#ff7d00] mr-2"></div>太阳
@@ -124,22 +161,22 @@
         </div>
 
         <!-- 教学内容 -->
-        <div class="bg-dark/30 rounded-xl p-6 border border-white/10 mb-6">
-            <h2 class="text-xl font-bold mb-4 flex items-center">
+        <div class="bg-dark/30 rounded-xl p-4 md:p-6 border border-white/10 mb-4 md:mb-6" id="educationContent">
+            <h2 class="text-lg md:text-xl font-bold mb-3 md:mb-4 flex items-center">
                 <i class="fa fa-book mr-2"></i>天体运动科普知识
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div>
-                    <h3 class="text-lg font-semibold mb-2">太阳系的组成</h3>
-                    <p class="text-gray-300 mb-3">太阳系是以太阳为中心，由八大行星、矮行星、卫星和无数的小行星、彗星等组成的天体系统。八大行星按照离太阳由近及远的顺序为：水星、金星、地球、火星、木星、土星、天王星和海王星。</p>
+                    <h3 class="text-base md:text-lg font-semibold mb-2">太阳系的组成</h3>
+                    <p class="text-gray-300 mb-3 text-sm md:text-base">太阳系是以太阳为中心，由八大行星、矮行星、卫星和无数的小行星、彗星等组成的天体系统。八大行星按照离太阳由近及远的顺序为：水星、金星、地球、火星、木星、土星、天王星和海王星。</p>
                     
-                    <h3 class="text-lg font-semibold mb-2">行星运动规律</h3>
-                    <p class="text-gray-300 mb-3">行星围绕太阳运行的轨道是椭圆形的，太阳位于椭圆的一个焦点上。离太阳越近的行星，公转周期越短；离太阳越远的行星，公转周期越长。</p>
+                    <h3 class="text-base md:text-lg font-semibold mb-2">行星运动规律</h3>
+                    <p class="text-gray-300 mb-3 text-sm md:text-base">行星围绕太阳运行的轨道是椭圆形的，太阳位于椭圆的一个焦点上。离太阳越近的行星，公转周期越短；离太阳越远的行星，公转周期越长。</p>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-2">开普勒定律</h3>
-                    <p class="text-gray-300 mb-3">德国天文学家开普勒发现了行星运动的三大定律：</p>
-                    <ol class="list-decimal list-inside text-gray-300 space-y-1">
+                    <h3 class="text-base md:text-lg font-semibold mb-2">开普勒定律</h3>
+                    <p class="text-gray-300 mb-3 text-sm md:text-base">德国天文学家开普勒发现了行星运动的三大定律：</p>
+                    <ol class="list-decimal list-inside text-gray-300 space-y-1 text-sm md:text-base">
                         <li>轨道定律：行星绕太阳运行的轨道是椭圆，太阳位于椭圆的一个焦点上。</li>
                         <li>面积定律：行星与太阳的连线在相等时间内扫过相等的面积。</li>
                         <li>周期定律：行星绕太阳运行周期的平方与轨道半长轴的立方成正比。</li>
@@ -149,8 +186,8 @@
         </div>
     </main>
 
-    <footer class="container mx-auto px-4 py-6 text-center text-gray-500 text-sm">
-        <p>太阳系天体运动模拟器 &copy; 2025 | 为低年级科学课堂设计</p>
+    <footer class="container mx-auto px-4 py-4 md:py-6 text-center text-gray-500 text-xs md:text-sm" id="mainFooter">
+        <p>太阳系天体运动模拟器 v1.0.1 &copy; 2025 | 为低年级科学课堂设计</p>
     </footer>
 
     <script>
@@ -188,12 +225,13 @@
             let animationSpeed = 1;
             let zoomLevel = 1;
             let showLabels = true;
+            let offsetX = 0, offsetY = 0;
             
-            // 计算中心坐标
+            // 计算中心坐标（考虑偏移）
             function getCenter() {
                 return {
-                    x: canvas.width / 2,
-                    y: canvas.height / 2
+                    x: canvas.width / 2 + offsetX,
+                    y: canvas.height / 2 + offsetY
                 };
             }
             
@@ -355,6 +393,48 @@
             // 初始化动画
             animate();
             
+            // 移动端优化：只在canvas区域防止页面滚动
+            canvas.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+            }, { passive: false });
+            
+            // 移动端优化：处理屏幕方向变化
+            window.addEventListener('orientationchange', function() {
+                setTimeout(() => {
+                    resizeCanvas();
+                }, 500);
+            });
+            
+            // 移动端优化：双击重置位置
+            let lastTap = 0;
+            canvas.addEventListener('touchend', function(e) {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                if (tapLength < 500 && tapLength > 0) {
+                    // 双击重置视图
+                    offsetX = 0;
+                    offsetY = 0;
+                    zoomLevel = 1;
+                    document.getElementById('zoomRange').value = 1;
+                    document.getElementById('zoomValue').textContent = '1x';
+                    e.preventDefault();
+                }
+                lastTap = currentTime;
+            });
+            
+            // 移动端检测和初始化
+            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isMobileDevice) {
+                // 移动端默认隐藏一些信息
+                document.getElementById('planetInfo').style.display = 'none';
+                document.getElementById('educationContent').style.display = 'none';
+                
+                // 更新信息按钮图标
+                const infoBtn = document.getElementById('infoBtn');
+                infoBtn.innerHTML = '<i class="fa fa-eye-slash"></i>';
+                infoBtn.title = '显示信息';
+            }
+            
             // 事件监听器
             document.getElementById('pauseBtn').addEventListener('click', function() {
                 isPaused = !isPaused;
@@ -385,38 +465,46 @@
                 showLabels = this.checked;
             });
             
+            // 统一全屏按钮功能
             document.getElementById('fullscreenBtn').addEventListener('click', function() {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(err => {
-                        alert(`全屏请求出错: ${err.message}`);
-                    });
+                // 检测是否为移动设备或小屏幕
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+                
+                if (isMobile || isMobileFullscreen) {
+                    // 移动设备或已在移动全屏模式，使用自定义全屏
+                    toggleMobileFullscreen();
                 } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    }
+                    // 桌面设备：直接使用自定义全屏，提供更好的控制体验
+                    toggleMobileFullscreen();
                 }
             });
             
             // 信息面板切换
             const infoBtn = document.getElementById('infoBtn');
             const planetInfo = document.getElementById('planetInfo');
-            let infoVisible = true;
+            const educationContent = document.getElementById('educationContent');
+            let infoVisible = !isMobileDevice; // 桌面端默认显示，移动端默认隐藏
             
             infoBtn.addEventListener('click', function() {
                 infoVisible = !infoVisible;
                 planetInfo.style.display = infoVisible ? 'grid' : 'none';
-                this.innerHTML = infoVisible ? '<i class="fa fa-info-circle"></i>' : '<i class="fa fa-info-circle"></i>';
+                educationContent.style.display = infoVisible ? 'block' : 'none';
+                this.innerHTML = infoVisible ? '<i class="fa fa-eye"></i>' : '<i class="fa fa-eye-slash"></i>';
+                this.title = infoVisible ? '隐藏信息' : '显示信息';
             });
             
-            // 添加拖动画布功能
+            // 触摸和拖动功能
             let isDragging = false;
             let dragStartX, dragStartY;
-            let offsetX = 0, offsetY = 0;
+            let lastTouchDistance = 0;
+            let isMobileFullscreen = false;
             
+            // 鼠标事件
             canvas.addEventListener('mousedown', function(e) {
                 isDragging = true;
                 dragStartX = e.clientX - offsetX;
                 dragStartY = e.clientY - offsetY;
+                e.preventDefault();
             });
             
             canvas.addEventListener('mousemove', function(e) {
@@ -432,6 +520,159 @@
             canvas.addEventListener('mouseleave', function() {
                 isDragging = false;
             });
+            
+            // 触摸事件
+            canvas.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    dragStartX = e.touches[0].clientX - offsetX;
+                    dragStartY = e.touches[0].clientY - offsetY;
+                } else if (e.touches.length === 2) {
+                    isDragging = false;
+                    const touch1 = e.touches[0];
+                    const touch2 = e.touches[1];
+                    lastTouchDistance = Math.sqrt(
+                        Math.pow(touch2.clientX - touch1.clientX, 2) +
+                        Math.pow(touch2.clientY - touch1.clientY, 2)
+                    );
+                }
+                e.preventDefault();
+            });
+            
+            canvas.addEventListener('touchmove', function(e) {
+                if (e.touches.length === 1 && isDragging) {
+                    offsetX = e.touches[0].clientX - dragStartX;
+                    offsetY = e.touches[0].clientY - dragStartY;
+                } else if (e.touches.length === 2) {
+                    const touch1 = e.touches[0];
+                    const touch2 = e.touches[1];
+                    const currentDistance = Math.sqrt(
+                        Math.pow(touch2.clientX - touch1.clientX, 2) +
+                        Math.pow(touch2.clientY - touch1.clientY, 2)
+                    );
+                    
+                    if (lastTouchDistance > 0) {
+                        const scaleChange = currentDistance / lastTouchDistance;
+                        const newZoom = Math.max(0.5, Math.min(3, zoomLevel * scaleChange));
+                        zoomLevel = newZoom;
+                        document.getElementById('zoomRange').value = newZoom;
+                        document.getElementById('zoomValue').textContent = newZoom.toFixed(1) + 'x';
+                    }
+                    lastTouchDistance = currentDistance;
+                }
+                e.preventDefault();
+            });
+            
+            canvas.addEventListener('touchend', function(e) {
+                isDragging = false;
+                if (e.touches.length < 2) {
+                    lastTouchDistance = 0;
+                }
+                e.preventDefault();
+            });
+            
+            
+            // 全屏退出按钮
+            document.getElementById('fullscreenExitBtn').addEventListener('click', function() {
+                if (isMobileFullscreen) {
+                    toggleMobileFullscreen();
+                } else if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                }
+            });
+            
+            // 工具栏切换按钮
+            let isToolbarVisible = true;
+            document.getElementById('toolbarToggleBtn').addEventListener('click', function() {
+                const controlPanel = document.getElementById('controlPanel');
+                const toggleIcon = this.querySelector('i');
+                
+                if (isToolbarVisible) {
+                    // 隐藏工具栏
+                    controlPanel.style.transform = 'translateY(100%)';
+                    controlPanel.style.opacity = '0';
+                    toggleIcon.className = 'fa fa-chevron-up text-lg';
+                    this.title = '显示工具栏';
+                    this.querySelector('button').className = 'bg-green-500/80 hover:bg-green-600 text-white p-3 rounded-full transition-all duration-300 shadow-lg backdrop-blur-md border border-green-400/50';
+                    isToolbarVisible = false;
+                } else {
+                    // 显示工具栏
+                    controlPanel.style.transform = 'translateY(0)';
+                    controlPanel.style.opacity = '1';
+                    toggleIcon.className = 'fa fa-sliders text-lg';
+                    this.title = '隐藏工具栏';
+                    this.querySelector('button').className = 'bg-blue-500/80 hover:bg-blue-600 text-white p-3 rounded-full transition-all duration-300 shadow-lg backdrop-blur-md border border-blue-400/50';
+                    isToolbarVisible = true;
+                }
+            });
+            
+            function toggleMobileFullscreen() {
+                const body = document.getElementById('mainBody');
+                const header = document.getElementById('mainHeader');
+                const content = document.getElementById('mainContent');
+                const container = document.getElementById('simulatorContainer');
+                const planetInfo = document.getElementById('planetInfo');
+                const educationContent = document.getElementById('educationContent');
+                const footer = document.getElementById('mainFooter');
+                const exitBtn = document.getElementById('fullscreenExitBtn');
+                const toolbarToggle = document.getElementById('toolbarToggleBtn');
+                
+                if (!isMobileFullscreen) {
+                    // 进入手机全屏模式
+                    isMobileFullscreen = true;
+                    body.style.overflow = 'hidden';
+                    header.style.display = 'none';
+                    planetInfo.style.display = 'none';
+                    educationContent.style.display = 'none';
+                    footer.style.display = 'none';
+                    content.style.padding = '0';
+                    container.style.height = '100vh';
+                    container.style.borderRadius = '0';
+                    container.style.margin = '0';
+                    
+                    // 显示全屏控制按钮
+                    exitBtn.style.display = 'block';
+                    toolbarToggle.style.display = 'block';
+                    
+                    // 更新全屏按钮图标
+                    const fullscreenBtn = document.getElementById('fullscreenBtn');
+                    if (fullscreenBtn) {
+                        fullscreenBtn.innerHTML = '<i class="fa fa-compress"></i>';
+                        fullscreenBtn.title = '退出全屏';
+                    }
+                } else {
+                    // 退出手机全屏模式
+                    isMobileFullscreen = false;
+                    body.style.overflow = '';
+                    header.style.display = '';
+                    planetInfo.style.display = '';
+                    educationContent.style.display = '';
+                    footer.style.display = '';
+                    content.style.padding = '';
+                    container.style.height = '';
+                    container.style.borderRadius = '';
+                    container.style.margin = '';
+                    
+                    // 隐藏全屏控制按钮
+                    exitBtn.style.display = 'none';
+                    toolbarToggle.style.display = 'none';
+                    
+                    // 显示控制面板
+                    document.getElementById('controlPanel').style.display = 'flex';
+                    
+                    // 更新全屏按钮图标
+                    const fullscreenBtn = document.getElementById('fullscreenBtn');
+                    if (fullscreenBtn) {
+                        fullscreenBtn.innerHTML = '<i class="fa fa-expand"></i>';
+                        fullscreenBtn.title = '全屏模式';
+                    }
+                }
+                
+                // 重新调整画布尺寸
+                setTimeout(() => {
+                    resizeCanvas();
+                }, 100);
+            }
             
             // 缩放动画效果
             zoomRange.addEventListener('input', function() {
