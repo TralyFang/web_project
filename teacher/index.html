@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教师节快乐 - 粒子时钟</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 配置 Tailwind 自定义主题
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8E44AD', // 紫色调，代表尊敬和感激
+                        secondary: '#F1C40F', // 温暖的黄色，代表阳光和希望
+                        accent: '#3498DB', // 蓝色，代表知识和智慧
+                        background: '#F8F9FA',
+                        text: '#34495E',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .text-shadow-lg {
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+            }
+            .animate-float {
+                animation: float 3s ease-in-out infinite;
+            }
+            .bg-gradient-teacher {
+                background-image: linear-gradient(135deg, #8E44AD 0%, #3498DB 100%);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-text min-h-screen flex flex-col">
+    <!-- 粒子时间画布 -->
+    <canvas id="particleClock" class="fixed top-0 left-0 w-full h-full z-0"></canvas>
+
+    <!-- 页面内容 -->
+    <div class="container mx-auto px-4 py-12 flex-1 z-10 relative">
+        <!-- 头部 -->
+        <header class="text-center mb-16">
+            <div class="inline-block animate-float">
+                <i class="fa fa-graduation-cap text-primary text-6xl mb-4"></i>
+            </div>
+            <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold text-primary text-shadow-lg mb-2">教师节快乐！</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">亲爱的老师，感谢您的辛勤付出和无私奉献，您的教导将伴随我们一生。</p>
+        </header>
+
+        <!-- 主要内容 -->
+        <main class="max-w-4xl mx-auto">
+            <!-- 祝福卡片 -->
+            <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-xl overflow-hidden mb-12 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
+                <div class="bg-gradient-teacher h-2"></div>
+                <div class="p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mr-4">
+                            <i class="fa fa-heart text-primary text-2xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-semibold text-gray-800">感恩有您</h2>
+                            <p class="text-gray-500">致最敬爱的老师</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        在这个特别的日子里，我们想对您说一声：老师，您辛苦了！您不仅传授我们知识，更教会我们如何做人。
+                        您的耐心教导和鼓励，如同明灯指引我们前行的道路。您的付出和奉献，我们将永远铭记在心。
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-primary/5 rounded-lg p-4 text-center transition-all duration-300 hover:bg-primary/10">
+                            <i class="fa fa-book text-primary text-3xl mb-2"></i>
+                            <p class="font-medium">知识的灯塔</p>
+                        </div>
+                        <div class="bg-primary/5 rounded-lg p-4 text-center transition-all duration-300 hover:bg-primary/10">
+                            <i class="fa fa-lightbulb-o text-primary text-3xl mb-2"></i>
+                            <p class="font-medium">思想的启蒙</p>
+                        </div>
+                        <div class="bg-primary/5 rounded-lg p-4 text-center transition-all duration-300 hover:bg-primary/10">
+                            <i class="fa fa-handshake-o text-primary text-3xl mb-2"></i>
+                            <p class="font-medium">人生的导师</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实时时钟显示（备用） -->
+            <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 mb-12 text-center">
+                <h2 class="text-xl font-semibold mb-4">当前时间</h2>
+                <div id="digitalClock" class="text-3xl font-mono text-primary"></div>
+            </div>
+
+            <!-- 教师感谢语 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <div class="bg-white/90 backdrop-blur-sm rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg">
+                    <div class="text-secondary text-2xl mb-3">
+                        <i class="fa fa-quote-left"></i>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        教师是人类灵魂的工程师，您用自己的智慧和爱心，塑造着我们的未来。
+                    </p>
+                    <div class="flex justify-end">
+                        <i class="fa fa-star text-secondary"></i>
+                        <i class="fa fa-star text-secondary"></i>
+                        <i class="fa fa-star text-secondary"></i>
+                        <i class="fa fa-star text-secondary"></i>
+                        <i class="fa fa-star text-secondary"></i>
+                    </div>
+                </div>
+                <div class="bg-white/90 backdrop-blur-sm rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg">
+                    <div class="text-secondary text-2xl mb-3">
+                        <i class="fa fa-quote-left"></i>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        春蚕到死丝方尽，蜡炬成灰泪始干。您的奉献精神将永远激励着我们前进。
+                    </p>
+                    <div class="flex justify-end">
+                        <i class="fa fa-star text-secondary"></i>
+                        <i class="fa fa-star text-secondary"></i>
+                        <i class="fa fa-star text-secondary"></i>
+                        <i class="fa fa-star text-secondary"></i>
+                        <i class="fa fa-star text-secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="text-center py-8 text-gray-500">
+            <p>祝您教师节快乐，身体健康，工作顺利！</p>
+            <div class="flex justify-center mt-4 space-x-4">
+                <a href="#" class="text-primary hover:text-primary/80 transition-colors duration-300">
+                    <i class="fa fa-envelope-o text-xl"></i>
+                </a>
+                <a href="#" class="text-primary hover:text-primary/80 transition-colors duration-300">
+                    <i class="fa fa-phone text-xl"></i>
+                </a>
+                <a href="#" class="text-primary hover:text-primary/80 transition-colors duration-300">
+                    <i class="fa fa-comment-o text-xl"></i>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // 增强版粒子时钟实现
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('particleClock');
+            const ctx = canvas.getContext('2d');
+            const digitalClock = document.getElementById('digitalClock');
+            let particles = [];
+            let backgroundParticles = [];
+            let width = 0;
+            let height = 0;
+            let font = '120px Arial';
+            let text = '';
+            
+            // 增强版粒子参数
+            const PARTICLE_SIZE = 3;
+            const PARTICLE_SPEED = 2;
+            const BACKGROUND_PARTICLE_COUNT = 200;
+            const COLOR_PALETTE = [
+                '#8E44AD', // 紫色
+                '#F1C40F', // 黄色
+                '#3498DB', // 蓝色
+                '#E74C3C', // 红色
+                '#2ECC71'  // 绿色
+            ];
+
+            // 初始化画布尺寸
+            function initCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                
+                // 根据屏幕大小调整字体大小
+                const fontSize = Math.min(width / 8, 180);
+                font = `${fontSize}px Arial`;
+                
+                // 重置粒子
+                particles = [];
+                
+                // 创建背景粒子
+                createBackgroundParticles();
+            }
+
+            // 创建背景粒子
+            function createBackgroundParticles() {
+                backgroundParticles = [];
+                for (let i = 0; i < BACKGROUND_PARTICLE_COUNT; i++) {
+                    backgroundParticles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        size: Math.random() * 2 + 1,
+                        speed: Math.random() * 0.5 + 0.1,
+                        color: COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)],
+                        alpha: Math.random() * 0.5 + 0.1,
+                        directionX: (Math.random() - 0.5) * 2,
+                        directionY: (Math.random() - 0.5) * 2
+                    });
+                }
+            }
+
+            // 创建时间粒子
+            function createTimeParticles() {
+                // 清除之前的粒子
+                particles = [];
+                
+                // 获取当前时间
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const seconds = now.getSeconds().toString().padStart(2, '0');
+                text = `${hours}:${minutes}:${seconds}`;
+                
+                // 更新数字时钟
+                digitalClock.textContent = text;
+                
+                // 绘制文字到离屏画布以获取像素数据
+                const offscreenCanvas = document.createElement('canvas');
+                const offscreenCtx = offscreenCanvas.getContext('2d');
+                
+                offscreenCtx.font = font;
+                const textWidth = offscreenCtx.measureText(text).width;
+                const textHeight = parseInt(font);
+                
+                offscreenCanvas.width = textWidth;
+                offscreenCanvas.height = textHeight;
+                offscreenCtx.font = font;
+                offscreenCtx.fillStyle = COLOR_PALETTE[0];
+                offscreenCtx.textBaseline = 'top';
+                offscreenCtx.fillText(text, 0, 0);
+                
+                // 获取像素数据并创建粒子
+                const imageData = offscreenCtx.getImageData(0, 0, textWidth, textHeight);
+                const pixels = imageData.data;
+                
+                const startX = (width - textWidth) / 2;
+                const startY = (height - textHeight) / 2;
+                
+                // 减小采样步长，增加粒子密度
+                const step = 2;
+                for (let y = 0; y < textHeight; y += step) {
+                    for (let x = 0; x < textWidth; x += step) {
+                        const index = (y * textWidth + x) * 4;
+                        const alpha = pixels[index + 3];
+                        
+                        // 如果像素不是完全透明的，创建粒子
+                        if (alpha > 128) {
+                            // 从调色板中随机选择颜色
+                            const color = COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)];
+                            
+                            particles.push({
+                                x: startX + x + (Math.random() - 0.5) * 20, // 增加随机初始位置
+                                y: startY + y + (Math.random() - 0.5) * 20,
+                                targetX: startX + x,
+                                targetY: startY + y,
+                                size: PARTICLE_SIZE + Math.random() * 3, // 增大粒子尺寸范围
+                                speed: PARTICLE_SPEED + Math.random() * 1, // 增加移动速度
+                                color: color,
+                                alpha: Math.random() * 0.5 + 0.7, // 增加不透明度
+                                velocityX: (Math.random() - 0.5) * 3, // 初始水平速度
+                                velocityY: (Math.random() - 0.5) * 3, // 初始垂直速度
+                                life: Math.random() * 60 + 120, // 粒子生命值
+                                maxLife: Math.random() * 60 + 120 // 最大生命值
+                            });
+                        }
+                    }
+                }
+            }
+
+            // 更新背景粒子
+            function updateBackgroundParticles() {
+                backgroundParticles.forEach(particle => {
+                    particle.x += particle.directionX * particle.speed;
+                    particle.y += particle.directionY * particle.speed;
+                    
+                    // 边界检查
+                    if (particle.x < 0 || particle.x > width) particle.directionX *= -1;
+                    if (particle.y < 0 || particle.y > height) particle.directionY *= -1;
+                });
+            }
+
+            // 更新时间粒子
+            function updateTimeParticles() {
+                particles.forEach(particle => {
+                    // 向目标位置移动
+                    const dx = particle.targetX - particle.x;
+                    const dy = particle.targetY - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance > 0.5) {
+                        particle.x += (dx / distance) * particle.speed;
+                        particle.y += (dy / distance) * particle.speed;
+                    }
+                    
+                    // 应用速度和摩擦力
+                    particle.x += particle.velocityX;
+                    particle.y += particle.velocityY;
+                    particle.velocityX *= 0.97; // 摩擦力
+                    particle.velocityY *= 0.97;
+                    
+                    // 添加微小的随机运动以增加活力
+                    particle.x += (Math.random() - 0.5) * 2;
+                    particle.y += (Math.random() - 0.5) * 2;
+                    
+                    // 更新生命值
+                    particle.life -= 0.5;
+                    if (particle.life <= 0) {
+                        particle.life = particle.maxLife;
+                        // 随机重置位置，创造闪烁效果
+                        particle.x = particle.targetX + (Math.random() - 0.5) * 10;
+                        particle.y = particle.targetY + (Math.random() - 0.5) * 10;
+                    }
+                    particle.alpha = Math.max(0.3, particle.life / particle.maxLife);
+                });
+            }
+
+            // 绘制粒子
+            function drawParticles() {
+                // 清除画布
+                ctx.clearRect(0, 0, width, height);
+                
+                // 绘制背景粒子
+                backgroundParticles.forEach(particle => {
+                    drawGlowingParticle(particle, 1);
+                });
+                
+                // 绘制时间粒子
+                particles.forEach(particle => {
+                    drawGlowingParticle(particle, 2);
+                });
+            }
+
+            // 绘制发光粒子
+            function drawGlowingParticle(particle, glowSize) {
+                // 创建发光效果（光晕）
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size * glowSize, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.globalAlpha = particle.alpha * 0.2;
+                ctx.fill();
+                
+                // 绘制粒子本身
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.globalAlpha = particle.alpha;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+
+            // 动画循环
+            function animate() {
+                updateBackgroundParticles();
+                updateTimeParticles();
+                drawParticles();
+                requestAnimationFrame(animate);
+            }
+
+            // 处理窗口大小变化
+            window.addEventListener('resize', function() {
+                initCanvas();
+                createTimeParticles();
+            });
+
+            // 每秒更新一次时间粒子
+            setInterval(createTimeParticles, 1000);
+
+            // 初始化
+            initCanvas();
+            createTimeParticles();
+            animate();
+        });
+    </script>
+</body>
+</html>
