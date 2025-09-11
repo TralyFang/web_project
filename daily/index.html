@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3NJ6qob9tWWEj2g3",ck:"3NJ6qob9tWWEj2g3",autoTrack:true,hashMode:true})</script>
+    <title>每日心灵鸡汤</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            padding: 25px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        .date-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 8px 16px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .nav-btn:hover:not(:disabled) {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+            transform: translateY(-1px);
+        }
+        
+        .nav-btn:disabled {
+            background: #ecf0f1;
+            color: #95a5a6;
+            border-color: #d5dbdb;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn {
+            padding: 10px 18px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .content {
+            text-align: center;
+        }
+        
+        .inspiration-text {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            font-style: italic;
+        }
+        
+        .artwork {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 15px;
+        }
+        
+        .artwork-caption {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #95a5a6;
+            font-style: italic;
+            padding: 40px 0;
+        }
+        
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            padding: 15px;
+            background: #fdedec;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #fadbd8;
+        }
+        
+        .date-info {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ 每日心灵鸡汤 ✨</h1>
+            <p>汲取智慧，滋养心灵</p>
+        </div>
+        
+        <div class="date-selector">
+            <button onclick="loadPrevDay()" class="nav-btn" id="prevBtn">← 前一天</button>
+            <button onclick="loadToday()" class="btn">今日</button>
+            <button onclick="loadNextDay()" class="nav-btn" id="nextBtn">后一天 →</button>
+            <button onclick="refreshContent()" class="nav-btn" id="refreshBtn">🔄 刷新</button>
+        </div>
+        
+        <div class="date-info" id="dateInfo"></div>
+        
+        <div class="content" id="content">
+            <div class="loading" id="loading">正在加载中...</div>
+        </div>
+    </div>
+
+    <script>
+        const QUOTE_API = 'https://api.xygeng.cn/one';
+        const ART_BASE = 'https://picsum.photos/600/400';
+        const ART_KEYWORDS = ['nature', 'peaceful', 'calm', 'serene', 'tranquil', 'landscape', 'water', 'sky'];
+        let dailyCache = {};
+        const FALLBACK_QUOTES = [
+            "生活就像一盒巧克力，你永远不知道下一颗是什么味道。 —— 《阿甘正传》",
+            "世界上最宽阔的是海洋，比海洋更宽阔的是天空，比天空更宽阔的是人的胸怀。 —— 雨果",
+            "成功不是将来才有的，而是从决定去做的那一刻起，持续累积而成。 —— 佚名",
+            "每一天都是新的开始，每一个当下都是最好的时机。 —— 佚名",
+            "心若向阳，无畏悲伤。保持微笑，生活就会对你微笑。 —— 佚名",
+            "人生没有白走的路，每一步都算数。 —— 佚名",
+            "保持热爱，奔赴山海。忠于自己，热爱生活。 —— 佚名"
+        ];
+        
+        let currentDate = new Date();
+        
+        function initNavigation() {
+            updateDateInfo(currentDate);
+            updateNavButtons();
+        }
+        
+        function updateDateInfo(date) {
+            const dateInfo = document.getElementById('dateInfo');
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                weekday: 'long'
+            };
+            dateInfo.textContent = `📅 ${date.toLocaleDateString('zh-CN', options)}`;
+        }
+        
+        function updateNavButtons() {
+            const today = new Date();
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            // 禁用明天的按钮
+            nextBtn.disabled = currentDate.toDateString() === today.toDateString();
+            
+            // 禁用7天前的按钮
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(today.getDate() - 7);
+            prevBtn.disabled = currentDate <= sevenDaysAgo;
+        }
+        
+        async function loadDailyInspiration(forceRefresh = false) {
+            showLoading();
+            updateDateInfo(currentDate);
+            updateNavButtons();
+            
+            try {
+                const [quote, artUrl] = await Promise.all([
+                    fetchInspiration(forceRefresh),
+                    fetchArtwork(forceRefresh)
+                ]);
+                
+                displayContent(quote, artUrl);
+            } catch (error) {
+                showError('加载失败，请稍后重试');
+                console.error('Error:', error);
+            }
+        }
+        
+        async function fetchInspiration(forceRefresh = false) {
+            const dateKey = currentDate.toDateString();
+            
+            // 检查缓存
+            if (!forceRefresh && dailyCache[dateKey] && dailyCache[dateKey].quote) {
+                return dailyCache[dateKey].quote;
+            }
+            
+            try {
+                // 使用日期和随机数生成更好的缓存键
+                const timestamp = Date.now();
+                const dateHash = btoa(dateKey).slice(-8); // 使用日期生成简短哈希
+                const response = await fetch(`${QUOTE_API}?d=${dateHash}&t=${timestamp}`);
+                
+                if (!response.ok) throw new Error('API请求失败');
+                
+                const data = await response.json();
+                let quote = '';
+                
+                if (data && data.data && data.data.content) {
+                    quote = data.data.content;
+                    // 添加来源信息
+                    if (data.data.origin) {
+                        quote += ` —— ${data.data.origin}`;
+                    }
+                } else {
+                    throw new Error('未找到合适的语录');
+                }
+                
+                // 更新缓存
+                if (!dailyCache[dateKey]) dailyCache[dateKey] = {};
+                dailyCache[dateKey].quote = quote;
+                
+                return quote;
+                
+            } catch (error) {
+                console.warn('使用备用语录:', error);
+                // 为不同日期使用不同的备用语录
+                const dateIndex = Math.abs(currentDate.getTime()) % FALLBACK_QUOTES.length;
+                return FALLBACK_QUOTES[dateIndex];
+            }
+        }
+        
+        async function fetchArtwork(forceRefresh = false) {
+            const dateKey = currentDate.toDateString();
+            
+            // 检查缓存
+            if (!forceRefresh && dailyCache[dateKey] && dailyCache[dateKey].artwork) {
+                return dailyCache[dateKey].artwork;
+            }
+            
+            try {
+                // 基于日期生成稳定的关键词索引，确保同一天总是相同的图片主题
+                const dateHash = currentDate.getFullYear() * 10000 + currentDate.getMonth() * 100 + currentDate.getDate();
+                const keywordIndex = dateHash % ART_KEYWORDS.length;
+                const keyword = ART_KEYWORDS[keywordIndex];
+                
+                // 基于日期生成种子，确保同一天的图片相对稳定
+                const seed = dateHash;
+                const imageUrl = `${ART_BASE}?${keyword}&seed=${seed}`;
+                
+                // 更新缓存
+                if (!dailyCache[dateKey]) dailyCache[dateKey] = {};
+                dailyCache[dateKey].artwork = imageUrl;
+                
+                return imageUrl;
+            } catch (error) {
+                console.warn('使用默认图片:', error);
+                return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlNWU1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua1i+ivleWbvueJhzwvdGV4dD48L3N2Zz4=';
+            }
+        }
+        
+        function displayContent(quote, artUrl) {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = `
+                <div class="inspiration-text">
+                    "${quote}"
+                </div>
+                <img src="${artUrl}" alt="心灵画作" class="artwork" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlNWU1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua1i+ivleWbvueJhzwvdGV4dD48L3N2Zz4='">
+                <div class="artwork-caption">🎨 心灵画作</div>
+            `;
+        }
+        
+        function showLoading() {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = '<div class="loading">正在加载中...</div>';
+        }
+        
+        function showError(message) {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = `<div class="error">${message}</div>`;
+        }
+        
+        function refreshContent() {
+            // 清除当前日期的缓存并强制刷新
+            const dateKey = currentDate.toDateString();
+            if (dailyCache[dateKey]) {
+                delete dailyCache[dateKey];
+            }
+            loadDailyInspiration(true);
+        }
+        
+        function loadToday() {
+            currentDate = new Date();
+            loadDailyInspiration();
+        }
+        
+        function loadPrevDay() {
+            const newDate = new Date(currentDate);
+            newDate.setDate(newDate.getDate() - 1);
+            currentDate = newDate;
+            loadDailyInspiration();
+        }
+        
+        function loadNextDay() {
+            const newDate = new Date(currentDate);
+            newDate.setDate(newDate.getDate() + 1);
+            currentDate = newDate;
+            loadDailyInspiration();
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initNavigation();
+            loadDailyInspiration();
+        });
+    </script>
+</body>
+</html>
