@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3NJ6qob9tWWEj2g3",ck:"3NJ6qob9tWWEj2g3",autoTrack:true,hashMode:true})</script>
+    <title>每日心灵鸡汤</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .date-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .date-input {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .date-input:focus {
+            border-color: #4CAF50;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #45a049;
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .content {
+            text-align: center;
+        }
+        
+        .inspiration-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .artwork {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #d32f2f;
+            text-align: center;
+            padding: 20px;
+            background: #ffebee;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .date-info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌻 每日心灵鸡汤 🌻</h1>
+            <p>温暖你的心灵，点亮你的每一天</p>
+        </div>
+        
+        <div class="date-selector">
+            <input type="date" id="datePicker" class="date-input" max="">
+            <button onclick="loadDailyInspiration()" class="btn">查看该日鸡汤</button>
+            <button onclick="loadToday()" class="btn">回到今天</button>
+        </div>
+        
+        <div class="date-info" id="dateInfo"></div>
+        
+        <div class="content" id="content">
+            <div class="loading" id="loading">正在加载今日心灵鸡汤...</div>
+        </div>
+    </div>
+
+    <script>
+        const QUOTE_BASE = 'https://www.lz13.cn/';
+        const ART_BASE = 'https://source.unsplash.com/600x400/?nature,peaceful,calm,serene,tranquil';
+        const FALLBACK_QUOTES = [
+            "生活就像一盒巧克力，你永远不知道下一颗是什么味道。 —— 《阿甘正传》",
+            "世界上最宽阔的是海洋，比海洋更宽阔的是天空，比天空更宽阔的是人的胸怀。 —— 雨果",
+            "成功不是将来才有的，而是从决定去做的那一刻起，持续累积而成。 —— 佚名",
+            "每一天都是新的开始，每一个当下都是最好的时机。 —— 佚名",
+            "心若向阳，无畏悲伤。保持微笑，生活就会对你微笑。 —— 佚名",
+            "人生没有白走的路，每一步都算数。 —— 佚名",
+            "保持热爱，奔赴山海。忠于自己，热爱生活。 —— 佚名"
+        ];
+        
+        let currentDate = new Date();
+        
+        function initDatePicker() {
+            const datePicker = document.getElementById('datePicker');
+            const today = new Date().toISOString().split('T')[0];
+            const maxDate = new Date();
+            maxDate.setDate(maxDate.getDate() + 1);
+            const maxDateStr = maxDate.toISOString().split('T')[0];
+            
+            datePicker.max = maxDateStr;
+            datePicker.value = today;
+            
+            updateDateInfo(today);
+        }
+        
+        function updateDateInfo(dateStr) {
+            const dateInfo = document.getElementById('dateInfo');
+            const date = new Date(dateStr);
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                weekday: 'long'
+            };
+            dateInfo.textContent = `📅 ${date.toLocaleDateString('zh-CN', options)}`;
+        }
+        
+        function isValidDate(dateStr) {
+            const selectedDate = new Date(dateStr);
+            const today = new Date();
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(today.getDate() - 7);
+            
+            return selectedDate <= today && selectedDate >= sevenDaysAgo;
+        }
+        
+        async function loadDailyInspiration() {
+            const datePicker = document.getElementById('datePicker');
+            const selectedDate = datePicker.value;
+            
+            if (!isValidDate(selectedDate)) {
+                showError('只能查看过去7天内的数据哦～');
+                return;
+            }
+            
+            showLoading();
+            updateDateInfo(selectedDate);
+            
+            try {
+                const [quote, artUrl] = await Promise.all([
+                    fetchInspiration(),
+                    fetchArtwork()
+                ]);
+                
+                displayContent(quote, artUrl);
+            } catch (error) {
+                showError('加载失败，请稍后重试');
+                console.error('Error:', error);
+            }
+        }
+        
+        async function fetchInspiration() {
+            try {
+                const response = await fetch(QUOTE_BASE, {
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
+                });
+                
+                if (!response.ok) throw new Error('网站请求失败');
+                
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                const quotes = [];
+                const elements = doc.querySelectorAll('p, div, span');
+                
+                elements.forEach(el => {
+                    const text = el.textContent.trim();
+                    if (text.length > 20 && text.length < 200 && 
+                        !text.includes('http') && !text.includes('©') &&
+                        !text.includes('备案') && !text.includes('版权')) {
+                        quotes.push(text);
+                    }
+                });
+                
+                if (quotes.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * quotes.length);
+                    return quotes[randomIndex];
+                }
+                
+                throw new Error('未找到合适的语录');
+                
+            } catch (error) {
+                console.warn('使用备用语录:', error);
+                const randomIndex = Math.floor(Math.random() * FALLBACK_QUOTES.length);
+                return FALLBACK_QUOTES[randomIndex];
+            }
+        }
+        
+        async function fetchArtwork() {
+            try {
+                const response = await fetch(`${ART_BASE}&t=${Date.now()}`, {
+                    method: 'HEAD'
+                });
+                if (response.ok) {
+                    return `${ART_BASE}&t=${Date.now()}`;
+                }
+                throw new Error('图片加载失败');
+            } catch (error) {
+                console.warn('使用默认图片:', error);
+                return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlNWU1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua1i+ivleWbvueJhzwvdGV4dD48L3N2Zz4=';
+            }
+        }
+        
+        function displayContent(quote, artUrl) {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = `
+                <div class="inspiration-text">
+                    "${quote}"
+                </div>
+                <img src="${artUrl}" alt="治愈画作" class="artwork" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlNWU1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua1i+ivleWbvueJhzwvdGV4dD48L3N2Zz4='">
+                <p>🎨 每日治愈画作</p>
+            `;
+        }
+        
+        function showLoading() {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = '<div class="loading">正在加载中...</div>';
+        }
+        
+        function showError(message) {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = `<div class="error">${message}</div>`;
+        }
+        
+        function loadToday() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('datePicker').value = today;
+            loadDailyInspiration();
+        }
+        
+        function getRandomPastDate() {
+            const daysAgo = Math.floor(Math.random() * 7) + 1;
+            const date = new Date();
+            date.setDate(date.getDate() - daysAgo);
+            return date.toISOString().split('T')[0];
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initDatePicker();
+            loadDailyInspiration();
+            
+            document.getElementById('datePicker').addEventListener('change', function() {
+                const selectedDate = this.value;
+                if (!isValidDate(selectedDate)) {
+                    showError('只能查看过去7天内的数据哦～');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
