@@ -167,6 +167,7 @@
             <button onclick="loadPrevDay()" class="nav-btn" id="prevBtn">← 前一天</button>
             <button onclick="loadToday()" class="btn">今日</button>
             <button onclick="loadNextDay()" class="nav-btn" id="nextBtn">后一天 →</button>
+            <button onclick="refreshContent()" class="nav-btn" id="refreshBtn">🔄 刷新</button>
         </div>
         
         <div class="date-info" id="dateInfo"></div>
@@ -180,6 +181,7 @@
         const QUOTE_API = 'https://api.xygeng.cn/one';
         const ART_BASE = 'https://picsum.photos/600/400';
         const ART_KEYWORDS = ['nature', 'peaceful', 'calm', 'serene', 'tranquil', 'landscape', 'water', 'sky'];
+        let dailyCache = {};
         const FALLBACK_QUOTES = [
             "生活就像一盒巧克力，你永远不知道下一颗是什么味道。 —— 《阿甘正传》",
             "世界上最宽阔的是海洋，比海洋更宽阔的是天空，比天空更宽阔的是人的胸怀。 —— 雨果",
@@ -222,15 +224,15 @@
             prevBtn.disabled = currentDate <= sevenDaysAgo;
         }
         
-        async function loadDailyInspiration() {
+        async function loadDailyInspiration(forceRefresh = false) {
             showLoading();
             updateDateInfo(currentDate);
             updateNavButtons();
             
             try {
                 const [quote, artUrl] = await Promise.all([
-                    fetchInspiration(),
-                    fetchArtwork()
+                    fetchInspiration(forceRefresh),
+                    fetchArtwork(forceRefresh)
                 ]);
                 
                 displayContent(quote, artUrl);
@@ -240,33 +242,71 @@
             }
         }
         
-        async function fetchInspiration() {
+        async function fetchInspiration(forceRefresh = false) {
+            const dateKey = currentDate.toDateString();
+            
+            // 检查缓存
+            if (!forceRefresh && dailyCache[dateKey] && dailyCache[dateKey].quote) {
+                return dailyCache[dateKey].quote;
+            }
+            
             try {
-                const response = await fetch(QUOTE_API);
+                // 使用日期和随机数生成更好的缓存键
+                const timestamp = Date.now();
+                const dateHash = btoa(dateKey).slice(-8); // 使用日期生成简短哈希
+                const response = await fetch(`${QUOTE_API}?d=${dateHash}&t=${timestamp}`);
                 
                 if (!response.ok) throw new Error('API请求失败');
                 
                 const data = await response.json();
+                let quote = '';
+                
                 if (data && data.data && data.data.content) {
-                    return data.data.content;
+                    quote = data.data.content;
+                    // 添加来源信息
+                    if (data.data.origin) {
+                        quote += ` —— ${data.data.origin}`;
+                    }
+                } else {
+                    throw new Error('未找到合适的语录');
                 }
                 
-                throw new Error('未找到合适的语录');
+                // 更新缓存
+                if (!dailyCache[dateKey]) dailyCache[dateKey] = {};
+                dailyCache[dateKey].quote = quote;
+                
+                return quote;
                 
             } catch (error) {
                 console.warn('使用备用语录:', error);
-                const randomIndex = Math.floor(Math.random() * FALLBACK_QUOTES.length);
-                return FALLBACK_QUOTES[randomIndex];
+                // 为不同日期使用不同的备用语录
+                const dateIndex = Math.abs(currentDate.getTime()) % FALLBACK_QUOTES.length;
+                return FALLBACK_QUOTES[dateIndex];
             }
         }
         
-        async function fetchArtwork() {
+        async function fetchArtwork(forceRefresh = false) {
+            const dateKey = currentDate.toDateString();
+            
+            // 检查缓存
+            if (!forceRefresh && dailyCache[dateKey] && dailyCache[dateKey].artwork) {
+                return dailyCache[dateKey].artwork;
+            }
+            
             try {
-                // 使用随机关键词生成图片URL
-                const randomKeyword = ART_KEYWORDS[Math.floor(Math.random() * ART_KEYWORDS.length)];
-                const imageUrl = `${ART_BASE}?${randomKeyword}&t=${Date.now()}`;
+                // 基于日期生成稳定的关键词索引，确保同一天总是相同的图片主题
+                const dateHash = currentDate.getFullYear() * 10000 + currentDate.getMonth() * 100 + currentDate.getDate();
+                const keywordIndex = dateHash % ART_KEYWORDS.length;
+                const keyword = ART_KEYWORDS[keywordIndex];
                 
-                // 直接返回图片URL，让浏览器处理加载
+                // 基于日期生成种子，确保同一天的图片相对稳定
+                const seed = dateHash;
+                const imageUrl = `${ART_BASE}?${keyword}&seed=${seed}`;
+                
+                // 更新缓存
+                if (!dailyCache[dateKey]) dailyCache[dateKey] = {};
+                dailyCache[dateKey].artwork = imageUrl;
+                
                 return imageUrl;
             } catch (error) {
                 console.warn('使用默认图片:', error);
@@ -293,6 +333,15 @@
         function showError(message) {
             const contentDiv = document.getElementById('content');
             contentDiv.innerHTML = `<div class="error">${message}</div>`;
+        }
+        
+        function refreshContent() {
+            // 清除当前日期的缓存并强制刷新
+            const dateKey = currentDate.toDateString();
+            if (dailyCache[dateKey]) {
+                delete dailyCache[dateKey];
+            }
+            loadDailyInspiration(true);
         }
         
         function loadToday() {
