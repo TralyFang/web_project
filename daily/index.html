@@ -16,59 +16,88 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            padding: 25px;
         }
         
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin: 0;
         }
         
         .date-selector {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
         
-        .date-input {
-            padding: 10px 15px;
-            border: 2px solid #ddd;
+        .nav-btn {
+            padding: 8px 16px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            border: 2px solid #bdc3c7;
             border-radius: 8px;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            font-weight: 500;
         }
         
-        .date-input:focus {
-            border-color: #4CAF50;
+        .nav-btn:hover:not(:disabled) {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+            transform: translateY(-1px);
+        }
+        
+        .nav-btn:disabled {
+            background: #ecf0f1;
+            color: #95a5a6;
+            border-color: #d5dbdb;
+            cursor: not-allowed;
+            transform: none;
         }
         
         .btn {
-            padding: 10px 20px;
-            background: #4CAF50;
+            padding: 10px 18px;
+            background: #3498db;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            font-weight: 500;
         }
         
         .btn:hover {
-            background: #45a049;
+            background: #2980b9;
+            transform: translateY(-1px);
         }
         
         .btn:disabled {
-            background: #ccc;
+            background: #bdc3c7;
             cursor: not-allowed;
+            transform: none;
         }
         
         .content {
@@ -76,70 +105,81 @@
         }
         
         .inspiration-text {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #333;
-            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.7;
+            color: #2c3e50;
+            margin-bottom: 25px;
             padding: 20px;
             background: #f8f9fa;
             border-radius: 10px;
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid #3498db;
+            font-style: italic;
         }
         
         .artwork {
             max-width: 100%;
             height: auto;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 15px;
+        }
+        
+        .artwork-caption {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 25px;
         }
         
         .loading {
             text-align: center;
-            color: #666;
+            color: #95a5a6;
             font-style: italic;
+            padding: 40px 0;
         }
         
         .error {
-            color: #d32f2f;
+            color: #e74c3c;
             text-align: center;
-            padding: 20px;
-            background: #ffebee;
+            padding: 15px;
+            background: #fdedec;
             border-radius: 8px;
             margin: 20px 0;
+            border: 1px solid #fadbd8;
         }
         
         .date-info {
             text-align: center;
-            color: #666;
+            color: #7f8c8d;
             margin-bottom: 20px;
             font-size: 14px;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌻 每日心灵鸡汤 🌻</h1>
-            <p>温暖你的心灵，点亮你的每一天</p>
+            <h1>✨ 每日心灵鸡汤 ✨</h1>
+            <p>汲取智慧，滋养心灵</p>
         </div>
         
         <div class="date-selector">
-            <input type="date" id="datePicker" class="date-input" max="">
-            <button onclick="loadDailyInspiration()" class="btn">查看该日鸡汤</button>
-            <button onclick="loadToday()" class="btn">回到今天</button>
+            <button onclick="loadPrevDay()" class="nav-btn" id="prevBtn">← 前一天</button>
+            <button onclick="loadToday()" class="btn">今日</button>
+            <button onclick="loadNextDay()" class="nav-btn" id="nextBtn">后一天 →</button>
         </div>
         
         <div class="date-info" id="dateInfo"></div>
         
         <div class="content" id="content">
-            <div class="loading" id="loading">正在加载今日心灵鸡汤...</div>
+            <div class="loading" id="loading">正在加载中...</div>
         </div>
     </div>
 
     <script>
-        const QUOTE_BASE = 'https://www.lz13.cn/';
-        const ART_BASE = 'https://source.unsplash.com/600x400/?nature,peaceful,calm,serene,tranquil';
+        const QUOTE_API = 'https://api.xygeng.cn/one';
+        const ART_BASE = 'https://picsum.photos/600/400';
+        const ART_KEYWORDS = ['nature', 'peaceful', 'calm', 'serene', 'tranquil', 'landscape', 'water', 'sky'];
         const FALLBACK_QUOTES = [
             "生活就像一盒巧克力，你永远不知道下一颗是什么味道。 —— 《阿甘正传》",
             "世界上最宽阔的是海洋，比海洋更宽阔的是天空，比天空更宽阔的是人的胸怀。 —— 雨果",
@@ -152,22 +192,13 @@
         
         let currentDate = new Date();
         
-        function initDatePicker() {
-            const datePicker = document.getElementById('datePicker');
-            const today = new Date().toISOString().split('T')[0];
-            const maxDate = new Date();
-            maxDate.setDate(maxDate.getDate() + 1);
-            const maxDateStr = maxDate.toISOString().split('T')[0];
-            
-            datePicker.max = maxDateStr;
-            datePicker.value = today;
-            
-            updateDateInfo(today);
+        function initNavigation() {
+            updateDateInfo(currentDate);
+            updateNavButtons();
         }
         
-        function updateDateInfo(dateStr) {
+        function updateDateInfo(date) {
             const dateInfo = document.getElementById('dateInfo');
-            const date = new Date(dateStr);
             const options = { 
                 year: 'numeric', 
                 month: 'long', 
@@ -177,26 +208,24 @@
             dateInfo.textContent = `📅 ${date.toLocaleDateString('zh-CN', options)}`;
         }
         
-        function isValidDate(dateStr) {
-            const selectedDate = new Date(dateStr);
+        function updateNavButtons() {
             const today = new Date();
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            // 禁用明天的按钮
+            nextBtn.disabled = currentDate.toDateString() === today.toDateString();
+            
+            // 禁用7天前的按钮
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(today.getDate() - 7);
-            
-            return selectedDate <= today && selectedDate >= sevenDaysAgo;
+            prevBtn.disabled = currentDate <= sevenDaysAgo;
         }
         
         async function loadDailyInspiration() {
-            const datePicker = document.getElementById('datePicker');
-            const selectedDate = datePicker.value;
-            
-            if (!isValidDate(selectedDate)) {
-                showError('只能查看过去7天内的数据哦～');
-                return;
-            }
-            
             showLoading();
-            updateDateInfo(selectedDate);
+            updateDateInfo(currentDate);
+            updateNavButtons();
             
             try {
                 const [quote, artUrl] = await Promise.all([
@@ -213,33 +242,13 @@
         
         async function fetchInspiration() {
             try {
-                const response = await fetch(QUOTE_BASE, {
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                    }
-                });
+                const response = await fetch(QUOTE_API);
                 
-                if (!response.ok) throw new Error('网站请求失败');
+                if (!response.ok) throw new Error('API请求失败');
                 
-                const html = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                
-                const quotes = [];
-                const elements = doc.querySelectorAll('p, div, span');
-                
-                elements.forEach(el => {
-                    const text = el.textContent.trim();
-                    if (text.length > 20 && text.length < 200 && 
-                        !text.includes('http') && !text.includes('©') &&
-                        !text.includes('备案') && !text.includes('版权')) {
-                        quotes.push(text);
-                    }
-                });
-                
-                if (quotes.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * quotes.length);
-                    return quotes[randomIndex];
+                const data = await response.json();
+                if (data && data.data && data.data.content) {
+                    return data.data.content;
                 }
                 
                 throw new Error('未找到合适的语录');
@@ -253,13 +262,12 @@
         
         async function fetchArtwork() {
             try {
-                const response = await fetch(`${ART_BASE}&t=${Date.now()}`, {
-                    method: 'HEAD'
-                });
-                if (response.ok) {
-                    return `${ART_BASE}&t=${Date.now()}`;
-                }
-                throw new Error('图片加载失败');
+                // 使用随机关键词生成图片URL
+                const randomKeyword = ART_KEYWORDS[Math.floor(Math.random() * ART_KEYWORDS.length)];
+                const imageUrl = `${ART_BASE}?${randomKeyword}&t=${Date.now()}`;
+                
+                // 直接返回图片URL，让浏览器处理加载
+                return imageUrl;
             } catch (error) {
                 console.warn('使用默认图片:', error);
                 return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlNWU1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua1i+ivleWbvueJhzwvdGV4dD48L3N2Zz4=';
@@ -272,8 +280,8 @@
                 <div class="inspiration-text">
                     "${quote}"
                 </div>
-                <img src="${artUrl}" alt="治愈画作" class="artwork" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlNWU1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua1i+ivleWbvueJhzwvdGV4dD48L3N2Zz4='">
-                <p>🎨 每日治愈画作</p>
+                <img src="${artUrl}" alt="心灵画作" class="artwork" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTVlNWU1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPua1i+ivleWbvueJhzwvdGV4dD48L3N2Zz4='">
+                <div class="artwork-caption">🎨 心灵画作</div>
             `;
         }
         
@@ -288,28 +296,27 @@
         }
         
         function loadToday() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('datePicker').value = today;
+            currentDate = new Date();
             loadDailyInspiration();
         }
         
-        function getRandomPastDate() {
-            const daysAgo = Math.floor(Math.random() * 7) + 1;
-            const date = new Date();
-            date.setDate(date.getDate() - daysAgo);
-            return date.toISOString().split('T')[0];
+        function loadPrevDay() {
+            const newDate = new Date(currentDate);
+            newDate.setDate(newDate.getDate() - 1);
+            currentDate = newDate;
+            loadDailyInspiration();
+        }
+        
+        function loadNextDay() {
+            const newDate = new Date(currentDate);
+            newDate.setDate(newDate.getDate() + 1);
+            currentDate = newDate;
+            loadDailyInspiration();
         }
         
         document.addEventListener('DOMContentLoaded', function() {
-            initDatePicker();
+            initNavigation();
             loadDailyInspiration();
-            
-            document.getElementById('datePicker').addEventListener('change', function() {
-                const selectedDate = this.value;
-                if (!isValidDate(selectedDate)) {
-                    showError('只能查看过去7天内的数据哦～');
-                }
-            });
         });
     </script>
 </body>
