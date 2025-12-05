@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>凡人修仙传 - 剧情梳理网站</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 自定义Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B4513',
+                        secondary: '#4A5568',
+                        accent: '#DAA520',
+                        dark: '#1A202C',
+                        light: '#F7FAFC',
+                        'scroll-bg': '#2D3748',
+                        'scroll-thumb': '#8B4513',
+                    },
+                    fontFamily: {
+                        sans: ['Arial', 'sans-serif'],
+                        serif: ['"Times New Roman"', 'serif'],
+                    },
+                    backgroundImage: {
+                        'scroll-pattern': "url('https://p26-doubao-search-sign.byteimg.com/labis/ad9dbc3042bdc75f480acccadb292986~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=fG%2F%2F2621gPmUyxs76HWx0vio8Fg%3D')",
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            .text-shadow-lg {
+                text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-custom::-webkit-scrollbar {
+                width: 8px;
+            }
+            .scrollbar-custom::-webkit-scrollbar-track {
+                background: theme('colors.scroll-bg');
+            }
+            .scrollbar-custom::-webkit-scrollbar-thumb {
+                background: theme('colors.scroll-thumb');
+                border-radius: 4px;
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            .animate-slide-in {
+                animation: slideIn 0.5s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes slideIn {
+                from { transform: translateY(20px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            .timeline-item::before {
+                content: '';
+                position: absolute;
+                left: -29px;
+                top: 0;
+                height: 100%;
+                width: 2px;
+                background-color: theme('colors.accent');
+            }
+            .timeline-item::after {
+                content: '';
+                position: absolute;
+                left: -33px;
+                top: 15px;
+                height: 10px;
+                width: 10px;
+                border-radius: 50%;
+                background-color: theme('colors.accent');
+            }
+            .timeline-item:hover::after {
+                transform: scale(1.5);
+                transition: transform 0.3s ease;
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+            .bg-parallax {
+                background-attachment: fixed;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-light font-serif scrollbar-custom">
+    <!-- 导航栏 -->
+    <nav id="main-nav" class="bg-dark bg-opacity-90 fixed w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <img src="https://p26-doubao-search-sign.byteimg.com/labis/ea21dc82b1022a5975c13e9bac27fe8f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=4L7qzOgbyvvKb95qIYAiXsM9P2M%3D" alt="凡人修仙传" class="h-10 w-10 rounded-full mr-3">
+                    <span class="text-xl font-bold text-accent">凡人修仙传</span>
+                </div>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link text-accent hover:text-white transition-colors duration-300">首页</a>
+                    <a href="#story" class="nav-link text-gray-300 hover:text-accent transition-colors duration-300">剧情梳理</a>
+                    <a href="#events" class="nav-link text-gray-300 hover:text-accent transition-colors duration-300">大事件汇总</a>
+                    <a href="#characters" class="nav-link text-gray-300 hover:text-accent transition-colors duration-300">角色介绍</a>
+                </div>
+                
+                <!-- 搜索框 -->
+                <div class="hidden md:flex items-center">
+                    <div class="relative">
+                        <input type="text" id="search-input" placeholder="搜索剧情、角色..." class="bg-gray-800 text-light rounded-full py-1 px-4 focus:outline-none focus:ring-2 focus:ring-accent w-40 md:w-64">
+                        <button id="search-btn" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-accent">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-300 hover:text-accent focus:outline-none">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 移动端导航菜单 -->
+            <div id="mobile-menu" class="md:hidden hidden mt-4 pb-2 animate-fade-in">
+                <a href="#home" class="block py-2 text-accent hover:text-white transition-colors duration-300">首页</a>
+                <a href="#story" class="block py-2 text-gray-300 hover:text-accent transition-colors duration-300">剧情梳理</a>
+                <a href="#events" class="block py-2 text-gray-300 hover:text-accent transition-colors duration-300">大事件汇总</a>
+                <a href="#characters" class="block py-2 text-gray-300 hover:text-accent transition-colors duration-300">角色介绍</a>
+                <div class="mt-3 relative">
+                    <input type="text" placeholder="搜索剧情、角色..." class="bg-gray-800 text-light rounded-full py-1 px-4 focus:outline-none focus:ring-2 focus:ring-accent w-full">
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-accent">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首页 -->
+    <section id="home" class="min-h-screen pt-20 pb-10 bg-cover bg-center bg-no-repeat" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/labis/ad9dbc3042bdc75f480acccadb292986~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=fG%2F%2F2621gPmUyxs76HWx0vio8Fg%3D');">
+        <div class="container mx-auto px-4">
+            <!-- 标题区域 -->
+            <div class="text-center mt-10 mb-16 animate-fade-in">
+                <h1 class="text-4xl md:text-6xl font-bold text-accent mb-4 text-shadow-lg">凡人修仙传</h1>
+                <p class="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto text-shadow">从山村少年到修仙巨擘的传奇之路</p>
+            </div>
+            
+            <!-- 简介区域 -->
+            <div class="bg-dark bg-opacity-80 rounded-lg p-6 md:p-8 mb-12 max-w-4xl mx-auto animate-slide-in">
+                <h2 class="text-2xl md:text-3xl font-bold text-accent mb-4">剧情简介</h2>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                    《凡人修仙传》讲述了平凡少年韩立出生贫困，为了让家人过上更好的生活，自愿前去七玄门参加入门考核，最终被墨大夫收入门下。通过墨大夫的遗书韩立得知了一个全新世界：修仙界的存在。
+                </p>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                    在帮助七玄门抵御外敌之后，韩立离开了七玄门，前去墨大夫的家中寻找暖阳宝玉解毒，并帮助墨家人打败了敌人。通过墨大夫之女墨彩环的口中得知太南小会地址，韩立为追寻修仙人的足迹决定前往太南小会，拜别家人后，韩立来到太南谷，结识了一众修仙人士，正式展开了自己的修仙之旅。
+                </p>
+            </div>
+            
+            <!-- 剧情阶段导航 -->
+            <div class="mb-16 animate-slide-in" style="animation-delay: 0.2s;">
+                <h2 class="text-2xl md:text-3xl font-bold text-accent mb-6 text-center">剧情阶段导航</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <!-- 七玄门篇 -->
+                    <div class="bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover cursor-pointer" onclick="scrollToSection('qixuanmen')">
+                        <div class="h-40 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/labis/3c7bfd13f4d2e4319e44f9b10a830a7f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=Z8vhXfzaAw9u7Jnl6vx6x8bUBTM%3D')"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-accent mb-2">七玄门篇</h3>
+                            <p class="text-gray-300">韩立初入七玄门，拜墨大夫为师，修炼长春功，发现墨大夫夺舍阴谋并反杀。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 黄枫谷篇 -->
+                    <div class="bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover cursor-pointer" onclick="scrollToSection('huangfenggu')">
+                        <div class="h-40 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/labis/b45d0758b7fea14f9fe8f8f5a41d9f22~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=apkP8%2F18TEZt%2B%2FMe7VdT13jzCEc%3D')"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-accent mb-2">黄枫谷篇</h3>
+                            <p class="text-gray-300">韩立加入黄枫谷，成为李化元弟子，参加血色禁地试炼，获得筑基丹并成功筑基。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 燕家堡之战 -->
+                    <div class="bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover cursor-pointer" onclick="scrollToSection('yanjiapu')">
+                        <div class="h-40 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/labis/cd002f745d6195e91bdfca87e9141846~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=BSrlPXfkgRUSvBuom6E9shiatpE%3D')"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-accent mb-2">燕家堡之战</h3>
+                            <p class="text-gray-300">韩立与董萱儿前往燕家堡参加夺宝大会，识破王蝉阴谋，破解血灵大阵。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 魔道争锋 -->
+                    <div class="bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover cursor-pointer" onclick="scrollToSection('modaozhengfeng')">
+                        <div class="h-40 bg-cover bg-center" style="background-image: url('https://p3-doubao-search-sign.byteimg.com/pgc-image/0d2063ed9aa74000912a0ff47daf886c~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=9iIZI5edwplAU84nCjCN90Pn%2BLU%3D')"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-accent mb-2">魔道争锋</h3>
+                            <p class="text-gray-300">魔道六宗入侵越国，正道七派奋起抵抗，韩立在战乱中成长，最终通过古传送阵逃离越国。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 再别天南 -->
+                    <div class="bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover cursor-pointer" onclick="scrollToSection('zaibietiannan')">
+                        <div class="h-40 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/fa635914d6f549ef95631c1931ef1c39~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=0Jg3Vl4sCvrZhYnZq40EXc1f%2BYc%3D')"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-accent mb-2">再别天南</h3>
+                            <p class="text-gray-300">韩立救出南宫婉后功力尽失，恢复后清剿付家，最终决定离开天南，前往乱星海。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 初入星海 -->
+                    <div class="bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover cursor-pointer" onclick="scrollToSection('churuxinghai')">
+                        <div class="h-40 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/labis/3d35fd53494273ddbb7e6e0743c7dd06~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=G88ScZbZVRtgzKPyErY79kHdJlM%3D')"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-accent mb-2">初入星海</h3>
+                            <p class="text-gray-300">韩立在乱星海开始新的修炼，偶得噬金虫，参与镇妖大典，斩杀古长老。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 主要角色简介 -->
+            <div class="animate-slide-in" style="animation-delay: 0.4s;">
+                <h2 class="text-2xl md:text-3xl font-bold text-accent mb-6 text-center">主要角色简介</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                    <!-- 韩立 -->
+                    <div class="bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover">
+                        <div class="h-56 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/labis/ea21dc82b1022a5975c13e9bac27fe8f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=4L7qzOgbyvvKb95qIYAiXsM9P2M%3D')"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-accent mb-2">韩立</h3>
+                            <p class="text-gray-300 text-sm">男主角，相貌普通，皮肤黝黑，性格坚韧、谨慎、心思缜密，目标明确，为达目的不罢休。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 南宫婉 -->
+                    <div class="bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover">
+                        <div class="h-56 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/pgc-image/3fe4895168e448039aa364e3cd07c9d5~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=ihU3b%2FY%2FaeTkE3nzYwAnEVnChOw%3D')"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-accent mb-2">南宫婉</h3>
+                            <p class="text-gray-300 text-sm">女主角，掩月宗长老，修炼素女轮回功，韩立的道侣，气质高雅，容貌绝美。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 墨彩环 -->
+                    <div class="bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover">
+                        <div class="h-56 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/pgc-image/a2fb178e61ee4dd7b26c52de6d3be5d0~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=1zL553QUd2NDGMWlM7Sg0FJ3mM4%3D')"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-accent mb-2">墨彩环</h3>
+                            <p class="text-gray-300 text-sm">墨居仁的女儿，韩立早期遇到的重要人物，温婉善良，对韩立有好感但最终未能在一起。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 董萱儿 -->
+                    <div class="bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover">
+                        <div class="h-56 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/labis/816a275a05455b7c66d3c33fc20cfa81~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=0TflX3Ig6EgkJoWu8%2BJZe6T6pww%3D')"></div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-accent mb-2">董萱儿</h3>
+                            <p class="text-gray-300 text-sm">黄枫谷红拂师祖弟子，擅长媚术，大小姐脾气，天生媚体，曾试图引诱韩立。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 剧情梳理主页面 -->
+    <section id="story" class="min-h-screen py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-accent mb-10 text-center">剧情梳理</h2>
+            
+            <!-- 时间线导航 -->
+            <div class="mb-12 overflow-x-auto scrollbar-hide">
+                <div class="flex space-x-4 md:space-x-8 min-w-max pb-4">
+                    <button class="timeline-nav-btn bg-primary text-white px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-target="qixuanmen">七玄门篇</button>
+                    <button class="timeline-nav-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-target="huangfenggu">黄枫谷篇</button>
+                    <button class="timeline-nav-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-target="yanjiapu">燕家堡之战</button>
+                    <button class="timeline-nav-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-target="modaozhengfeng">魔道争锋</button>
+                    <button class="timeline-nav-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-target="zaibietiannan">再别天南</button>
+                    <button class="timeline-nav-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-target="churuxinghai">初入星海</button>
+                    <button class="timeline-nav-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-target="xinghaifeichi">星海飞驰篇</button>
+                </div>
+            </div>
+            
+            <!-- 剧情内容区域 -->
+            <div class="bg-dark bg-opacity-80 rounded-lg p-6 md:p-8">
+                <!-- 七玄门篇 -->
+                <div id="qixuanmen" class="timeline-content animate-fade-in">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold text-accent mb-4">七玄门篇</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                韩立出生贫困，为改善家庭生活，参加七玄门考核被墨大夫收为弟子。修炼长春功采灵芝时遇野狼帮被厉飞雨救。墨老对韩立练成长春功惊喜，让张铁练象甲功。
+                            </p>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                韩立修炼中发现墨老可疑，墨老以一年寿命逼韩立喝下毒药，后以长春功四层解毒。韩立为反杀墨老做准备，夜里告知成果并要求解药，墨老检查修为后与韩立交手，最后被铁奴打晕带至地下室。
+                            </p>
+                            <p class="text-gray-300 leading-relaxed">
+                                韩立发现铁奴是张铁，查卷宗取名曲魂，立墨老墓碑。七玄门与野狼帮交战，开启机关后山崩地裂。双方决定死契血斗，马长老师傅对金光上人，韩立阻止并灭杀金光上人、贾天龙，其余天狼帮成员逃散。
+                            </p>
+                            
+                            <!-- 关键事件列表 -->
+                            <div class="mt-8">
+                                <h4 class="text-xl font-bold text-accent mb-4">关键事件</h4>
+                                <ul class="space-y-4">
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('qixuanmen-1')">
+                                        <h5 class="font-bold text-white">墨大夫收徒</h5>
+                                        <p class="text-gray-400 text-sm">韩立加入七玄门，被墨大夫收为弟子，开始修炼长春功</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('qixuanmen-2')">
+                                        <h5 class="font-bold text-white">发现夺舍阴谋</h5>
+                                        <p class="text-gray-400 text-sm">韩立发现墨大夫企图夺舍的阴谋，开始暗中准备反击</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('qixuanmen-3')">
+                                        <h5 class="font-bold text-white">反杀墨大夫</h5>
+                                        <p class="text-gray-400 text-sm">韩立成功反杀墨大夫，获得其遗物，得知修仙界的存在</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('qixuanmen-4')">
+                                        <h5 class="font-bold text-white">七玄门大战</h5>
+                                        <p class="text-gray-400 text-sm">韩立灭杀金光上人、贾天龙，帮助七玄门战胜野狼帮</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden mb-6">
+                                <img src="https://p26-doubao-search-sign.byteimg.com/labis/3c7bfd13f4d2e4319e44f9b10a830a7f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=Z8vhXfzaAw9u7Jnl6vx6x8bUBTM%3D" alt="韩立初入七玄门" class="w-full h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                <div class="p-4">
+                                    <p class="text-gray-300">韩立初入七玄门，开始修炼之路</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/fa635914d6f549ef95631c1931ef1c39~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=0Jg3Vl4sCvrZhYnZq40EXc1f%2BYc%3D" alt="韩立修炼" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立修炼长春功</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p3-doubao-search-sign.byteimg.com/pgc-image/0d2063ed9aa74000912a0ff47daf886c~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=9iIZI5edwplAU84nCjCN90Pn%2BLU%3D" alt="韩立与人交手" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立灭杀金光上人</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 修为境界 -->
+                            <div class="mt-6 bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-xl font-bold text-accent mb-3">修为境界</h4>
+                                <div class="flex items-center">
+                                    <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                        <div class="bg-accent h-2.5 rounded-full" style="width: 20%"></div>
+                                    </div>
+                                    <span class="ml-3 text-white">炼气期</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-2">韩立在七玄门期间修炼至长春功四层，为后续修仙之路打下基础。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 黄枫谷篇 -->
+                <div id="huangfenggu" class="timeline-content hidden animate-fade-in">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold text-accent mb-4">黄枫谷篇</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                韩立离开七玄门后修仙，助解嘉元城墨家危机，留曲魂保护并遗医学典籍。韩立得知金光上人令牌"升仙令"。韩立接任百药园工作，向去过血色禁地的向之礼请教。
+                            </p>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                韩立现身与女修士共同抵抗多宝女，多宝女遭狂人偷袭而死，谷中女修士亦被杀害。韩立杀死埋伏修士，获得筑基丹药草并炼制成功。
+                            </p>
+                            <p class="text-gray-300 leading-relaxed">
+                                韩立吞服筑基丹完成筑基，但药力过多需消耗灵力，修炼青元剑诀至第四层。韩立发现书签上三字"辛如音"，确认此法阵主要为辛如音制作，齐云霄协助。
+                            </p>
+                            
+                            <!-- 关键事件列表 -->
+                            <div class="mt-8">
+                                <h4 class="text-xl font-bold text-accent mb-4">关键事件</h4>
+                                <ul class="space-y-4">
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('huangfenggu-1')">
+                                        <h5 class="font-bold text-white">加入黄枫谷</h5>
+                                        <p class="text-gray-400 text-sm">韩立凭借升仙令加入黄枫谷，成为李化元的真传弟子</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('huangfenggu-2')">
+                                        <h5 class="font-bold text-white">血色禁地试炼</h5>
+                                        <p class="text-gray-400 text-sm">韩立参加血色禁地试炼，获得筑基丹药材</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('huangfenggu-3')">
+                                        <h5 class="font-bold text-white">炼制筑基丹</h5>
+                                        <p class="text-gray-400 text-sm">韩立成功炼制筑基丹，为筑基做准备</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('huangfenggu-4')">
+                                        <h5 class="font-bold text-white">成功筑基</h5>
+                                        <p class="text-gray-400 text-sm">韩立吞服筑基丹，成功突破至筑基期</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden mb-6">
+                                <img src="https://p26-doubao-search-sign.byteimg.com/labis/b45d0758b7fea14f9fe8f8f5a41d9f22~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=apkP8%2F18TEZt%2B%2FMe7VdT13jzCEc%3D" alt="黄枫谷" class="w-full h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                <div class="p-4">
+                                    <p class="text-gray-300">韩立所在的黄枫谷</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/labis/cd002f745d6195e91bdfca87e9141846~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=BSrlPXfkgRUSvBuom6E9shiatpE%3D" alt="血色禁地" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">血色禁地试炼</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/labis/3d35fd53494273ddbb7e6e0743c7dd06~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=G88ScZbZVRtgzKPyErY79kHdJlM%3D" alt="韩立筑基" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立成功筑基</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 修为境界 -->
+                            <div class="mt-6 bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-xl font-bold text-accent mb-3">修为境界</h4>
+                                <div class="flex items-center">
+                                    <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                        <div class="bg-accent h-2.5 rounded-full" style="width: 40%"></div>
+                                    </div>
+                                    <span class="ml-3 text-white">筑基期</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-2">韩立在黄枫谷期间成功筑基，修炼青元剑诀至第四层，实力大幅提升。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 燕家堡之战 -->
+                <div id="yanjiapu" class="timeline-content hidden animate-fade-in">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold text-accent mb-4">燕家堡之战</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                燕家堡堡主燕炎是结丹中期修士，他的女儿燕如嫣是天灵根的天才，但此时处于昏迷中，所需治疗药物在刚关闭不久的血色禁地中，燕炎为此十分苦恼。
+                            </p>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                鬼灵门少主王蝉知晓此事后，想趁机将燕家堡收入麾下，并迎娶燕如嫣为妻，以实现自己的野心。韩立此时已筑基成功，成为李化元的真传弟子，因师父安排与董萱儿一同前往燕家堡参加夺宝大赛。
+                            </p>
+                            <p class="text-gray-300 leading-relaxed">
+                                韩立与董萱儿来到燕家堡后，韩立闲逛时遇到了墨彩环，墨彩环是墨居仁的女儿，韩立曾帮助过她，此次重逢二人感慨颇多。而董萱儿天生媚体，在堡内到处释放魅力，与韩立相处并不融洽，后来二人还分开行动。
+                            </p>
+                            
+                            <!-- 关键事件列表 -->
+                            <div class="mt-8">
+                                <h4 class="text-xl font-bold text-accent mb-4">关键事件</h4>
+                                <ul class="space-y-4">
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('yanjiapu-1')">
+                                        <h5 class="font-bold text-white">燕家堡夺宝大会</h5>
+                                        <p class="text-gray-400 text-sm">韩立与董萱儿前往燕家堡参加夺宝大会</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('yanjiapu-2')">
+                                        <h5 class="font-bold text-white">重逢墨彩环</h5>
+                                        <p class="text-gray-400 text-sm">韩立在燕家堡偶遇墨彩环，得知墨家近况</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('yanjiapu-3')">
+                                        <h5 class="font-bold text-white">识破血灵大阵</h5>
+                                        <p class="text-gray-400 text-sm">韩立识破王蝉的血灵大阵阴谋</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('yanjiapu-4')">
+                                        <h5 class="font-bold text-white">大战王蝉</h5>
+                                        <p class="text-gray-400 text-sm">韩立与王蝉展开激烈斗法，结下深仇</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden mb-6">
+                                <img src="https://p26-doubao-search-sign.byteimg.com/labis/cd002f745d6195e91bdfca87e9141846~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=BSrlPXfkgRUSvBuom6E9shiatpE%3D" alt="燕家堡之战" class="w-full h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                <div class="p-4">
+                                    <p class="text-gray-300">燕家堡之战场景</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/pgc-image/a2fb178e61ee4dd7b26c52de6d3be5d0~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=1zL553QUd2NDGMWlM7Sg0FJ3mM4%3D" alt="墨彩环" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立与墨彩环重逢</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/labis/816a275a05455b7c66d3c33fc20cfa81~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=0TflX3Ig6EgkJoWu8%2BJZe6T6pww%3D" alt="董萱儿" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立与董萱儿同行</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 修为境界 -->
+                            <div class="mt-6 bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-xl font-bold text-accent mb-3">修为境界</h4>
+                                <div class="flex items-center">
+                                    <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                        <div class="bg-accent h-2.5 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                    <span class="ml-3 text-white">筑基期</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-2">韩立在燕家堡之战时已筑基成功，实力稳步提升，能够与筑基中期的王蝉抗衡。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 魔道争锋 -->
+                <div id="modaozhengfeng" class="timeline-content hidden animate-fade-in">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold text-accent mb-4">魔道争锋</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                修仙界中，天南地区的越国存在正道七派与魔道六宗的势力划分，双方因利益和理念冲突一直暗潮涌动。此前燕家堡之战等事件已使局势逐渐紧张，魔道六宗有扩张之势，准备入侵越国。
+                            </p>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                韩立在黄枫谷已筑基成功，成为李化元的真传弟子，但也因此卷入了正魔两道的纷争之中。韩立的师父李化元担心魔道六宗会对在朝为官的师侄秦府下手，于是派韩立前去保护。
+                            </p>
+                            <p class="text-gray-300 leading-relaxed">
+                                魔道六宗开始大规模入侵越国，正道七派奋起抵抗，但魔道势力强大，正道逐渐处于下风。在战斗中，各方修士尽显神通，各种法宝和法术的对决精彩纷呈，场面宏大壮观。
+                            </p>
+                            
+                            <!-- 关键事件列表 -->
+                            <div class="mt-8">
+                                <h4 class="text-xl font-bold text-accent mb-4">关键事件</h4>
+                                <ul class="space-y-4">
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('modaozhengfeng-1')">
+                                        <h5 class="font-bold text-white">保护秦府</h5>
+                                        <p class="text-gray-400 text-sm">韩立受师命保护秦府，与魔道修士展开小规模冲突</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('modaozhengfeng-2')">
+                                        <h5 class="font-bold text-white">魔道入侵</h5>
+                                        <p class="text-gray-400 text-sm">魔道六宗大规模入侵越国，正魔大战爆发</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('modaozhengfeng-3')">
+                                        <h5 class="font-bold text-white">黄枫谷撤退</h5>
+                                        <p class="text-gray-400 text-sm">黄枫谷为保存实力开始撤退，韩立所在队伍被当作弃子</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('modaozhengfeng-4')">
+                                        <h5 class="font-bold text-white">传送乱星海</h5>
+                                        <p class="text-gray-400 text-sm">韩立通过古传送阵逃离越国，来到乱星海</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden mb-6">
+                                <img src="https://p3-doubao-search-sign.byteimg.com/pgc-image/0d2063ed9aa74000912a0ff47daf886c~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=9iIZI5edwplAU84nCjCN90Pn%2BLU%3D" alt="魔道争锋" class="w-full h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                <div class="p-4">
+                                    <p class="text-gray-300">正魔大战场景</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/labis/3d35fd53494273ddbb7e6e0743c7dd06~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=G88ScZbZVRtgzKPyErY79kHdJlM%3D" alt="韩立战斗" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立与魔道修士战斗</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/labis/ad9dbc3042bdc75f480acccadb292986~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=fG%2F%2F2621gPmUyxs76HWx0vio8Fg%3D" alt="传送阵" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立通过古传送阵</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 修为境界 -->
+                            <div class="mt-6 bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-xl font-bold text-accent mb-3">修为境界</h4>
+                                <div class="flex items-center">
+                                    <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                        <div class="bg-accent h-2.5 rounded-full" style="width: 50%"></div>
+                                    </div>
+                                    <span class="ml-3 text-white">筑基期</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-2">韩立在魔道争锋期间已筑基成功，青元剑诀修炼至第四层，具备较强的战斗力。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 再别天南 -->
+                <div id="zaibietiannan" class="timeline-content hidden animate-fade-in">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold text-accent mb-4">再别天南</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                天南修仙界面临魔道六宗的大规模入侵，正道七派节节败退，局势危急。在此之前，韩立已在黄枫谷等一系列事件中历经磨难并成长，但此次魔道入侵规模远超以往，天南修仙界面临着前所未有的危机。
+                            </p>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                韩立所在的黄枫谷内部也出现问题，灵兽山叛变，而掌门却无视韩立找到的相关证据，这使得黄枫谷在应对魔道入侵时更加困难。黄枫谷为求生机，决定让红拂师伯与韩立做交易。
+                            </p>
+                            <p class="text-gray-300 leading-relaxed">
+                                李化元为了救韩立，最终战死。韩立的妻子南宫婉在寻找韩立的过程中被魔道修士围困，情况十分危急。韩立得知消息后，不顾自身安危，毅然前去营救南宫婉。
+                            </p>
+                            
+                            <!-- 关键事件列表 -->
+                            <div class="mt-8">
+                                <h4 class="text-xl font-bold text-accent mb-4">关键事件</h4>
+                                <ul class="space-y-4">
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('zaibietiannan-1')">
+                                        <h5 class="font-bold text-white">黄枫谷危机</h5>
+                                        <p class="text-gray-400 text-sm">黄枫谷面临内忧外患，灵兽山叛变</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('zaibietiannan-2')">
+                                        <h5 class="font-bold text-white">李化元之死</h5>
+                                        <p class="text-gray-400 text-sm">韩立的师父李化元为救韩立战死</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('zaibietiannan-3')">
+                                        <h5 class="font-bold text-white">营救南宫婉</h5>
+                                        <p class="text-gray-400 text-sm">韩立营救被围困的南宫婉，自身功力尽失</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('zaibietiannan-4')">
+                                        <h5 class="font-bold text-white">清剿付家</h5>
+                                        <p class="text-gray-400 text-sm">韩立恢复实力后清剿付家，满门覆灭</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden mb-6">
+                                <img src="https://p26-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/fa635914d6f549ef95631c1931ef1c39~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=0Jg3Vl4sCvrZhYnZq40EXc1f%2BYc%3D" alt="再别天南" class="w-full h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                <div class="p-4">
+                                    <p class="text-gray-300">韩立告别天南</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/pgc-image/3fe4895168e448039aa364e3cd07c9d5~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=ihU3b%2FY%2FaeTkE3nzYwAnEVnChOw%3D" alt="南宫婉" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立营救南宫婉</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p3-doubao-search-sign.byteimg.com/pgc-image/0d2063ed9aa74000912a0ff47daf886c~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=9iIZI5edwplAU84nCjCN90Pn%2BLU%3D" alt="韩立战斗" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立清剿付家</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 修为境界 -->
+                            <div class="mt-6 bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-xl font-bold text-accent mb-3">修为境界</h4>
+                                <div class="flex items-center">
+                                    <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                        <div class="bg-accent h-2.5 rounded-full" style="width: 55%"></div>
+                                    </div>
+                                    <span class="ml-3 text-white">筑基期</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-2">韩立在再别天南期间经历了功力尽失又恢复的过程，最终决定离开天南，前往乱星海寻求新的发展。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 初入星海 -->
+                <div id="churuxinghai" class="timeline-content hidden animate-fade-in">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold text-accent mb-4">初入星海</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                韩立因天南修仙界的魔道入侵等变故，通过古传送阵来到乱星海。他初到魁星岛，便遇到六连殿执事文樯，在其帮助下开始了解乱星海的局势及相关信息。
+                            </p>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                乱星海的星宫举办镇妖大典，欲释放被镇压的雷鹏。然而，大典过程中发生变故，雷鹏被放出后获得"前代妖兽之王"称号，它大闹魁星岛，毁掉了镇妖大典的结界，而韩立和紫灵则趁机逃离。
+                            </p>
+                            <p class="text-gray-300 leading-relaxed">
+                                韩立在乱星海开始了艰苦的修炼，经过二十年的努力，重新修炼至筑基巅峰。期间，他还偶得噬金虫，为日后的修行增添了助力。
+                            </p>
+                            
+                            <!-- 关键事件列表 -->
+                            <div class="mt-8">
+                                <h4 class="text-xl font-bold text-accent mb-4">关键事件</h4>
+                                <ul class="space-y-4">
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('churuxinghai-1')">
+                                        <h5 class="font-bold text-white">初到魁星岛</h5>
+                                        <p class="text-gray-400 text-sm">韩立来到乱星海魁星岛，遇到六连殿执事文樯</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('churuxinghai-2')">
+                                        <h5 class="font-bold text-white">镇妖大典</h5>
+                                        <p class="text-gray-400 text-sm">韩立参与星宫镇妖大典，雷鹏被放出大闹魁星岛</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('churuxinghai-3')">
+                                        <h5 class="font-bold text-white">斩杀古长老</h5>
+                                        <p class="text-gray-400 text-sm">韩立斩杀逆星盟古长老，解决危机</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('churuxinghai-4')">
+                                        <h5 class="font-bold text-white">偶得噬金虫</h5>
+                                        <p class="text-gray-400 text-sm">韩立获得噬金虫，成为日后重要战力</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden mb-6">
+                                <img src="https://p26-doubao-search-sign.byteimg.com/labis/3d35fd53494273ddbb7e6e0743c7dd06~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=G88ScZbZVRtgzKPyErY79kHdJlM%3D" alt="初入星海" class="w-full h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                <div class="p-4">
+                                    <p class="text-gray-300">韩立在乱星海</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/labis/ad9dbc3042bdc75f480acccadb292986~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=fG%2F%2F2621gPmUyxs76HWx0vio8Fg%3D" alt="魁星岛" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">魁星岛镇妖大典</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p3-doubao-search-sign.byteimg.com/pgc-image/0d2063ed9aa74000912a0ff47daf886c~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=9iIZI5edwplAU84nCjCN90Pn%2BLU%3D" alt="韩立战斗" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立斩杀古长老</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 修为境界 -->
+                            <div class="mt-6 bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-xl font-bold text-accent mb-3">修为境界</h4>
+                                <div class="flex items-center">
+                                    <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                        <div class="bg-accent h-2.5 rounded-full" style="width: 70%"></div>
+                                    </div>
+                                    <span class="ml-3 text-white">筑基巅峰</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-2">韩立在乱星海重新修炼至筑基巅峰，为结丹做准备，并获得噬金虫这一重要助力。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 星海飞驰篇 -->
+                <div id="xinghaifeichi" class="timeline-content hidden animate-fade-in">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/2">
+                            <h3 class="text-2xl font-bold text-accent mb-4">星海飞驰篇</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                韩立在乱星海历经努力开始准备结丹，在此期间他偶得噬金虫，并结识了紫灵，还得到了金雷竹。星宫长老邀请韩立助阵灭极阴岛叛徒，却不料是紫灵设下的陷阱，她欲清扫门户和复仇。
+                            </p>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                韩立在各种机缘巧合与危机下，迎来了虚天殿的开启。虚天殿中危险重重，第一关就遇煞宝养高阶阴灵，他只能用辟邪神雷过关。在第二关之前，韩立与玄骨约定取九曲灵参后合作杀极阴。
+                            </p>
+                            <p class="text-gray-300 leading-relaxed">
+                                韩立从虚天殿出来后便开始逃亡，在外海又遇封岛，还遇上了星海结丹第一人温仁居，他蒙混过关后逃走，回星宫据点拿东西再逃往外海，期间偶遇大善人风希。
+                            </p>
+                            
+                            <!-- 关键事件列表 -->
+                            <div class="mt-8">
+                                <h4 class="text-xl font-bold text-accent mb-4">关键事件</h4>
+                                <ul class="space-y-4">
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('xinghaifeichi-1')">
+                                        <h5 class="font-bold text-white">结识紫灵</h5>
+                                        <p class="text-gray-400 text-sm">韩立结识紫灵，得到金雷竹</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('xinghaifeichi-2')">
+                                        <h5 class="font-bold text-white">虚天殿探险</h5>
+                                        <p class="text-gray-400 text-sm">韩立进入虚天殿探险，历经重重危险</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('xinghaifeichi-3')">
+                                        <h5 class="font-bold text-white">获得宝物</h5>
+                                        <p class="text-gray-400 text-sm">韩立获得乾蓝冰焰、虚天鼎、小银月等宝物</p>
+                                    </li>
+                                    <li class="bg-gray-800 p-4 rounded-lg border-l-4 border-accent cursor-pointer hover:bg-gray-700 transition-colors duration-300" onclick="showEventDetail('xinghaifeichi-4')">
+                                        <h5 class="font-bold text-white">红尘劫</h5>
+                                        <p class="text-gray-400 text-sm">韩立历经红尘劫，磨练心性，坚定道心</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-1/2">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden mb-6">
+                                <img src="https://p26-doubao-search-sign.byteimg.com/labis/3d35fd53494273ddbb7e6e0743c7dd06~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=G88ScZbZVRtgzKPyErY79kHdJlM%3D" alt="星海飞驰" class="w-full h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                <div class="p-4">
+                                    <p class="text-gray-300">韩立在乱星海历练</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/labis/ad9dbc3042bdc75f480acccadb292986~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=fG%2F%2F2621gPmUyxs76HWx0vio8Fg%3D" alt="虚天殿" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">虚天殿探险</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                    <img src="https://p3-doubao-search-sign.byteimg.com/pgc-image/0d2063ed9aa74000912a0ff47daf886c~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=9iIZI5edwplAU84nCjCN90Pn%2BLU%3D" alt="韩立战斗" class="w-full h-40 object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <div class="p-3">
+                                        <p class="text-gray-300 text-sm">韩立历经红尘劫</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 修为境界 -->
+                            <div class="mt-6 bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-xl font-bold text-accent mb-3">修为境界</h4>
+                                <div class="flex items-center">
+                                    <div class="w-full bg-gray-700 rounded-full h-2.5">
+                                        <div class="bg-accent h-2.5 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                    <span class="ml-3 text-white">结丹期</span>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-2">韩立在星海飞驰篇成功结丹，实力大幅提升，获得多种宝物，为日后进阶元婴打下基础。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 大事件汇总 -->
+    <section id="events" class="min-h-screen py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-accent mb-10 text-center">大事件汇总</h2>
+            
+            <!-- 时间线 -->
+            <div class="relative max-w-4xl mx-auto mb-16">
+                <!-- 时间线轴 -->
+                <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 h-full w-1 bg-accent bg-opacity-30"></div>
+                
+                <!-- 时间线事件 -->
+                <div class="space-y-12">
+                    <!-- 七玄门篇事件 -->
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center">
+                        <div class="md:w-1/2 md:pr-8 md:text-right mb-4 md:mb-0">
+                            <h3 class="text-xl font-bold text-accent">墨大夫夺舍阴谋</h3>
+                            <p class="text-gray-300 mt-2">韩立发现墨大夫企图夺舍的阴谋，经过精心策划，成功反杀墨大夫，获得其遗物和修仙界的信息。</p>
+                            <button class="mt-3 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showEventDetail('qixuanmen-2')">查看详情</button>
+                        </div>
+                        <div class="md:absolute md:left-1/2 md:transform md:-translate-x-1/2 h-6 w-6 rounded-full bg-accent border-4 border-dark"></div>
+                        <div class="md:w-1/2 md:pl-8 hidden md:block"></div>
+                    </div>
+                    
+                    <!-- 黄枫谷篇事件 -->
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center">
+                        <div class="md:w-1/2 md:pr-8 hidden md:block"></div>
+                        <div class="md:absolute md:left-1/2 md:transform md:-translate-x-1/2 h-6 w-6 rounded-full bg-accent border-4 border-dark"></div>
+                        <div class="md:w-1/2 md:pl-8">
+                            <h3 class="text-xl font-bold text-accent">血色禁地试炼</h3>
+                            <p class="text-gray-300 mt-2">韩立参加血色禁地试炼，获得筑基丹药材，并在试炼中与其他修士发生冲突，展现出过人的实力和谨慎的性格。</p>
+                            <button class="mt-3 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showEventDetail('huangfenggu-2')">查看详情</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 燕家堡之战事件 -->
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center">
+                        <div class="md:w-1/2 md:pr-8 md:text-right mb-4 md:mb-0">
+                            <h3 class="text-xl font-bold text-accent">血灵大阵破解</h3>
+                            <p class="text-gray-300 mt-2">韩立识破王蝉的血灵大阵阴谋，巧妙破解大阵，营救被困修士，并与王蝉展开激烈斗法，结下深仇。</p>
+                            <button class="mt-3 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showEventDetail('yanjiapu-3')">查看详情</button>
+                        </div>
+                        <div class="md:absolute md:left-1/2 md:transform md:-translate-x-1/2 h-6 w-6 rounded-full bg-accent border-4 border-dark"></div>
+                        <div class="md:w-1/2 md:pl-8 hidden md:block"></div>
+                    </div>
+                    
+                    <!-- 魔道争锋事件 -->
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center">
+                        <div class="md:w-1/2 md:pr-8 hidden md:block"></div>
+                        <div class="md:absolute md:left-1/2 md:transform md:-translate-x-1/2 h-6 w-6 rounded-full bg-accent border-4 border-dark"></div>
+                        <div class="md:w-1/2 md:pl-8">
+                            <h3 class="text-xl font-bold text-accent">魔道入侵</h3>
+                            <p class="text-gray-300 mt-2">魔道六宗大规模入侵越国，正魔大战爆发，韩立所在的黄枫谷节节败退，最终韩立通过古传送阵逃离越国。</p>
+                            <button class="mt-3 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showEventDetail('modaozhengfeng-2')">查看详情</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 再别天南事件 -->
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center">
+                        <div class="md:w-1/2 md:pr-8 md:text-right mb-4 md:mb-0">
+                            <h3 class="text-xl font-bold text-accent">营救南宫婉</h3>
+                            <p class="text-gray-300 mt-2">韩立得知南宫婉被围困，不顾自身安危前去营救，成功救出南宫婉后自身功力完全丧失，陷入极度虚弱状态。</p>
+                            <button class="mt-3 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showEventDetail('zaibietiannan-3')">查看详情</button>
+                        </div>
+                        <div class="md:absolute md:left-1/2 md:transform md:-translate-x-1/2 h-6 w-6 rounded-full bg-accent border-4 border-dark"></div>
+                        <div class="md:w-1/2 md:pl-8 hidden md:block"></div>
+                    </div>
+                    
+                    <!-- 初入星海事件 -->
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center">
+                        <div class="md:w-1/2 md:pr-8 hidden md:block"></div>
+                        <div class="md:absolute md:left-1/2 md:transform md:-translate-x-1/2 h-6 w-6 rounded-full bg-accent border-4 border-dark"></div>
+                        <div class="md:w-1/2 md:pl-8">
+                            <h3 class="text-xl font-bold text-accent">偶得噬金虫</h3>
+                            <p class="text-gray-300 mt-2">韩立在乱星海偶得噬金虫，这成为他日后重要的战力之一，为他的修仙之路增添了强大助力。</p>
+                            <button class="mt-3 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showEventDetail('churuxinghai-4')">查看详情</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 星海飞驰篇事件 -->
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center">
+                        <div class="md:w-1/2 md:pr-8 md:text-right mb-4 md:mb-0">
+                            <h3 class="text-xl font-bold text-accent">虚天殿探险</h3>
+                            <p class="text-gray-300 mt-2">韩立进入虚天殿探险，历经重重危险，最终获得乾蓝冰焰、虚天鼎、小银月等珍贵宝物。</p>
+                            <button class="mt-3 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showEventDetail('xinghaifeichi-2')">查看详情</button>
+                        </div>
+                        <div class="md:absolute md:left-1/2 md:transform md:-translate-x-1/2 h-6 w-6 rounded-full bg-accent border-4 border-dark"></div>
+                        <div class="md:w-1/2 md:pl-8 hidden md:block"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 角色介绍 -->
+    <section id="characters" class="min-h-screen py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-accent mb-10 text-center">角色介绍</h2>
+            
+            <!-- 角色分类标签 -->
+            <div class="flex flex-wrap justify-center gap-4 mb-10">
+                <button class="character-filter-btn bg-primary text-white px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-filter="all">全部角色</button>
+                <button class="character-filter-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-filter="protagonist">主角</button>
+                <button class="character-filter-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-filter="heroine">女主角</button>
+                <button class="character-filter-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-filter="ally">盟友</button>
+                <button class="character-filter-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300" data-filter="enemy">敌人</button>
+            </div>
+            
+            <!-- 角色卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 韩立 -->
+                <div class="character-card bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover" data-category="protagonist">
+                    <div class="h-64 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/labis/ea21dc82b1022a5975c13e9bac27fe8f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=4L7qzOgbyvvKb95qIYAiXsM9P2M%3D')"></div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-accent mb-2">韩立</h3>
+                        <p class="text-gray-400 mb-4">男主角 | 天南越国镜州青牛镇五里沟人氏</p>
+                        <p class="text-gray-300 mb-4 leading-relaxed">
+                            相貌普通，皮肤黝黑，家中排行老四，童年被三叔介绍到七玄门，因身具灵根(四伪灵根缺金)，可修炼长春功而被墨大夫收为弟子，从此踏上修仙之路。
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            性格坚韧、谨慎、心思缜密，目标明确，为达目的不罢休。拥有神秘小瓶，能加速灵草生长，是他修仙之路上的重要助力。
+                        </p>
+                        <button class="mt-4 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showCharacterDetail('hanli')">查看详情</button>
+                    </div>
+                </div>
+                
+                <!-- 南宫婉 -->
+                <div class="character-card bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover" data-category="heroine">
+                    <div class="h-64 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/pgc-image/3fe4895168e448039aa364e3cd07c9d5~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=ihU3b%2FY%2FaeTkE3nzYwAnEVnChOw%3D')"></div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-accent mb-2">南宫婉</h3>
+                        <p class="text-gray-400 mb-4">女主角 | 掩月宗长老</p>
+                        <p class="text-gray-300 mb-4 leading-relaxed">
+                            修炼素女轮回功，轮回期间法力降到练气期，以练气期弟子身份混入血色禁地，与韩立合力杀死墨蛟，得到金色箱子。
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            气质高雅，容貌绝美，是韩立的道侣。在修仙界有着重要地位，对韩立的修仙之路有着深远影响。
+                        </p>
+                        <button class="mt-4 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showCharacterDetail('nangongwan')">查看详情</button>
+                    </div>
+                </div>
+                
+                <!-- 墨彩环 -->
+                <div class="character-card bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover" data-category="heroine">
+                    <div class="h-64 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/pgc-image/a2fb178e61ee4dd7b26c52de6d3be5d0~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=1zL553QUd2NDGMWlM7Sg0FJ3mM4%3D')"></div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-accent mb-2">墨彩环</h3>
+                        <p class="text-gray-400 mb-4">重要角色 | 墨居仁之女</p>
+                        <p class="text-gray-300 mb-4 leading-relaxed">
+                            墨居仁的女儿，韩立路过墨府解救其危难，韩立离开赠与医学典籍，后墨府被破流落到燕家堡开了一座医馆，韩立参加燕家堡大会与其再见。
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            温婉善良，对韩立有好感，但最终未能在一起。她是韩立早期修仙之路上的重要人物，代表了韩立对凡人情谊的牵挂。
+                        </p>
+                        <button class="mt-4 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showCharacterDetail('mocaihuan')">查看详情</button>
+                    </div>
+                </div>
+                
+                <!-- 董萱儿 -->
+                <div class="character-card bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover" data-category="heroine">
+                    <div class="h-64 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/labis/816a275a05455b7c66d3c33fc20cfa81~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=0TflX3Ig6EgkJoWu8%2BJZe6T6pww%3D')"></div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-accent mb-2">董萱儿</h3>
+                        <p class="text-gray-400 mb-4">重要角色 | 黄枫谷红拂师祖弟子</p>
+                        <p class="text-gray-300 mb-4 leading-relaxed">
+                            擅长媚术，大小姐脾气，但是十分惧怕其师傅，被师傅指派与韩立一同参加燕家堡大会。天生媚体，修炼"化春诀"而魅惑天成。
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            曾试图引诱韩立未果，最终因心魔困扰请求韩立相助。她在韩立的修仙之路上多次出现，与韩立有着复杂的关系。
+                        </p>
+                        <button class="mt-4 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showCharacterDetail('dongxuaner')">查看详情</button>
+                    </div>
+                </div>
+                
+                <!-- 厉飞雨 -->
+                <div class="character-card bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover" data-category="ally">
+                    <div class="h-64 bg-cover bg-center" style="background-image: url('https://p26-doubao-search-sign.byteimg.com/labis/3c7bfd13f4d2e4319e44f9b10a830a7f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=Z8vhXfzaAw9u7Jnl6vx6x8bUBTM%3D')"></div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-accent mb-2">厉飞雨</h3>
+                        <p class="text-gray-400 mb-4">重要角色 | 韩立的好友</p>
+                        <p class="text-gray-300 mb-4 leading-relaxed">
+                            和韩立同年上山，初入七玄门时考核未能一次过关，被收为记名弟子。半年后一鸣惊人，引起上层注意，但因根骨一般，未被重视。
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            2年后，只拜在一名普通护法门下，学了几套普通武功，其中就包含了风雷刀法。是韩立在七玄门时期的好友，多次帮助韩立。
+                        </p>
+                        <button class="mt-4 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showCharacterDetail('lifeiyu')">查看详情</button>
+                    </div>
+                </div>
+                
+                <!-- 王蝉 -->
+                <div class="character-card bg-dark bg-opacity-80 rounded-lg overflow-hidden card-hover" data-category="enemy">
+                    <div class="h-64 bg-cover bg-center" style="background-image: url('https://p3-doubao-search-sign.byteimg.com/pgc-image/0d2063ed9aa74000912a0ff47daf886c~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=9iIZI5edwplAU84nCjCN90Pn%2BLU%3D')"></div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-accent mb-2">王蝉</h3>
+                        <p class="text-gray-400 mb-4">反派角色 | 鬼灵门少主</p>
+                        <p class="text-gray-300 mb-4 leading-relaxed">
+                            鬼灵门少主，天生暗灵根，修炼血灵大法，策划魔道入侵的主力人物之一。在燕家堡之战中与韩立结下深仇。
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            野心勃勃，心狠手辣，多次设计陷害韩立。是韩立修仙之路上的重要对手，对韩立的成长有着重要影响。
+                        </p>
+                        <button class="mt-4 bg-primary text-white px-4 py-1 rounded hover:bg-accent transition-colors duration-300" onclick="showCharacterDetail('wangchan')">查看详情</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center">
+                        <img src="https://p26-doubao-search-sign.byteimg.com/labis/ea21dc82b1022a5975c13e9bac27fe8f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=4L7qzOgbyvvKb95qIYAiXsM9P2M%3D" alt="凡人修仙传" class="h-10 w-10 rounded-full mr-3">
+                        <span class="text-xl font-bold text-accent">凡人修仙传</span>
+                    </div>
+                    <p class="text-gray-400 mt-2">从山村少年到修仙巨擘的传奇之路</p>
+                </div>
+                
+                <div class="flex flex-col md:flex-row md:space-x-12">
+                    <div class="mb-6 md:mb-0">
+                        <h4 class="text-lg font-bold text-accent mb-3">快速链接</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#home" class="text-gray-400 hover:text-accent transition-colors duration-300">首页</a></li>
+                            <li><a href="#story" class="text-gray-400 hover:text-accent transition-colors duration-300">剧情梳理</a></li>
+                            <li><a href="#events" class="text-gray-400 hover:text-accent transition-colors duration-300">大事件汇总</a></li>
+                            <li><a href="#characters" class="text-gray-400 hover:text-accent transition-colors duration-300">角色介绍</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold text-accent mb-3">关于我们</h4>
+                        <p class="text-gray-400">本网站旨在梳理《凡人修仙传》动画剧情，方便观众了解剧情发展脉络。</p>
+                        <p class="text-gray-400 mt-2">© 2025 凡人修仙传剧情梳理网站</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center">
+                <p class="text-gray-500">本站内容仅供参考，版权归原作者所有。如有侵权，请联系我们删除。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 大事件详情模态框 -->
+    <div id="event-detail-modal" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center hidden">
+        <div class="bg-dark rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="event-detail-title" class="text-2xl md:text-3xl font-bold text-accent"></h3>
+                <button id="close-event-detail" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <div id="event-detail-content" class="space-y-6">
+                <!-- 内容将通过JavaScript动态填充 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 角色详情模态框 -->
+    <div id="character-detail-modal" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center hidden">
+        <div class="bg-dark rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="character-detail-title" class="text-2xl md:text-3xl font-bold text-accent"></h3>
+                <button id="close-character-detail" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <div id="character-detail-content" class="space-y-6">
+                <!-- 内容将通过JavaScript动态填充 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片查看模态框 -->
+    <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center hidden">
+        <div class="relative">
+            <button id="close-image-modal" class="absolute -top-10 right-0 text-white text-3xl hover:text-accent">&times;</button>
+            <img id="modal-image" src="" alt="大图查看" class="max-w-[90vw] max-h-[90vh]">
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('main-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('py-2');
+                nav.classList.remove('py-3');
+            } else {
+                nav.classList.add('py-3');
+                nav.classList.remove('py-2');
+            }
+        });
+        
+        // 移动端菜单切换
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 如果是移动端，点击后关闭菜单
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+        
+        // 剧情时间线导航
+        document.querySelectorAll('.timeline-nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                
+                // 更新按钮样式
+                document.querySelectorAll('.timeline-nav-btn').forEach(b => {
+                    b.classList.remove('bg-primary', 'text-white');
+                    b.classList.add('bg-gray-700', 'text-gray-300');
+                });
+                this.classList.remove('bg-gray-700', 'text-gray-300');
+                this.classList.add('bg-primary', 'text-white');
+                
+                // 显示对应内容
+                document.querySelectorAll('.timeline-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(targetId).classList.remove('hidden');
+            });
+        });
+        
+        // 角色筛选
+        document.querySelectorAll('.character-filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+                
+                // 更新按钮样式
+                document.querySelectorAll('.character-filter-btn').forEach(b => {
+                    b.classList.remove('bg-primary', 'text-white');
+                    b.classList.add('bg-gray-700', 'text-gray-300');
+                });
+                this.classList.remove('bg-gray-700', 'text-gray-300');
+                this.classList.add('bg-primary', 'text-white');
+                
+                // 筛选角色卡片
+                document.querySelectorAll('.character-card').forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // 搜索功能
+        document.getElementById('search-btn').addEventListener('click', performSearch);
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        function performSearch() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+            if (!searchTerm) return;
+            
+            // 搜索剧情阶段
+            const timelineContents = document.querySelectorAll('.timeline-content');
+            for (let content of timelineContents) {
+                const title = content.querySelector('h3').textContent.toLowerCase();
+                const paragraphs = content.querySelectorAll('p');
+                let found = false;
+                
+                if (title.includes(searchTerm)) {
+                    found = true;
+                } else {
+                    for (let p of paragraphs) {
+                        if (p.textContent.toLowerCase().includes(searchTerm)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (found) {
+                    // 滚动到剧情梳理部分
+                    document.querySelector('#story').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // 显示对应内容
+                    timelineContents.forEach(c => c.classList.add('hidden'));
+                    content.classList.remove('hidden');
+                    
+                    // 更新时间线导航按钮样式
+                    document.querySelectorAll('.timeline-nav-btn').forEach(btn => {
+                        if (btn.getAttribute('data-target') === content.id) {
+                            btn.classList.remove('bg-gray-700', 'text-gray-300');
+                            btn.classList.add('bg-primary', 'text-white');
+                        } else {
+                            btn.classList.remove('bg-primary', 'text-white');
+                            btn.classList.add('bg-gray-700', 'text-gray-300');
+                        }
+                    });
+                    
+                    return;
+                }
+            }
+            
+            // 搜索角色
+            const characterCards = document.querySelectorAll('.character-card');
+            for (let card of characterCards) {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const paragraphs = card.querySelectorAll('p');
+                let found = false;
+                
+                if (title.includes(searchTerm)) {
+                    found = true;
+                } else {
+                    for (let p of paragraphs) {
+                        if (p.textContent.toLowerCase().includes(searchTerm)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (found) {
+                    // 滚动到角色介绍部分
+                    document.querySelector('#characters').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // 显示对应角色卡片
+                    characterCards.forEach(c => c.style.display = 'none');
+                    card.style.display = 'block';
+                    
+                    // 更新角色筛选按钮样式
+                    document.querySelectorAll('.character-filter-btn').forEach(btn => {
+                        btn.classList.remove('bg-primary', 'text-white');
+                        btn.classList.add('bg-gray-700', 'text-gray-300');
+                    });
+                    
+                    return;
+                }
+            }
+            
+            alert('未找到相关内容，请尝试其他关键词');
+        }
+        
+        // 图片查看功能
+        function showImageModal(src) {
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            
+            modalImage.src = src;
+            modal.classList.remove('hidden');
+        }
+        
+        document.getElementById('close-image-modal').addEventListener('click', function() {
+            document.getElementById('image-modal').classList.add('hidden');
+        });
+        
+        // 点击模态框外部关闭
+        document.getElementById('image-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+        
+        // 大事件详情功能
+        function showEventDetail(eventId) {
+            const modal = document.getElementById('event-detail-modal');
+            const title = document.getElementById('event-detail-title');
+            const content = document.getElementById('event-detail-content');
+            
+            // 根据事件ID获取详情
+            let eventData = {};
+            
+            switch(eventId) {
+                case 'qixuanmen-1':
+                    eventData = {
+                        title: '墨大夫收徒',
+                        content: `
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="md:w-1/2">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/labis/3c7bfd13f4d2e4319e44f9b10a830a7f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=Z8vhXfzaAw9u7Jnl6vx6x8bUBTM%3D" alt="墨大夫收徒" class="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        韩立出生贫困，为了让家人过上更好的生活，自愿前去七玄门参加入门考核。在考核中，韩立表现出了非凡的毅力和观察力，被神秘的墨大夫看中，收为弟子。
+                                    </p>
+                                    <p class="text-gray-300 leading-relaxed">
+                                        墨大夫一开始对韩立悉心培养、传授医术，让韩立对他非常感激。墨大夫传授给韩立的长春功是一种基础的修仙功法，为韩立打开了修仙之门。
+                                    </p>
+                                </div>
+                                <div class="md:w-1/2">
+                                    <h4 class="text-xl font-bold text-accent mb-3">事件详情</h4>
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        墨大夫收韩立为徒，是韩立修仙之路的起点。墨大夫看中韩立的原因，除了他的毅力和观察力外，更重要的是韩立身具四伪灵根，虽然资质平庸，但适合修炼长春功，这为墨大夫的夺舍计划埋下了伏笔。
+                                    </p>
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        在墨大夫的指导下，韩立开始修炼长春功，并学习医术。这段时间的修炼为韩立打下了坚实的基础，也让他对修仙界有了初步的了解。
+                                    </p>
+                                    <h4 class="text-xl font-bold text-accent mb-3">相关角色</h4>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                                        <li>韩立 - 事件主角，被墨大夫收为弟子</li>
+                                        <li>墨大夫 - 七玄门神秘医师，实际是修仙者</li>
+                                        <li>张铁 - 与韩立同期入门的弟子</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `
+                    };
+                    break;
+                case 'qixuanmen-2':
+                    eventData = {
+                        title: '发现夺舍阴谋',
+                        content: `
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="md:w-1/2">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/tos-cn-i-6w9my0ksvp/fa635914d6f549ef95631c1931ef1c39~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=0Jg3Vl4sCvrZhYnZq40EXc1f%2BYc%3D" alt="发现夺舍阴谋" class="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        随着修炼的深入，韩立逐渐发现墨大夫的行为越来越可疑。墨大夫对韩立的长春功进展异常关注，并且经常询问韩立的身体状况，这让韩立产生了警觉。
+                                    </p>
+                                    <p class="text-gray-300 leading-relaxed">
+                                        同时，与韩立同期入门的弟子张铁神秘失踪，更让韩立感到不安。通过一系列的观察和调查，韩立逐渐意识到墨大夫可能在策划一个可怕的阴谋。
+                                    </p>
+                                </div>
+                                <div class="md:w-1/2">
+                                    <h4 class="text-xl font-bold text-accent mb-3">事件详情</h4>
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        墨大夫实际上是一名修仙者，因修炼出了岔子，需要夺舍他人的身体才能继续存活。他看中了韩立的身体，认为其适合修炼长春功，是理想的夺舍对象。
+                                    </p>
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        墨大夫以一年寿命逼韩立喝下毒药，以此控制韩立。韩立在得知真相后，表面顺从，暗中却在准备反击。他利用墨大夫传授的知识和自己的智慧，制定了周密的计划。
+                                    </p>
+                                    <h4 class="text-xl font-bold text-accent mb-3">相关角色</h4>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                                        <li>韩立 - 发现墨大夫阴谋，准备反击</li>
+                                        <li>墨大夫 - 策划夺舍阴谋的修仙者</li>
+                                        <li>张铁 - 被墨大夫炼成铁奴的弟子</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `
+                    };
+                    break;
+                // 其他事件详情...
+                default:
+                    eventData = {
+                        title: '事件详情',
+                        content: '<p class="text-gray-300">该事件详情正在整理中...</p>'
+                    };
+            }
+            
+            title.textContent = eventData.title;
+            content.innerHTML = eventData.content;
+            modal.classList.remove('hidden');
+        }
+        
+        document.getElementById('close-event-detail').addEventListener('click', function() {
+            document.getElementById('event-detail-modal').classList.add('hidden');
+        });
+        
+        // 点击模态框外部关闭
+        document.getElementById('event-detail-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+        
+        // 角色详情功能
+        function showCharacterDetail(characterId) {
+            const modal = document.getElementById('character-detail-modal');
+            const title = document.getElementById('character-detail-title');
+            const content = document.getElementById('character-detail-content');
+            
+            // 根据角色ID获取详情
+            let characterData = {};
+            
+            switch(characterId) {
+                case 'hanli':
+                    characterData = {
+                        title: '韩立',
+                        content: `
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="md:w-1/2">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/labis/ea21dc82b1022a5975c13e9bac27fe8f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866152&x-signature=4L7qzOgbyvvKb95qIYAiXsM9P2M%3D" alt="韩立" class="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        韩立，天南越国镜州青牛镇五里沟人氏，燕族人。相貌普通，皮肤黝黑，家中排行老四，童年被三叔介绍到七玄门，因身具灵根(四伪灵根缺金)，可修炼长春功而被墨大夫收为弟子，从此踏上修仙之路。
+                                    </p>
+                                    <p class="text-gray-300 leading-relaxed">
+                                        韩立性格坚韧、谨慎、心思缜密，目标明确，为达目的不罢休。他拥有神秘小瓶，能加速灵草生长，是他修仙之路上的重要助力。
+                                    </p>
+                                </div>
+                                <div class="md:w-1/2">
+                                    <h4 class="text-xl font-bold text-accent mb-3">角色详情</h4>
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        韩立本是一个普通的山村少年，为了改善家庭生活而加入七玄门。在得知修仙界的存在后，他踏上了追求长生的道路。韩立资质平庸，但凭借着过人的毅力、谨慎的性格和神秘小瓶的帮助，在修仙界一步步崛起。
+                                    </p>
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        韩立的修仙之路充满坎坷，但他始终坚持自己的原则，不断提升实力。他擅长炼丹、制符、炼器等多项技能，并且拥有多种强大的法宝和功法。
+                                    </p>
+                                    <h4 class="text-xl font-bold text-accent mb-3">主要经历</h4>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                                        <li>加入七玄门，被墨大夫收为弟子</li>
+                                        <li>发现墨大夫夺舍阴谋，成功反杀</li>
+                                        <li>加入黄枫谷，成为李化元的真传弟子</li>
+                                        <li>参加血色禁地试炼，获得筑基丹</li>
+                                        <li>成功筑基，修炼青元剑诀</li>
+                                        <li>参与燕家堡之战，与王蝉结仇</li>
+                                        <li>经历魔道入侵，逃离越国</li>
+                                        <li>在乱星海重新开始修炼，获得噬金虫</li>
+                                        <li>进入虚天殿探险，获得多种宝物</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `
+                    };
+                    break;
+                case 'nangongwan':
+                    characterData = {
+                        title: '南宫婉',
+                        content: `
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="md:w-1/2">
+                                    <img src="https://p26-doubao-search-sign.byteimg.com/pgc-image/3fe4895168e448039aa364e3cd07c9d5~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1776866153&x-signature=ihU3b%2FY%2FaeTkE3nzYwAnEVnChOw%3D" alt="南宫婉" class="w-full h-64 object-cover rounded-lg mb-4 cursor-pointer hover:opacity-90 transition-opacity duration-300" onclick="showImageModal(this.src)">
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        南宫婉，掩月宗长老，修炼素女轮回功，轮回期间法力降到练气期，以练气期弟子身份混入血色禁地，与韩立合力杀死墨蛟，得到金色箱子。
+                                    </p>
+                                    <p class="text-gray-300 leading-relaxed">
+                                        南宫婉气质高雅，容貌绝美，是韩立的道侣。她在修仙界有着重要地位，对韩立的修仙之路有着深远影响。
+                                    </p>
+                                </div>
+                                <div class="md:w-1/2">
+                                    <h4 class="text-xl font-bold text-accent mb-3">角色详情</h4>
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        南宫婉是韩立的道侣，也是他修仙之路上最重要的人之一。她本是掩月宗的长老，因修炼素女轮回功而法力大减，以练气期弟子的身份进入血色禁地。在禁地里，她与韩立相遇，并一同经历了生死考验。
+                                    </p>
+                                    <p class="text-gray-300 mb-4 leading-relaxed">
+                                        南宫婉不仅容貌绝美，而且实力强大，心思缜密。她对韩立有着深厚的感情，在韩立遇到危难时多次出手相助。她的存在，是韩立在冷酷的修仙界中为数不多的温暖。
+                                    </p>
+                                    <h4 class="text-xl font-bold text-accent mb-3">主要经历</h4>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-2">
+                                        <li>修炼素女轮回功，法力大减</li>
+                                        <li>以练气期身份进入血色禁地</li>
+                                        <li>与韩立相遇，合力杀死墨蛟</li>
+                                        <li>与韩立结为道侣</li>
+                                        <li>在魔道入侵中被围困，被韩立营救</li>
+                                        <li>与韩立共同面对修仙界的挑战</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `
+                    };
+                    break;
+                // 其他角色详情...
+                default:
+                    characterData = {
+                        title: '角色详情',
+                        content: '<p class="text-gray-300">该角色详情正在整理中...</p>'
+                    };
+            }
+            
+            title.textContent = characterData.title;
+            content.innerHTML = characterData.content;
+            modal.classList.remove('hidden');
+        }
+        
+        document.getElementById('close-character-detail').addEventListener('click', function() {
+            document.getElementById('character-detail-modal').classList.add('hidden');
+        });
+        
+        // 点击模态框外部关闭
+        document.getElementById('character-detail-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+        
+        // 滚动到指定剧情阶段
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                // 滚动到剧情梳理部分
+                document.querySelector('#story').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // 延迟显示对应内容，确保滚动完成
+                setTimeout(() => {
+                    // 显示对应内容
+                    document.querySelectorAll('.timeline-content').forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    section.classList.remove('hidden');
+                    
+                    // 更新时间线导航按钮样式
+                    document.querySelectorAll('.timeline-nav-btn').forEach(btn => {
+                        if (btn.getAttribute('data-target') === sectionId) {
+                            btn.classList.remove('bg-gray-700', 'text-gray-300');
+                            btn.classList.add('bg-primary', 'text-white');
+                        } else {
+                            btn.classList.remove('bg-primary', 'text-white');
+                            btn.classList.add('bg-gray-700', 'text-gray-300');
+                        }
+                    });
+                }, 500);
+            }
+        }
+        
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', function() {
+            // 设置导航链接高亮
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            
+            window.addEventListener('scroll', function() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionHeight = section.clientHeight;
+                    if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('text-accent');
+                    link.classList.add('text-gray-300');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.remove('text-gray-300');
+                        link.classList.add('text-accent');
+                    }
+                });
+            });
+            
+            // 触发一次滚动事件，初始化导航高亮
+            window.dispatchEvent(new Event('scroll'));
+        });
+    </script>
+</body>
+</html>

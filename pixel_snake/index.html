@@ -75,6 +75,16 @@
       line-height:64px;
     }
     
+    /* 定义CSS变量 */
+    :root {
+      --tw-color-accent: #0EFF37;
+      --tw-color-dark: #121212;
+      --tw-color-primary: #0EFF37;
+      --tw-color-secondary: #37383C;
+      --tw-transform: none;
+    }
+    
+    
     /* 移动端优化 */
     @media (max-width: 640px) {
       .mobile-text-sm {
@@ -95,6 +105,77 @@
       }
       .landscape-mt-2 {
         margin-top: 0.5rem;
+      }
+    }
+    
+    /* 防止页面滑动 */
+    html, body {
+      touch-action: none;
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: auto;
+    }
+    
+    /* 游戏区域优化 */
+    #game-container {
+      touch-action: none;
+    }
+    
+    /* 移动端按钮优化 */
+    @media (max-width: 768px) {
+      #mobile-controls button {
+        touch-action: manipulation;
+      }
+      
+      /* 小屏幕优化 */
+      @media (max-width: 480px) {
+        #mobile-controls {
+          gap: 1rem;
+        }
+        
+        #mobile-controls button {
+          height: 3.5rem;
+        }
+      }
+      
+      /* 超小屏幕优化 */
+      @media (max-width: 360px) {
+        #mobile-controls {
+          gap: 0.75rem;
+        }
+        
+        #mobile-controls button {
+          height: 3rem;
+          font-size: 1rem;
+        }
+        
+        .glass-effect {
+          padding: 0.25rem;
+        }
+        
+        .glass-effect p {
+          font-size: 0.75rem;
+          line-height: 1.2;
+        }
+      }
+    }
+    
+    /* 横屏优化 */
+    @media (orientation: landscape) {
+      .flex-col {
+        flex-direction: row;
+      }
+      
+      .flex-grow {
+        flex-grow: 1;
+      }
+      
+      .flex-shrink-0 {
+        flex-shrink: 0;
+      }
+      
+      /* 横屏时隐藏操作说明 */
+      .landscape-hide {
+        display: none !important;
       }
     }
     
@@ -135,22 +216,53 @@
         background: linear-gradient(135deg, #0f1a3d 0%, #1a2a6c 50%, #0f1a3d 100%);
       }
       .pixel-button {
-        @apply relative px-6 py-3 text-xl font-extrabold transform transition-all duration-150 overflow-hidden 
-               bg-accent text-dark pixel-text shadow-pixel hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-pixel-hover;
+        position: relative;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        font-weight: 800;
+        transform: var(--tw-transform);
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+        overflow: hidden;
+        background-color: var(--tw-color-accent);
+        color: var(--tw-color-dark);
+        font-family: 'Doto', monospace;
+        box-shadow: 4px 4px 0px rgba(69, 101, 75, 1);
+      }
+      .pixel-button:hover {
+        --tw-translate-x: -2px;
+        --tw-translate-y: -2px;
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+        box-shadow: 6px 6px 0px rgba(69, 101, 75, 1);
       }
       .pixel-button::before {
         content: '';
-        @apply absolute top-0 left-0 w-full h-full bg-white opacity-20 
-               transform translate-x-[-100%] skew-x-[-15deg] transition-transform duration-300;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        opacity: 0.2;
+        transform: translateX(-100%) skewX(-15deg);
+        transition-property: transform;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
       }
       .pixel-button:hover::before {
-        @apply transform translate-x-[100%];
+        transform: translateX(100%);
       }
       .pixel-text {
         font-family: 'Doto', monospace;
       }
       .glass-effect {
-        @apply bg-white bg-opacity-10 backdrop-blur-md;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
       }
     }
   </style>
@@ -160,15 +272,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&amp;display=swap" rel="stylesheet">
 </head>
-<body class="bg-dark min-h-screen flex flex-col items-center justify-center p-4 text-light overflow-hidden">
-  <div class="w-full max-w-3xl mx-auto flex flex-col items-center">
-    <!-- 游戏标题 -->
-    <h1 class="pixel-text text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-2 sm:mb-4 text-accent" style="line-height: 1.2;">SNAKE GAME</h1>
+<body class="bg-dark h-screen w-screen overflow-hidden m-0 p-0 text-light">
+  <div class="h-full w-full flex flex-col">
+    <!-- 游戏标题区域 -->
+    <div class="flex-shrink-0 px-2 py-1 sm:px-4 sm:py-2">
+      <h1 class="pixel-text text-xl sm:text-2xl md:text-3xl font-bold text-center text-accent">SNAKE GAME</h1>
+    </div>
     
-    <!-- 游戏容器 -->
-    <div id="game-container" class="relative overflow-hidden pixel-borders transition-all duration-300 mx-auto" style="max-width: 100%;">
-      <!-- 游戏画布 -->
-      <canvas id="gameCanvas" class="block bg-dark grid-pattern w-full h-full"></canvas>
+    <!-- 游戏区域（占据主要空间） -->
+    <div class="flex-grow flex flex-col items-center justify-center p-0">
+      <!-- 游戏容器 -->
+      <div id="game-container" class="relative overflow-hidden pixel-borders transition-all duration-300" style="width: 100%; height: 100%;">
+        <!-- 游戏画布 -->
+        <canvas id="gameCanvas" class="block bg-dark grid-pattern w-full h-full"></canvas>
       
       <!-- 分数显示 -->
       <div id="score-container" class="absolute top-1 sm:top-2 right-1 sm:right-2 px-2 sm:px-3 py-0.5 sm:py-1 rounded glass-effect pixel-text text-base sm:text-xl">
@@ -186,35 +302,39 @@
         <p class="pixel-text text-base sm:text-lg md:text-xl mb-1 sm:mb-2">最终得分: <span id="final-score" class="text-accent">0</span></p>
         <button id="restart-button" class="pixel-button text-lg sm:text-xl md:text-2xl px-4 sm:px-6 py-2 sm:py-3 mt-4 sm:mt-6">RESTART</button>
       </div>
+      </div>
     </div>
     
-    <!-- 操作说明 -->
-    <div class="mt-4 sm:mt-6 px-3 sm:px-4 py-2 sm:py-3 glass-effect w-full pixel-text text-sm sm:text-base">
-      <p class="text-center">使用 <span class="text-accent" style="color: rgb(14, 255, 55);">方向键 ↑ ↓ ← →</span> 控制蛇的移动，按空格键暂停</p>
-      <p class="text-center mt-1 sm:mt-2">吃到食物得分，蛇身会变长</p>
-    </div>
-    
-    <!-- 移动端控制按钮 -->
-    <div id="mobile-controls" class="mt-6 grid grid-cols-3 gap-3 w-full max-w-xs sm:max-w-sm">
-      <div class="col-start-2">
-        <button id="up-button" class="w-full h-16 sm:h-14 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
-          <i class="fa fa-arrow-up text-2xl sm:text-xl"></i>
-        </button>
+    <!-- 底部控制区域 -->
+    <div class="flex-shrink-0 px-2 sm:px-4 py-2 sm:py-3">
+      <!-- 操作说明（横屏时隐藏） -->
+      <div class="glass-effect w-full pixel-text text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 mb-2 landscape-hide">
+        <p class="text-center">使用 <span class="text-accent">方向键 ↑ ↓ ← →</span> 或下方按钮控制</p>
+        <p class="text-center">按空格键暂停，吃到食物得分</p>
       </div>
-      <div class="col-start-1">
-        <button id="left-button" class="w-full h-16 sm:h-14 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
-          <i class="fa fa-arrow-left text-2xl sm:text-xl"></i>
-        </button>
-      </div>
-      <div class="col-start-2">
-        <button id="down-button" class="w-full h-16 sm:h-14 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
-          <i class="fa fa-arrow-down text-2xl sm:text-xl"></i>
-        </button>
-      </div>
-      <div class="col-start-3">
-        <button id="right-button" class="w-full h-16 sm:h-14 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
-          <i class="fa fa-arrow-right text-2xl sm:text-xl"></i>
-        </button>
+      
+      <!-- 移动端控制按钮 -->
+      <div id="mobile-controls" class="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-xs sm:max-w-sm mx-auto">
+        <div class="col-start-2">
+          <button id="up-button" class="w-full h-12 sm:h-14 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
+            <i class="fa fa-arrow-up text-xl sm:text-2xl"></i>
+          </button>
+        </div>
+        <div class="col-start-1">
+          <button id="left-button" class="w-full h-12 sm:h-14 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
+            <i class="fa fa-arrow-left text-xl sm:text-2xl"></i>
+          </button>
+        </div>
+        <div class="col-start-2">
+          <button id="down-button" class="w-full h-12 sm:h-14 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
+            <i class="fa fa-arrow-down text-xl sm:text-2xl"></i>
+          </button>
+        </div>
+        <div class="col-start-3">
+          <button id="right-button" class="w-full h-12 sm:h-14 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
+            <i class="fa fa-arrow-right text-xl sm:text-2xl"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -283,6 +403,9 @@
     
     // 初始化游戏
     function initGame() {
+      // 防止双击缩放
+      preventDoubleTapZoom();
+      
       // 检测设备类型并进行优化
       optimizeForDevice();
       
@@ -297,6 +420,50 @@
       
       // 初始化游戏状态
       resetGameState();
+      
+      // 测试：检查画布尺寸
+      setTimeout(() => {
+        const canvas = elements.canvas;
+        const container = elements.gameContainer;
+        const gameArea = container.parentElement;
+        
+        console.log('初始化完成，尺寸检查:', {
+          游戏区域宽度: gameArea.offsetWidth,
+          游戏区域高度: gameArea.offsetHeight,
+          容器宽度: container.offsetWidth,
+          容器高度: container.offsetHeight,
+          画布宽度: canvas.width,
+          画布高度: canvas.height,
+          画布style宽度: canvas.style.width,
+          画布style高度: canvas.style.height
+        });
+      }, 100);
+    }
+    
+    // 防止双击缩放
+    function preventDoubleTapZoom() {
+      let lastTouchEnd = 0;
+      
+      document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+          event.preventDefault();
+        }
+        lastTouchEnd = now;
+      }, { passive: false });
+      
+      // 阻止手势缩放
+      document.addEventListener('gesturestart', function(event) {
+        event.preventDefault();
+      });
+      
+      document.addEventListener('gesturechange', function(event) {
+        event.preventDefault();
+      });
+      
+      document.addEventListener('gestureend', function(event) {
+        event.preventDefault();
+      });
     }
     
     // 根据设备类型进行优化
@@ -308,6 +475,10 @@
         // 移动设备优化
         document.body.classList.add('mobile-optimized');
         
+        // 调整游戏速度以适应移动设备
+        config.initialSpeed = 180; // 移动端初始速度稍慢
+        config.minSpeed = 70; // 移动端最小速度
+        
         // 调整触摸目标大小
         const style = document.createElement('style');
         style.textContent = `
@@ -316,7 +487,10 @@
             min-width: 44px;
           }
           .mobile-optimized #mobile-controls button {
-            min-height: 60px;
+            min-height: 50px;
+          }
+          .mobile-optimized #game-container {
+            touch-action: none;
           }
         `;
         document.head.appendChild(style);
@@ -325,6 +499,16 @@
       if (isTablet) {
         // 平板设备优化
         document.body.classList.add('tablet-optimized');
+        
+        // 平板设备可以使用更快的速度
+        config.initialSpeed = 160;
+        config.minSpeed = 60;
+      }
+      
+      // 桌面设备保持原始速度
+      if (!isMobile && !isTablet) {
+        config.initialSpeed = 150;
+        config.minSpeed = 50;
       }
     }
     
@@ -338,73 +522,96 @@
       // 动态计算画布尺寸，适配手机屏幕
       calculateCanvasSize();
       
-      // 计算网格数量
-      gameState.gridWidth = Math.floor(gameState.canvas.width / config.gridSize);
-      gameState.gridHeight = Math.floor(gameState.canvas.height / config.gridSize);
+      // 网格数量已经在 calculateCanvasSize 中计算了
     }
     
-    // 动态计算画布尺寸
+    // 动态计算画布尺寸（最大化利用空间）
     function calculateCanvasSize() {
-      // 获取游戏容器的可用空间
-      const container = elements.gameContainer;
-      const containerRect = container.getBoundingClientRect();
+      // 获取游戏容器的父容器（游戏区域）
+      const gameArea = elements.gameContainer.parentElement;
+      const gameAreaRect = gameArea.getBoundingClientRect();
       
-      // 计算可用空间（减去内边距）
-      const availableWidth = Math.min(containerRect.width, window.innerWidth - 32); // 减去16px边距
-      const availableHeight = Math.min(containerRect.height, window.innerHeight - 200); // 减去标题和按钮空间
+      // 直接使用父容器的尺寸
+      let canvasWidth = Math.floor(gameAreaRect.width);
+      let canvasHeight = Math.floor(gameAreaRect.height);
       
       // 根据屏幕尺寸调整网格大小
       adjustGridSizeForScreen();
       
-      // 保持原始宽高比例（750:540 ≈ 1.3889）
-      const targetRatio = 750 / 540;
+      // 保持游戏可玩性的最小尺寸
+      const minGridWidth = 10;
+      const minGridHeight = 7;
       
-      let canvasWidth, canvasHeight;
+      // 计算当前尺寸下的网格数量
+      let gridWidth = Math.floor(canvasWidth / config.gridSize);
+      let gridHeight = Math.floor(canvasHeight / config.gridSize);
       
-      if (availableWidth / availableHeight > targetRatio) {
-        // 宽度充足，以高度为基准
-        canvasHeight = Math.floor(availableHeight);
-        canvasWidth = Math.floor(canvasHeight * targetRatio);
-      } else {
-        // 高度充足，以宽度为基准
-        canvasWidth = Math.floor(availableWidth);
-        canvasHeight = Math.floor(canvasWidth / targetRatio);
+      // 如果网格数量太少，调整网格大小
+      if (gridWidth < minGridWidth || gridHeight < minGridHeight) {
+        // 计算需要的网格大小
+        const neededGridSizeWidth = Math.floor(canvasWidth / minGridWidth);
+        const neededGridSizeHeight = Math.floor(canvasHeight / minGridHeight);
+        config.gridSize = Math.min(neededGridSizeWidth, neededGridSizeHeight);
+        
+        // 重新计算网格数量
+        gridWidth = Math.floor(canvasWidth / config.gridSize);
+        gridHeight = Math.floor(canvasHeight / config.gridSize);
       }
       
       // 确保画布尺寸是网格大小的整数倍
-      canvasWidth = Math.floor(canvasWidth / config.gridSize) * config.gridSize;
-      canvasHeight = Math.floor(canvasHeight / config.gridSize) * config.gridSize;
-      
-      // 设置最小尺寸
-      const minWidth = 15 * config.gridSize; // 至少15格宽
-      const minHeight = 10 * config.gridSize; // 至少10格高
-      
-      if (canvasWidth < minWidth) canvasWidth = minWidth;
-      if (canvasHeight < minHeight) canvasHeight = minHeight;
+      canvasWidth = gridWidth * config.gridSize;
+      canvasHeight = gridHeight * config.gridSize;
       
       // 设置画布尺寸
       gameState.canvas.width = canvasWidth;
       gameState.canvas.height = canvasHeight;
       
       // 更新游戏容器尺寸
-      container.style.width = canvasWidth + 'px';
-      container.style.height = canvasHeight + 'px';
+      elements.gameContainer.style.width = canvasWidth + 'px';
+      elements.gameContainer.style.height = canvasHeight + 'px';
+      
+      // 居中显示
+      elements.gameContainer.style.margin = '0 auto';
+      
+      // 更新网格数量
+      gameState.gridWidth = gridWidth;
+      gameState.gridHeight = gridHeight;
+      
+      // 调试信息
+      console.log('画布尺寸计算（简化版）:', {
+        父容器宽度: gameAreaRect.width,
+        父容器高度: gameAreaRect.height,
+        画布宽度: canvasWidth,
+        画布高度: canvasHeight,
+        网格大小: config.gridSize,
+        网格宽度: gridWidth,
+        网格高度: gridHeight
+      });
     }
     
     // 根据屏幕尺寸调整网格大小
     function adjustGridSizeForScreen() {
-      const isMobile = window.innerWidth <= 768;
-      const isSmallScreen = window.innerWidth <= 480;
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      const isMobile = screenWidth <= 768;
       
-      if (isSmallScreen) {
-        // 超小屏幕使用更小的网格
-        config.gridSize = 24;
+      if (screenWidth <= 360) {
+        // 超小屏幕
+        config.gridSize = 18;
+      } else if (screenWidth <= 480) {
+        // 小屏幕
+        config.gridSize = 20;
       } else if (isMobile) {
-        // 移动设备使用中等网格
-        config.gridSize = 28;
+        // 移动设备
+        config.gridSize = 22;
       } else {
-        // 桌面设备使用原始网格大小
-        config.gridSize = 30;
+        // 桌面设备
+        config.gridSize = 24;
+      }
+      
+      // 横屏模式可以使用稍大的网格
+      if (screenWidth > screenHeight && isMobile) {
+        config.gridSize = Math.min(config.gridSize + 2, 26);
       }
     }
     
@@ -425,6 +632,14 @@
     function addTouchEventListeners() {
       const gameCanvas = elements.canvas;
       let touchStartX, touchStartY;
+      let isTouchMoving = false;
+      
+      // 阻止整个文档的触摸滚动
+      document.addEventListener('touchmove', function(e) {
+        if (e.target.closest('#game-container') || e.target.closest('#mobile-controls')) {
+          e.preventDefault();
+        }
+      }, { passive: false });
       
       gameCanvas.addEventListener('touchstart', function(e) {
         if (gameState.isGameOver) return;
@@ -432,18 +647,32 @@
         // 记录触摸起始位置
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
+        isTouchMoving = false;
         
         // 阻止默认行为，防止页面滚动
         e.preventDefault();
       }, { passive: false });
       
       gameCanvas.addEventListener('touchmove', function(e) {
+        if (!touchStartX || !touchStartY) return;
+        
+        // 标记为正在移动
+        isTouchMoving = true;
+        
         // 阻止默认行为，防止页面滚动
         e.preventDefault();
       }, { passive: false });
       
       gameCanvas.addEventListener('touchend', function(e) {
         if (gameState.isGameOver || !touchStartX || !touchStartY) return;
+        
+        // 如果只是点击而不是滑动，不处理方向改变
+        if (!isTouchMoving) {
+          touchStartX = null;
+          touchStartY = null;
+          e.preventDefault();
+          return;
+        }
         
         // 计算触摸结束位置
         const touchEndX = e.changedTouches[0].clientX;
@@ -453,15 +682,17 @@
         const deltaX = touchEndX - touchStartX;
         const deltaY = touchEndY - touchStartY;
         
-        // 确定滑动方向（水平或垂直）
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // 确定滑动方向（需要最小滑动距离）
+        const minSwipeDistance = 30;
+        
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
           // 水平滑动
           if (deltaX > 0) {
             changeDirection('RIGHT');
           } else {
             changeDirection('LEFT');
           }
-        } else {
+        } else if (Math.abs(deltaY) > minSwipeDistance) {
           // 垂直滑动
           if (deltaY > 0) {
             changeDirection('DOWN');
@@ -473,8 +704,40 @@
         // 重置触摸起始位置
         touchStartX = null;
         touchStartY = null;
+        isTouchMoving = false;
         
         // 阻止默认行为
+        e.preventDefault();
+      }, { passive: false });
+      
+      // 防止移动端按钮触发页面滚动
+      document.querySelectorAll('#mobile-controls button').forEach(button => {
+        button.addEventListener('touchstart', function(e) {
+          e.stopPropagation();
+          // 防止按钮触摸时触发画布滑动
+          e.preventDefault();
+        }, { passive: false });
+        
+        button.addEventListener('touchend', function(e) {
+          e.stopPropagation();
+          // 防止按钮释放时触发画布滑动
+          e.preventDefault();
+        }, { passive: false });
+        
+        button.addEventListener('touchmove', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+        }, { passive: false });
+      });
+      
+      // 添加游戏区域外的触摸阻止
+      document.addEventListener('touchstart', function(e) {
+        // 如果触摸点在游戏区域或控制按钮上，不阻止
+        if (e.target.closest('#game-container') || e.target.closest('#mobile-controls')) {
+          return;
+        }
+        
+        // 否则阻止默认行为，防止页面滚动
         e.preventDefault();
       }, { passive: false });
     }
@@ -559,22 +822,44 @@
       const isLandscape = window.innerWidth > window.innerHeight;
       const isSmallScreen = window.innerHeight < 600;
       
-      if (isLandscape && isSmallScreen) {
-        // 横屏且屏幕较小时，隐藏一些元素以节省空间
-        document.querySelectorAll('.landscape-hide').forEach(el => {
-          el.style.display = 'none';
-        });
+      if (isLandscape) {
+        // 横屏模式下，隐藏操作说明以节省空间
+        const instructions = document.querySelector('.glass-effect');
+        if (instructions) {
+          instructions.style.display = 'none';
+        }
         
-        // 调整游戏容器边距
-        elements.gameContainer.style.marginTop = '0.5rem';
+        // 调整游戏区域布局
+        const gameArea = elements.gameContainer.parentElement;
+        if (gameArea) {
+          gameArea.style.paddingTop = '0';
+          gameArea.style.paddingBottom = '0';
+        }
+        
+        // 调整控制按钮大小
+        document.querySelectorAll('#mobile-controls button').forEach(button => {
+          button.style.height = '3rem';
+          button.style.minHeight = '3rem';
+        });
       } else {
-        // 恢复显示
-        document.querySelectorAll('.landscape-hide').forEach(el => {
-          el.style.display = '';
-        });
+        // 竖屏模式下，恢复显示
+        const instructions = document.querySelector('.glass-effect');
+        if (instructions) {
+          instructions.style.display = '';
+        }
         
-        // 恢复边距
-        elements.gameContainer.style.marginTop = '';
+        // 恢复游戏区域布局
+        const gameArea = elements.gameContainer.parentElement;
+        if (gameArea) {
+          gameArea.style.paddingTop = '';
+          gameArea.style.paddingBottom = '';
+        }
+        
+        // 恢复控制按钮大小
+        document.querySelectorAll('#mobile-controls button').forEach(button => {
+          button.style.height = '';
+          button.style.minHeight = '';
+        });
       }
     }
     
@@ -727,7 +1012,7 @@
       gameState.direction = 'RIGHT';
       gameState.nextDirection = 'RIGHT';
       
-      // 分数和速度
+      // 分数和速度（使用当前配置的速度）
       gameState.score = 0;
       gameState.speed = config.initialSpeed;
       
