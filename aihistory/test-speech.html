@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语音播放功能测试 - 中国历史学习助手</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 统一的 Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E40AF',
+                        secondary: '#3B82F6',
+                        accent: '#F59E0B',
+                        dark: '#0F172A',
+                        'dark-light': '#1E293B',
+                        'dark-lighter': '#334155',
+                        light: '#F1F5F9',
+                        'light-dark': '#CBD5E1',
+                        'light-lighter': '#F8FAFC'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- 自定义样式 -->
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .speech-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .speech-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .test-card {
+            transition: all 0.3s ease;
+        }
+        
+        .test-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        #audio-control-bar {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-light min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-dark mb-2">语音播放功能测试</h1>
+            <p class="text-gray-600">测试中国历史学习助手中的语音播放功能</p>
+        </header>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-dark mb-4">测试说明</h2>
+            <p class="text-gray-600 mb-4">本页面用于测试语音播放功能的各个方面，包括：</p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                <li>语音播放按钮显示</li>
+                <li>语音播放控制</li>
+                <li>音频控制栏功能</li>
+                <li>不同模块中的语音播放</li>
+            </ul>
+            <p class="text-gray-600">请点击下方各个测试区域的语音播放按钮，验证功能是否正常工作。</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- 测试1：基础语音播放 -->
+            <div class="test-card bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-dark">测试1：基础语音播放</h3>
+                        <button id="test1-btn" class="speech-btn w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition-colors">
+                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/d90af2d8fe4c425fac96e28590cdd2fe~tplv-a9rns2rl98-image.image?rcl=202511281112269ED8EEFEF12CC9B49178&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766891734&x-signature=F2o3097mV6hhtyoeBE7aqnNwqyw%3D" 
+                                 alt="播放" class="w-6 h-6">
+                        </button>
+                    </div>
+                    <p class="text-gray-600 mb-4">点击上方按钮播放一段测试文本。</p>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p id="test1-text">这是一段测试文本，用于测试语音播放功能。中国历史悠久，文化灿烂，拥有五千年的文明史。</p>
+                    </div>
+                    <div id="test1-status" class="mt-4 text-sm text-gray-500"></div>
+                </div>
+            </div>
+            
+            <!-- 测试2：较长文本播放 -->
+            <div class="test-card bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-dark">测试2：较长文本播放</h3>
+                        <button id="test2-btn" class="speech-btn w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition-colors">
+                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/d90af2d8fe4c425fac96e28590cdd2fe~tplv-a9rns2rl98-image.image?rcl=202511281112269ED8EEFEF12CC9B49178&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1766891734&x-signature=F2o3097mV6hhtyoeBE7aqnNwqyw%3D" 
+                                 alt="播放" class="w-6 h-6">
+                        </button>
+                    </div>
+                    <p class="text-gray-600 mb-4">点击上方按钮播放一段较长的历史文本。</p>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p id="test2-text">秦始皇统一六国，建立了中国历史上第一个统一的多民族的中央集权的封建国家。他推行郡县制，统一文字、货币、度量衡，修建长城，抵御匈奴，开创了中国两千多年的大一统局面。汉武帝时期，张骞出使西域，开辟了丝绸之路，促进了东西方的经济文化交流。唐朝是中国历史上最强盛的朝代之一，文化艺术高度发达，诗歌、绘画、雕塑等艺术形式都达到了很高的水平。</p>
+                    </div>
+                    <div id="test2-status" class="mt-4 text-sm text-gray-500"></div>
+                </div>
+            </div>
+            
+            <!-- 测试3：播放控制 -->
+            <div class="test-card bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-dark mb-4">测试3：播放控制</h3>
+                    <p class="text-gray-600 mb-4">测试播放、暂停、继续、停止功能。</p>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p id="test3-text">这段文本用于测试播放控制功能。点击播放后，可以尝试暂停、继续和停止播放。中国古代有四大发明：造纸术、印刷术、火药和指南针，这些发明对世界文明的发展产生了深远的影响。</p>
+                    </div>
+                    <div class="flex gap-3 mb-4">
+                        <button id="test3-play" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">
+                            <i class="fa fa-play mr-2"></i>播放
+                        </button>
+                        <button id="test3-pause" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" disabled>
+                            <i class="fa fa-pause mr-2"></i>暂停
+                        </button>
+                        <button id="test3-resume" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" disabled>
+                            <i class="fa fa-play mr-2"></i>继续
+                        </button>
+                        <button id="test3-stop" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" disabled>
+                            <i class="fa fa-stop mr-2"></i>停止
+                        </button>
+                    </div>
+                    <div id="test3-status" class="mt-4 text-sm text-gray-500"></div>
+                </div>
+            </div>
+            
+            <!-- 测试4：音量控制 -->
+            <div class="test-card bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-dark mb-4">测试4：音量控制</h3>
+                    <p class="text-gray-600 mb-4">测试音量调节功能。</p>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p id="test4-text">这段文本用于测试音量控制功能。中国历史上有许多著名的历史学家，如司马迁、司马光等，他们撰写的历史著作对后世产生了深远的影响。</p>
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <button id="test4-play" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors mr-4">
+                            <i class="fa fa-play mr-2"></i>播放
+                        </button>
+                        <div class="flex items-center">
+                            <i class="fa fa-volume-down text-gray-600 mr-2"></i>
+                            <input type="range" id="test4-volume" min="0" max="100" value="80" class="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <i class="fa fa-volume-up text-gray-600 ml-2"></i>
+                        </div>
+                    </div>
+                    <div id="test4-status" class="mt-4 text-sm text-gray-500"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-dark mb-4">浏览器兼容性测试</h2>
+            <p class="text-gray-600 mb-4">语音播放功能依赖于浏览器的Web Speech API支持。以下是主要浏览器的支持情况：</p>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">浏览器</th>
+                            <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">支持情况</th>
+                            <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2 px-4 border-b text-sm text-gray-600">Chrome</td>
+                            <td class="py-2 px-4 border-b text-sm text-green-600">支持</td>
+                            <td class="py-2 px-4 border-b text-sm text-gray-600">需要HTTPS环境</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b text-sm text-gray-600">Edge</td>
+                            <td class="py-2 px-4 border-b text-sm text-green-600">支持</td>
+                            <td class="py-2 px-4 border-b text-sm text-gray-600">需要HTTPS环境</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b text-sm text-gray-600">Safari</td>
+                            <td class="py-2 px-4 border-b text-sm text-green-600">支持</td>
+                            <td class="py-2 px-4 border-b text-sm text-gray-600">需要HTTPS环境</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b text-sm text-gray-600">Firefox</td>
+                            <td class="py-2 px-4 border-b text-sm text-yellow-600">部分支持</td>
+                            <td class="py-2 px-4 border-b text-sm text-gray-600">需要启用实验性功能</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b text-sm text-gray-600">Opera</td>
+                            <td class="py-2 px-4 border-b text-sm text-green-600">支持</td>
+                            <td class="py-2 px-4 border-b text-sm text-gray-600">需要HTTPS环境</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4">
+                <button id="check-support" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">
+                    <i class="fa fa-check-circle mr-2"></i>检查当前浏览器支持情况
+                </button>
+                <div id="support-result" class="mt-4 p-4 rounded-lg hidden"></div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold text-dark mb-4">功能总结</h2>
+            <p class="text-gray-600 mb-4">语音播放功能已成功集成到中国历史学习助手中，主要特点包括：</p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+                <li>在历史小故事卡片上添加了语音播放按钮</li>
+                <li>在朝代详情模态框中添加了语音播放按钮</li>
+                <li>在故事详情模态框中添加了语音播放按钮</li>
+                <li>在AI问答回答中添加了语音播放按钮</li>
+                <li>实现了完整的音频控制功能（播放/暂停/停止/音量调节）</li>
+                <li>支持进度条显示和拖动定位</li>
+                <li>响应式设计，适配不同设备</li>
+                <li>浏览器兼容性检测和提示</li>
+            </ul>
+            <div class="mt-6">
+                <a href="index.html" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors inline-flex items-center">
+                    <i class="fa fa-arrow-left mr-2"></i>返回首页
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 音频控制栏 -->
+    <div id="audio-control-bar" class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 p-3 z-40 hidden">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <div id="play-pause-btn" class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center cursor-pointer mr-3">
+                    <i class="fa fa-play"></i>
+                </div>
+                <div>
+                    <p id="current-text-title" class="font-medium text-gray-800 truncate max-w-xs">正在播放...</p>
+                    <p id="current-text-subtitle" class="text-sm text-gray-500 truncate max-w-xs">加载中...</p>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <div class="hidden md:flex items-center mr-4">
+                    <span id="current-time" class="text-sm text-gray-600 mr-2">0:00</span>
+                    <div class="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-primary" style="width: 0%"></div>
+                    </div>
+                    <span id="total-time" class="text-sm text-gray-600 ml-2">0:00</span>
+                </div>
+                <div class="flex items-center">
+                    <button id="volume-btn" class="text-gray-600 hover:text-primary mr-3">
+                        <i class="fa fa-volume-up"></i>
+                    </button>
+                    <div class="hidden md:block w-24 h-2 bg-gray-200 rounded-full overflow-hidden mr-4">
+                        <div id="volume-bar" class="h-full bg-primary" style="width: 80%"></div>
+                    </div>
+                    <button id="close-audio-btn" class="text-gray-600 hover:text-primary">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // 语音合成对象
+        let synth = window.speechSynthesis;
+        let currentUtterance = null;
+        let isPlaying = false;
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM 加载完成，开始初始化语音测试...');
+            
+            // 初始化音频控制栏
+            initAudioControls();
+            
+            // 初始化测试按钮
+            initTestButtons();
+            
+            // 检查浏览器支持
+            document.getElementById('check-support').addEventListener('click', checkBrowserSupport);
+        });
+        
+        // 初始化音频控制栏
+        function initAudioControls() {
+            // 添加事件监听器
+            document.getElementById('play-pause-btn').addEventListener('click', togglePlayPause);
+            document.getElementById('close-audio-btn').addEventListener('click', stopSpeech);
+            
+            // 添加音量控制
+            const volumeBtn = document.getElementById('volume-btn');
+            const volumeBar = document.getElementById('volume-bar');
+            
+            volumeBtn.addEventListener('click', () => {
+                if (synth) {
+                    const currentVolume = volumeBar.style.width.replace('%', '') / 100;
+                    const newVolume = currentVolume > 0 ? 0 : 0.8;
+                    volumeBar.style.width = `${newVolume * 100}%`;
+                    
+                    if (currentUtterance) {
+                        currentUtterance.volume = newVolume;
+                    }
+                    
+                    // 更新图标
+                    const icon = volumeBtn.querySelector('i');
+                    if (newVolume === 0) {
+                        icon.className = 'fa fa-volume-off';
+                    } else if (newVolume < 0.5) {
+                        icon.className = 'fa fa-volume-down';
+                    } else {
+                        icon.className = 'fa fa-volume-up';
+                    }
+                }
+            });
+            
+            // 添加进度条点击事件
+            const progressBarContainer = document.getElementById('progress-bar').parentElement;
+            progressBarContainer.addEventListener('click', (e) => {
+                if (currentUtterance && currentUtterance.text.length > 0) {
+                    const rect = progressBarContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const width = rect.width;
+                    const progress = x / width;
+                    
+                    // 估算文本位置
+                    const textLength = currentUtterance.text.length;
+                    const charIndex = Math.floor(textLength * progress);
+                    
+                    // 停止当前播放
+                    stopSpeech();
+                    
+                    // 从指定位置开始播放
+                    const newText = currentUtterance.text.substring(charIndex);
+                    const title = currentUtterance.title;
+                    const subtitle = currentUtterance.subtitle;
+                    
+                    speakText(newText, title, subtitle);
+                }
+            });
+            
+            // 添加音量条点击事件
+            volumeBar.parentElement.addEventListener('click', (e) => {
+                const rect = volumeBar.parentElement.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const width = rect.width;
+                const volume = x / width;
+                
+                volumeBar.style.width = `${volume * 100}%`;
+                
+                if (currentUtterance) {
+                    currentUtterance.volume = volume;
+                }
+                
+                // 更新图标
+                const icon = volumeBtn.querySelector('i');
+                if (volume === 0) {
+                    icon.className = 'fa fa-volume-off';
+                } else if (volume < 0.5) {
+                    icon.className = 'fa fa-volume-down';
+                } else {
+                    icon.className = 'fa fa-volume-up';
+                }
+            });
+        }
+        
+        // 初始化测试按钮
+        function initTestButtons() {
+            // 测试1：基础语音播放
+            document.getElementById('test1-btn').addEventListener('click', () => {
+                const text = document.getElementById('test1-text').textContent;
+                speakText(text, '基础语音测试', '测试1');
+                document.getElementById('test1-status').textContent = '正在播放...';
+                document.getElementById('test1-status').className = 'mt-4 text-sm text-green-600';
+            });
+            
+            // 测试2：较长文本播放
+            document.getElementById('test2-btn').addEventListener('click', () => {
+                const text = document.getElementById('test2-text').textContent;
+                speakText(text, '较长文本测试', '测试2');
+                document.getElementById('test2-status').textContent = '正在播放...';
+                document.getElementById('test2-status').className = 'mt-4 text-sm text-green-600';
+            });
+            
+            // 测试3：播放控制
+            const test3Play = document.getElementById('test3-play');
+            const test3Pause = document.getElementById('test3-pause');
+            const test3Resume = document.getElementById('test3-resume');
+            const test3Stop = document.getElementById('test3-stop');
+            const test3Status = document.getElementById('test3-status');
+            
+            test3Play.addEventListener('click', () => {
+                const text = document.getElementById('test3-text').textContent;
+                speakText(text, '播放控制测试', '测试3');
+                test3Status.textContent = '正在播放...';
+                test3Status.className = 'mt-4 text-sm text-green-600';
+                
+                test3Play.disabled = true;
+                test3Pause.disabled = false;
+                test3Resume.disabled = true;
+                test3Stop.disabled = false;
+            });
+            
+            test3Pause.addEventListener('click', () => {
+                pauseSpeech();
+                test3Status.textContent = '已暂停';
+                test3Status.className = 'mt-4 text-sm text-yellow-600';
+                
+                test3Play.disabled = true;
+                test3Pause.disabled = true;
+                test3Resume.disabled = false;
+                test3Stop.disabled = false;
+            });
+            
+            test3Resume.addEventListener('click', () => {
+                resumeSpeech();
+                test3Status.textContent = '继续播放...';
+                test3Status.className = 'mt-4 text-sm text-green-600';
+                
+                test3Play.disabled = true;
+                test3Pause.disabled = false;
+                test3Resume.disabled = true;
+                test3Stop.disabled = false;
+            });
+            
+            test3Stop.addEventListener('click', () => {
+                stopSpeech();
+                test3Status.textContent = '已停止';
+                test3Status.className = 'mt-4 text-sm text-gray-600';
+                
+                test3Play.disabled = false;
+                test3Pause.disabled = true;
+                test3Resume.disabled = true;
+                test3Stop.disabled = true;
+            });
+            
+            // 测试4：音量控制
+            const test4Play = document.getElementById('test4-play');
+            const test4Volume = document.getElementById('test4-volume');
+            const test4Status = document.getElementById('test4-status');
+            
+            test4Play.addEventListener('click', () => {
+                const text = document.getElementById('test4-text').textContent;
+                const volume = test4Volume.value / 100;
+                
+                speakText(text, '音量控制测试', '测试4', volume);
+                test4Status.textContent = `正在播放（音量：${test4Volume.value}%）`;
+                test4Status.className = 'mt-4 text-sm text-green-600';
+            });
+            
+            test4Volume.addEventListener('input', () => {
+                if (currentUtterance) {
+                    const volume = test4Volume.value / 100;
+                    currentUtterance.volume = volume;
+                    document.getElementById('volume-bar').style.width = `${volume * 100}%`;
+                    
+                    test4Status.textContent = `正在播放（音量：${test4Volume.value}%）`;
+                    
+                    // 更新音量按钮图标
+                    const volumeBtn = document.getElementById('volume-btn');
+                    const icon = volumeBtn.querySelector('i');
+                    if (volume === 0) {
+                        icon.className = 'fa fa-volume-off';
+                    } else if (volume < 0.5) {
+                        icon.className = 'fa fa-volume-down';
+                    } else {
+                        icon.className = 'fa fa-volume-up';
+                    }
+                }
+            });
+        }
+        
+        // 播放文本
+        function speakText(text, title, subtitle, volume = 0.8) {
+            console.log('播放语音:', title, text);
+            
+            // 停止当前播放
+            stopSpeech();
+            
+            // 创建语音合成对象
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.9; // 语速稍慢，适合学习
+            utterance.pitch = 1;
+            utterance.volume = volume;
+            
+            // 存储额外信息
+            utterance.title = title;
+            utterance.subtitle = subtitle;
+            utterance.text = text;
+            
+            // 保存当前语音对象
+            currentUtterance = utterance;
+            
+            // 更新音频控制栏
+            document.getElementById('current-text-title').textContent = title;
+            document.getElementById('current-text-subtitle').textContent = subtitle;
+            document.getElementById('progress-bar').style.width = '0%';
+            document.getElementById('volume-bar').style.width = `${volume * 100}%`;
+            
+            // 显示音频控制栏
+            document.getElementById('audio-control-bar').classList.remove('hidden');
+            
+            // 更新播放/暂停按钮
+            updatePlayPauseButton(true);
+            
+            // 设置播放状态
+            isPlaying = true;
+            
+            // 估算总时长（假设平均语速为每分钟150字）
+            const estimatedDuration = (text.length / 150) * 60;
+            document.getElementById('total-time').textContent = formatTime(estimatedDuration);
+            
+            // 更新进度条
+            let startTime = Date.now();
+            const progressInterval = setInterval(() => {
+                if (!isPlaying) {
+                    clearInterval(progressInterval);
+                    return;
+                }
+                
+                const elapsedTime = (Date.now() - startTime) / 1000;
+                const progress = Math.min(elapsedTime / estimatedDuration, 1);
+                
+                document.getElementById('progress-bar').style.width = `${progress * 100}%`;
+                document.getElementById('current-time').textContent = formatTime(elapsedTime);
+                
+                if (progress >= 1) {
+                    clearInterval(progressInterval);
+                }
+            }, 500);
+            
+            // 添加事件监听器
+            utterance.onend = () => {
+                console.log('语音播放结束');
+                isPlaying = false;
+                currentUtterance = null;
+                updatePlayPauseButton(false);
+                clearInterval(progressInterval);
+                
+                // 更新测试状态
+                if (title.includes('测试1')) {
+                    document.getElementById('test1-status').textContent = '播放完成';
+                    document.getElementById('test1-status').className = 'mt-4 text-sm text-green-600';
+                } else if (title.includes('测试2')) {
+                    document.getElementById('test2-status').textContent = '播放完成';
+                    document.getElementById('test2-status').className = 'mt-4 text-sm text-green-600';
+                } else if (title.includes('测试3')) {
+                    document.getElementById('test3-status').textContent = '播放完成';
+                    document.getElementById('test3-status').className = 'mt-4 text-sm text-green-600';
+                    
+                    document.getElementById('test3-play').disabled = false;
+                    document.getElementById('test3-pause').disabled = true;
+                    document.getElementById('test3-resume').disabled = true;
+                    document.getElementById('test3-stop').disabled = true;
+                } else if (title.includes('测试4')) {
+                    document.getElementById('test4-status').textContent = '播放完成';
+                    document.getElementById('test4-status').className = 'mt-4 text-sm text-green-600';
+                }
+            };
+            
+            utterance.onerror = (event) => {
+                console.error('语音播放错误:', event.error);
+                isPlaying = false;
+                currentUtterance = null;
+                updatePlayPauseButton(false);
+                clearInterval(progressInterval);
+                
+                // 显示错误提示
+                alert('语音播放失败，请稍后再试');
+                
+                // 更新测试状态
+                if (title.includes('测试1')) {
+                    document.getElementById('test1-status').textContent = '播放失败';
+                    document.getElementById('test1-status').className = 'mt-4 text-sm text-red-600';
+                } else if (title.includes('测试2')) {
+                    document.getElementById('test2-status').textContent = '播放失败';
+                    document.getElementById('test2-status').className = 'mt-4 text-sm text-red-600';
+                } else if (title.includes('测试3')) {
+                    document.getElementById('test3-status').textContent = '播放失败';
+                    document.getElementById('test3-status').className = 'mt-4 text-sm text-red-600';
+                    
+                    document.getElementById('test3-play').disabled = false;
+                    document.getElementById('test3-pause').disabled = true;
+                    document.getElementById('test3-resume').disabled = true;
+                    document.getElementById('test3-stop').disabled = true;
+                } else if (title.includes('测试4')) {
+                    document.getElementById('test4-status').textContent = '播放失败';
+                    document.getElementById('test4-status').className = 'mt-4 text-sm text-red-600';
+                }
+            };
+            
+            // 开始播放
+            synth.speak(utterance);
+        }
+        
+        // 切换播放/暂停
+        function togglePlayPause() {
+            if (isPlaying) {
+                pauseSpeech();
+            } else if (currentUtterance) {
+                resumeSpeech();
+            }
+        }
+        
+        // 暂停播放
+        function pauseSpeech() {
+            if (synth && isPlaying) {
+                synth.pause();
+                isPlaying = false;
+                updatePlayPauseButton(false);
+            }
+        }
+        
+        // 恢复播放
+        function resumeSpeech() {
+            if (synth && currentUtterance && !isPlaying) {
+                synth.resume();
+                isPlaying = true;
+                updatePlayPauseButton(true);
+            }
+        }
+        
+        // 停止播放
+        function stopSpeech() {
+            if (synth) {
+                synth.cancel();
+                isPlaying = false;
+                currentUtterance = null;
+                updatePlayPauseButton(false);
+                
+                // 隐藏音频控制栏
+                document.getElementById('audio-control-bar').classList.add('hidden');
+            }
+        }
+        
+        // 更新播放/暂停按钮
+        function updatePlayPauseButton(isPlaying) {
+            const btn = document.getElementById('play-pause-btn');
+            const icon = btn.querySelector('i');
+            
+            if (isPlaying) {
+                icon.className = 'fa fa-pause';
+            } else {
+                icon.className = 'fa fa-play';
+            }
+        }
+        
+        // 格式化时间
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        }
+        
+        // 检查浏览器支持
+        function checkBrowserSupport() {
+            const resultDiv = document.getElementById('support-result');
+            
+            if ('speechSynthesis' in window) {
+                resultDiv.innerHTML = `
+                    <div class="flex items-center bg-green-50 text-green-700">
+                        <i class="fa fa-check-circle mr-2"></i>
+                        <span>您的浏览器支持语音合成功能！</span>
+                    </div>
+                `;
+                resultDiv.classList.remove('hidden');
+                
+                // 测试语音合成
+                const testUtterance = new SpeechSynthesisUtterance('浏览器支持检测完成，语音功能可用');
+                testUtterance.lang = 'zh-CN';
+                synth.speak(testUtterance);
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="flex items-center bg-red-50 text-red-700">
+                        <i class="fa fa-exclamation-circle mr-2"></i>
+                        <span>您的浏览器不支持语音合成功能，请使用Chrome、Edge或Safari浏览器。</span>
+                    </div>
+                `;
+                resultDiv.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

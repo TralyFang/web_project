@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据测试页面 - 中国历史知识助手</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .test-result {
+            padding: 10px;
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>中国历史知识助手 - 数据测试页面</h1>
+    
+    <div class="test-section">
+        <div class="test-title">数据文件加载测试</div>
+        <p>检查数据文件是否正确加载：</p>
+        <div class="test-result" id="data-loading-result">
+            <p>正在加载数据文件...</p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">dynastyData 数据测试</div>
+        <p>检查朝代数据是否正确加载：</p>
+        <div class="test-result" id="dynasty-data-result">
+            <p>请先加载数据文件...</p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">storyData 数据测试</div>
+        <p>检查故事数据是否正确加载：</p>
+        <div class="test-result" id="story-data-result">
+            <p>请先加载数据文件...</p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">DOM 元素测试</div>
+        <p>检查页面中的DOM元素是否存在：</p>
+        <div class="test-result" id="dom-elements-result">
+            <p>请先加载数据文件...</p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">使用说明</div>
+        <p>此页面用于测试数据文件是否正确加载和处理。请打开浏览器的开发者工具（按F12）查看控制台输出，以获取更详细的调试信息。</p>
+        <a href="index.html" class="btn">返回主页面</a>
+    </div>
+    
+    <!-- 加载数据文件 -->
+    <script src="js/data/dynastyData.js"></script>
+    <script src="js/data/storyData.js"></script>
+    
+    <script>
+        // 页面加载完成后执行测试
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== 数据测试页面 ===');
+            
+            // 测试数据文件加载
+            testDataLoading();
+            
+            // 测试dynastyData数据
+            testDynastyData();
+            
+            // 测试storyData数据
+            testStoryData();
+            
+            // 测试DOM元素
+            testDOMElements();
+        });
+        
+        // 测试数据文件加载
+        function testDataLoading() {
+            const resultElement = document.getElementById('data-loading-result');
+            let result = '';
+            
+            console.log('=== 测试数据文件加载 ===');
+            console.log('dynastyData 是否存在:', typeof dynastyData !== 'undefined');
+            console.log('storyData 是否存在:', typeof storyData !== 'undefined');
+            
+            if (typeof dynastyData !== 'undefined') {
+                result += '✓ dynastyData.js 文件已加载<br>';
+            } else {
+                result += '✗ dynastyData.js 文件未加载<br>';
+            }
+            
+            if (typeof storyData !== 'undefined') {
+                result += '✓ storyData.js 文件已加载<br>';
+            } else {
+                result += '✗ storyData.js 文件未加载<br>';
+            }
+            
+            resultElement.innerHTML = result;
+            
+            if (typeof dynastyData !== 'undefined' && typeof storyData !== 'undefined') {
+                resultElement.className = 'test-result success';
+            } else {
+                resultElement.className = 'test-result error';
+            }
+        }
+        
+        // 测试dynastyData数据
+        function testDynastyData() {
+            const resultElement = document.getElementById('dynasty-data-result');
+            let result = '';
+            
+            console.log('=== 测试dynastyData数据 ===');
+            
+            if (typeof dynastyData === 'undefined') {
+                result = '✗ dynastyData 未定义';
+                resultElement.innerHTML = result;
+                resultElement.className = 'test-result error';
+                return;
+            }
+            
+            const dynasties = Object.keys(dynastyData);
+            result += `✓ dynastyData 包含 ${dynasties.length} 个朝代<br>`;
+            
+            // 显示朝代列表
+            result += '<br><strong>朝代列表：</strong><br>';
+            dynasties.forEach(dynasty => {
+                const data = dynastyData[dynasty];
+                result += `- ${dynasty}: ${data.title}<br>`;
+            });
+            
+            // 检查第一个朝代是否有事件数据
+            if (dynasties.length > 0) {
+                const firstDynasty = dynasties[0];
+                const firstDynastyData = dynastyData[firstDynasty];
+                
+                result += `<br><strong>${firstDynastyData.title} 的事件数据：</strong><br>`;
+                
+                if (firstDynastyData && firstDynastyData.events && firstDynastyData.events.length > 0) {
+                    result += `✓ 包含 ${firstDynastyData.events.length} 个事件<br>`;
+                    
+                    // 显示前3个事件
+                    result += '<br><strong>前3个事件：</strong><br>';
+                    firstDynastyData.events.slice(0, 3).forEach(event => {
+                        result += `- ${event.year}: ${event.event}<br>`;
+                    });
+                } else {
+                    result += '✗ 没有事件数据<br>';
+                }
+            }
+            
+            resultElement.innerHTML = result;
+            resultElement.className = 'test-result success';
+        }
+        
+        // 测试storyData数据
+        function testStoryData() {
+            const resultElement = document.getElementById('story-data-result');
+            let result = '';
+            
+            console.log('=== 测试storyData数据 ===');
+            
+            if (typeof storyData === 'undefined') {
+                result = '✗ storyData 未定义';
+                resultElement.innerHTML = result;
+                resultElement.className = 'test-result error';
+                return;
+            }
+            
+            const dynasties = Object.keys(storyData);
+            result += `✓ storyData 包含 ${dynasties.length} 个朝代的故事<br>`;
+            
+            // 显示朝代列表
+            result += '<br><strong>包含故事的朝代：</strong><br>';
+            dynasties.forEach(dynasty => {
+                const stories = storyData[dynasty];
+                result += `- ${dynasty}: ${stories.length} 个故事<br>`;
+            });
+            
+            // 检查第一个朝代是否有故事数据
+            if (dynasties.length > 0) {
+                const firstDynasty = dynasties[0];
+                const firstDynastyStories = storyData[firstDynasty];
+                
+                result += `<br><strong>${firstDynasty} 的故事数据：</strong><br>`;
+                
+                if (firstDynastyStories && firstDynastyStories.length > 0) {
+                    result += `✓ 包含 ${firstDynastyStories.length} 个故事<br>`;
+                    
+                    // 显示前3个故事
+                    result += '<br><strong>前3个故事：</strong><br>';
+                    firstDynastyStories.slice(0, 3).forEach(story => {
+                        result += `- ${story.title}<br>`;
+                    });
+                } else {
+                    result += '✗ 没有故事数据<br>';
+                }
+            }
+            
+            resultElement.innerHTML = result;
+            resultElement.className = 'test-result success';
+        }
+        
+        // 测试DOM元素
+        function testDOMElements() {
+            const resultElement = document.getElementById('dom-elements-result');
+            let result = '';
+            
+            console.log('=== 测试DOM元素 ===');
+            
+            // 检查主要页面元素
+            const mainElements = [
+                { id: 'sidebar', name: '侧边栏' },
+                { id: 'main-content', name: '主内容区域' },
+                { id: 'dynasty-song', name: '历史朝代歌页面' },
+                { id: 'dynasty-culture', name: '朝代传承页面' },
+                { id: 'dynasty-events', name: '朝代大事纪页面' },
+                { id: 'historical-stories', name: '历史小故事页面' },
+                { id: 'dynasty-system', name: '制度演变页面' },
+                { id: 'ai-assistant', name: 'AI历史问答页面' },
+                { id: 'foreign-treaties', name: '对外条约页面' }
+            ];
+            
+            result += '主要页面元素检查：<br>';
+            mainElements.forEach(element => {
+                const el = document.getElementById(element.id);
+                if (el) {
+                    result += `✓ ${element.name} (${element.id}) 存在<br>`;
+                } else {
+                    result += `✗ ${element.name} (${element.id}) 不存在<br>`;
+                }
+            });
+            
+            // 检查朝代事件容器
+            if (typeof dynastyData !== 'undefined') {
+                const dynasties = Object.keys(dynastyData);
+                if (dynasties.length > 0) {
+                    const firstDynasty = dynasties[0];
+                    const eventsContainer = document.getElementById(`${firstDynasty}-events`);
+                    
+                    result += `<br>朝代事件容器检查：<br>`;
+                    if (eventsContainer) {
+                        result += `✓ ${firstDynasty}-events 容器存在<br>`;
+                    } else {
+                        result += `✗ ${firstDynasty}-events 容器不存在<br>`;
+                    }
+                }
+            }
+            
+            // 检查故事容器
+            if (typeof storyData !== 'undefined') {
+                const dynasties = Object.keys(storyData);
+                if (dynasties.length > 0) {
+                    const firstDynasty = dynasties[0];
+                    const storiesContainer = document.getElementById(`${firstDynasty}-stories`);
+                    
+                    result += `<br>故事容器检查：<br>`;
+                    if (storiesContainer) {
+                        result += `✓ ${firstDynasty}-stories 容器存在<br>`;
+                    } else {
+                        result += `✗ ${firstDynasty}-stories 容器不存在<br>`;
+                    }
+                }
+            }
+            
+            resultElement.innerHTML = result;
+            resultElement.className = 'test-result success';
+        }
+    </script>
+</body>
+</html>

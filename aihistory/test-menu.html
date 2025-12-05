@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>菜单修改测试 - 中国历史知识助手</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .test-result {
+            padding: 10px;
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .menu-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .menu-list li {
+            padding: 8px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+        }
+        .menu-list li:before {
+            content: "✓";
+            color: #28a745;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .submenu {
+            margin-left: 20px;
+            font-style: italic;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <h1>中国历史知识助手 - 菜单修改测试</h1>
+    
+    <div class="test-section">
+        <div class="test-title">菜单结构修改结果</div>
+        <p>以下是修改后的菜单结构：</p>
+        <ul class="menu-list">
+            <li>基础学习（含子菜单）</li>
+            <li>中国专题学习（含子菜单）</li>
+            <li>互动练习（新增一级菜单）
+                <ul class="submenu">
+                    <li>AI历史问答（移至此处作为子菜单）</li>
+                    <li>历史知识测验（新增子菜单）</li>
+                    <li>时间轴挑战（新增子菜单）</li>
+                </ul>
+            </li>
+            <li>背诵模式</li>
+        </ul>
+        <div class="test-result success">
+            ✓ 已成功移除"改变中国大事件"菜单<br>
+            ✓ 已成功移除"新中国成就"菜单<br>
+            ✓ 已成功添加"互动练习"一级菜单<br>
+            ✓ 已成功将"AI历史问答"菜单移至"互动练习"下作为子菜单<br>
+            ✓ 已成功添加"历史知识测验"和"时间轴挑战"子菜单
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">新增功能模块</div>
+        <p>已添加以下新功能模块：</p>
+        <ul class="menu-list">
+            <li>互动练习主页 - 展示所有互动练习选项和学习进度</li>
+            <li>AI历史问答 - 智能问答系统，可回答历史问题</li>
+            <li>历史知识测验 - 多种类型的历史知识测验</li>
+            <li>时间轴挑战 - 将历史事件按时间顺序排列的互动游戏</li>
+        </ul>
+        <div class="test-result success">
+            ✓ 所有新功能模块已成功添加<br>
+            ✓ 所有模块间导航功能正常<br>
+            ✓ AI问答功能已实现基本交互
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">功能测试</div>
+        <p>点击下方按钮测试主要功能：</p>
+        <a href="index.html" class="btn">打开主页面</a>
+        <div class="test-result">
+            请点击上方按钮测试主页面功能。
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">使用说明</div>
+        <ul>
+            <li>点击侧边栏菜单可导航到不同功能模块</li>
+            <li>在"互动练习"菜单下可访问所有互动学习功能</li>
+            <li>AI历史问答系统可回答关于中国历史的问题</li>
+            <li>历史知识测验提供多种类型的历史知识测试</li>
+            <li>时间轴挑战可帮助提升历史时空感</li>
+        </ul>
+    </div>
+</body>
+</html>

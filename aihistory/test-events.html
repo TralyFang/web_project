@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>朝代事件测试 - 中国历史知识助手</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 统一的 Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E40AF',
+                        secondary: '#3B82F6',
+                        accent: '#F59E0B',
+                        dark: '#0F172A',
+                        'dark-light': '#1E293B',
+                        'dark-lighter': '#334155',
+                        light: '#F1F5F9',
+                        'light-dark': '#CBD5E1',
+                        'light-lighter': '#F8FAFC'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .event-card {
+            p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow;
+        }
+    </style>
+</head>
+<body>
+    <h1>中国历史知识助手 - 朝代事件测试</h1>
+    
+    <div class="test-section">
+        <div class="test-title">朝代事件数据测试</div>
+        <p>此页面用于测试朝代事件数据是否能正确显示：</p>
+        
+        <!-- 朝代选择器 -->
+        <div class="flex flex-wrap gap-2 mb-6">
+            <button class="dynasty-btn px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors" data-dynasty="xia">夏朝</button>
+            <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="shang">商朝</button>
+            <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="zhou">周朝</button>
+            <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="qin">秦朝</button>
+            <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="han">汉朝</button>
+        </div>
+        
+        <!-- 事件列表 -->
+        <div class="events-container">
+            <!-- 朝代事件容器 -->
+            <div class="dynasty-events" id="xia-events"></div>
+            <div class="dynasty-events hidden" id="shang-events"></div>
+            <div class="dynasty-events hidden" id="zhou-events"></div>
+            <div class="dynasty-events hidden" id="qin-events"></div>
+            <div class="dynasty-events hidden" id="han-events"></div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">使用说明</div>
+        <p>点击上方的朝代按钮，查看对应的历史事件。</p>
+        <a href="index.html" class="btn">返回主页面</a>
+    </div>
+    
+    <!-- 加载数据文件 -->
+    <script src="js/data/dynastyData.js"></script>
+    
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化朝代事件数据
+            initDynastyEventsData();
+            
+            // 默认显示夏朝事件
+            showDynastyEvents('xia');
+            
+            // 朝代按钮点击事件
+            document.querySelectorAll('.dynasty-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // 移除所有按钮的active类
+                    document.querySelectorAll('.dynasty-btn').forEach(btn => {
+                        btn.classList.remove('active', 'bg-primary', 'text-white');
+                        btn.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    
+                    // 添加当前按钮的active类
+                    this.classList.add('active', 'bg-primary', 'text-white');
+                    this.classList.remove('bg-gray-200', 'text-gray-700');
+                    
+                    // 显示选中朝代的事件
+                    const dynasty = this.getAttribute('data-dynasty');
+                    showDynastyEvents(dynasty);
+                });
+            });
+        });
+        
+        // 初始化朝代事件数据
+        function initDynastyEventsData() {
+            console.log('初始化朝代事件数据...');
+            console.log('dynastyData:', dynastyData);
+            
+            // 遍历所有朝代
+            for (const dynasty in dynastyData) {
+                const data = dynastyData[dynasty];
+                const container = document.getElementById(`${dynasty}-events`);
+                
+                if (container && data && data.events && data.events.length > 0) {
+                    console.log(`朝代 ${dynasty} 有 ${data.events.length} 个事件`);
+                    
+                    // 创建朝代事件容器
+                    let content = `
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h2 class="text-2xl font-bold mb-4 text-dark">${data.title}大事纪</h2>
+                            
+                            <div class="space-y-4">
+                    `;
+                    
+                    // 添加事件卡片
+                    data.events.forEach(event => {
+                        content += `
+                            <div class="event-card p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-lg font-semibold text-primary">${event.event}</h3>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">${event.year}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    // 关闭容器
+                    content += `
+                            </div>
+                        </div>
+                    `;
+                    
+                    // 设置容器内容
+                    container.innerHTML = content;
+                    console.log(`朝代 ${dynasty} 事件已渲染到页面`);
+                }
+            }
+        }
+        
+        // 显示选中朝代的事件
+        function showDynastyEvents(dynasty) {
+            // 隐藏所有朝代事件
+            document.querySelectorAll('.dynasty-events').forEach(events => {
+                events.classList.add('hidden');
+            });
+            
+            // 显示选中朝代的事件
+            const selectedEvents = document.getElementById(`${dynasty}-events`);
+            if (selectedEvents) {
+                selectedEvents.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

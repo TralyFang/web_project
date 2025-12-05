@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试朝代数据显示</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">测试朝代数据显示</h1>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">修复总结</h2>
+            <ul class="list-disc pl-6 space-y-2">
+                <li>修复了故事渲染逻辑，移除了容器内容检查，确保每次切换朝代时都重新渲染内容</li>
+                <li>在故事筛选逻辑的三个地方添加了渲染故事的调用</li>
+                <li>在事件筛选逻辑中添加了渲染事件的调用</li>
+                <li>在页面加载完成后，默认渲染夏朝的事件和故事</li>
+            </ul>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-4">测试步骤</h2>
+            <ol class="list-decimal pl-6 space-y-2">
+                <li>打开主页面 index.html</li>
+                <li>点击"朝代大事纪"或"历史小故事"选项卡</li>
+                <li>点击不同的朝代按钮，查看数据是否正确显示</li>
+                <li>使用上一个/下一个朝代按钮切换，查看数据是否正确显示</li>
+            </ol>
+            
+            <div class="mt-6 p-4 bg-green-50 rounded-md">
+                <p class="text-green-700"><strong>预期结果：</strong>切换朝代时，对应的事件和故事数据应该正确显示在页面上。</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
