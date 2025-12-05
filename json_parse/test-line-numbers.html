@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行号显示测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .test-title {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .test-step {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        .expected {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .issue {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .test-data {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>行号显示修复验证</h1>
+    
+    <div class="test-section">
+        <div class="test-title">问题：行数展示不对，只展示了1行</div>
+        <div class="test-step"><strong>原问题：</strong>无论输入多少行内容，行号区域只显示1行</div>
+        <div class="test-step"><strong>修复方案：</strong></div>
+        <ul>
+            <li>合并重复的input事件监听器</li>
+            <li>确保updateLineNumbers()在每次输入时都被调用</li>
+            <li>移除HTML中硬编码的行号</li>
+            <li>在应用初始化时调用updateLineNumbers()</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">测试用例</div>
+        
+        <div class="test-step"><strong>测试用例1：单行JSON</strong></div>
+        <div class="test-data">{"name": "test", "value": 123}</div>
+        <div class="expected">预期：显示1行</div>
+        
+        <div class="test-step"><strong>测试用例2：多行JSON</strong></div>
+        <div class="test-data">{
+  "users": [
+    {
+      "id": 1,
+      "name": "张三",
+      "email": "zhangsan@example.com"
+    },
+    {
+      "id": 2,
+      "name": "李四",
+      "email": "lisi@example.com"
+    }
+  ],
+  "metadata": {
+    "total": 2,
+    "page": 1,
+    "pageSize": 10
+  }
+}</div>
+        <div class="expected">预期：显示18行</div>
+        
+        <div class="test-step"><strong>测试用例3：空输入</strong></div>
+        <div class="test-data">(空内容)</div>
+        <div class="expected">预期：显示1行（空行）</div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">验证步骤</div>
+        <ol>
+            <li>打开JSON解析工具</li>
+            <li>输入测试用例1的内容</li>
+            <li>确认左侧行号区域显示1行</li>
+            <li>输入测试用例2的内容</li>
+            <li>确认左侧行号区域显示18行</li>
+            <li>清空输入框</li>
+            <li>确认左侧行号区域显示1行（空行）</li>
+            <li>滚动输入框，确认行号同步滚动</li>
+        </ol>
+    </div>
+
+    <h2>修复结果</h2>
+    <ul>
+        <li>✅ 合并重复事件监听器 - 完成</li>
+        <li>✅ 实时更新行号 - 完成</li>
+        <li>✅ 移除硬编码行号 - 完成</li>
+        <li>✅ 初始化行号显示 - 完成</li>
+        <li>✅ 行号同步滚动 - 完成</li>
+    </ul>
+
+    <div class="test-section">
+        <div class="test-title">技术实现细节</div>
+        <div class="test-step"><strong>修改的文件：</strong></div>
+        <ul>
+            <li><code>app.js:31-34</code> - 合并input事件监听器</li>
+            <li><code>app.js:23</code> - 添加初始化行号调用</li>
+            <li><code>index.html:57-59</code> - 移除硬编码行号</li>
+        </ul>
+        
+        <div class="test-step"><strong>核心逻辑：</strong></div>
+        <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px;">
+// 输入变化时同时更新行号和解析JSON
+this.jsonInput.addEventListener('input', () => {
+    this.updateLineNumbers(); // 实时更新行号
+    this.debounce(() => this.parseJSON(), 300); // 防抖解析
+});
+        </pre>
+    </div>
+</body>
+</html>

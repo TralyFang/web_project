@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有功能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .feature-test {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .feature-title {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .test-case {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        .test-input {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .expected {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .actual {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>JSON解析工具 - 所有功能测试</h1>
+    
+    <div class="feature-test">
+        <div class="feature-title">1. 满屏展示和区域调节</div>
+        <div class="test-case">
+            <p><strong>测试步骤：</strong></p>
+            <ul>
+                <li>打开JSON解析工具页面</li>
+                <li>确认页面占据整个浏览器窗口</li>
+                <li>拖动左右区域之间的分隔线</li>
+                <li>验证区域大小可以调节</li>
+            </ul>
+            <p class="expected">预期：页面满屏显示，区域大小可手动调节</p>
+        </div>
+    </div>
+
+    <div class="feature-test">
+        <div class="feature-title">2. 行号显示功能</div>
+        <div class="test-case">
+            <p><strong>测试步骤：</strong></p>
+            <ul>
+                <li>在左侧输入框中输入多行JSON</li>
+                <li>查看左侧是否显示行号</li>
+                <li>滚动输入框，验证行号同步滚动</li>
+                <li>查看右侧结果区域是否显示行数统计</li>
+            </ul>
+            <p class="expected">预期：左右区域都显示行号/行数统计</p>
+        </div>
+    </div>
+
+    <div class="feature-test">
+        <div class="feature-title">3. 双击复制功能</div>
+        <div class="test-case">
+            <p><strong>测试步骤：</strong></p>
+            <ul>
+                <li>解析一个有效的JSON</li>
+                <li>在右侧结果区域双击</li>
+                <li>粘贴到文本编辑器验证内容</li>
+            </ul>
+            <p class="expected">预期：双击后内容被复制到剪贴板</p>
+        </div>
+    </div>
+
+    <div class="feature-test">
+        <div class="feature-title">4. 压缩选项</div>
+        <div class="test-case">
+            <p><strong>测试输入：</strong></p>
+            <div class="test-input">
+{
+  "name": "测试",
+  "age": 25,
+  "data": [1, 2, 3]
+}
+            </div>
+            <p><strong>测试步骤：</strong></p>
+            <ul>
+                <li>勾选"压缩"选项</li>
+                <li>查看结果是否压缩为一行</li>
+                <li>取消勾选"压缩"选项</li>
+                <li>查看结果是否格式化显示</li>
+            </ul>
+            <p class="expected">预期：压缩选项控制JSON输出格式</p>
+        </div>
+    </div>
+
+    <div class="feature-test">
+        <div class="feature-title">5. 着色选项</div>
+        <div class="test-case">
+            <p><strong>测试输入：</strong></p>
+            <div class="test-input">
+{
+  "string": "测试文本",
+  "number": 123.45,
+  "boolean": true,
+  "null": null,
+  "array": [1, 2, 3]
+}
+            </div>
+            <p><strong>测试步骤：</strong></p>
+            <ul>
+                <li>勾选"着色"选项</li>
+                <li>查看结果中不同类型是否有不同颜色</li>
+                <li>取消勾选"着色"选项</li>
+                <li>查看结果是否变为单色</li>
+            </ul>
+            <p class="expected">预期：着色选项控制语法高亮显示</p>
+        </div>
+    </div>
+
+    <div class="feature-test">
+        <div class="feature-title">6. 显示JS类型</div>
+        <div class="test-case">
+            <p><strong>测试输入：</strong></p>
+            <div class="test-input">
+{
+  "string": "文本",
+  "number": 42,
+  "boolean": false,
+  "null": null,
+  "object": {"key": "value"},
+  "array": [1, 2, 3]
+}
+            </div>
+            <p><strong>测试步骤：</strong></p>
+            <ul>
+                <li>勾选"显示JS类型"选项</li>
+                <li>鼠标悬停在各个值上查看提示</li>
+                <li>验证类型显示是否正确</li>
+            </ul>
+            <p class="expected">预期：鼠标悬停时显示JavaScript类型</p>
+        </div>
+    </div>
+
+    <div class="feature-test">
+        <div class="feature-title">7. 显示数组索引</div>
+        <div class="test-case">
+            <p><strong>测试输入：</strong></p>
+            <div class="test-input">
+{
+  "items": ["苹果", "香蕉", "橙子"],
+  "numbers": [10, 20, 30, 40]
+}
+            </div>
+            <p><strong>测试步骤：</strong></p>
+            <ul>
+                <li>勾选"显示数组索引"选项</li>
+                <li>查看数组元素前是否显示索引</li>
+                <li>验证索引显示是否正确</li>
+            </ul>
+            <p class="expected">预期：数组元素前显示索引号</p>
+        </div>
+    </div>
+
+    <div class="feature-test">
+        <div class="feature-title">8. 错误高亮功能</div>
+        <div class="test-case">
+            <p><strong>测试输入：</strong></p>
+            <div class="test-input">
+{
+  name: '测试',
+  age: 25,
+  data: [1,2,3,],
+  active: true
+}
+            </div>
+            <p><strong>测试步骤：</strong></p>
+            <ul>
+                <li>输入包含错误的JSON</li>
+                <li>查看左侧行号区域是否有红色高亮</li>
+                <li>验证错误行号是否正确</li>
+            </ul>
+            <p class="expected">预期：错误行号以红色背景高亮显示</p>
+        </div>
+    </div>
+
+    <div class="feature-test">
+        <div class="feature-title">9. 综合测试</div>
+        <div class="test-case">
+            <p><strong>测试步骤：</strong></p>
+            <ul>
+                <li>同时启用所有选项</li>
+                <li>输入复杂的JSON数据</li>
+                <li>验证所有功能协同工作正常</li>
+                <li>测试选项切换时的响应速度</li>
+            </ul>
+            <p class="expected">预期：所有功能协同工作，无冲突</p>
+        </div>
+    </div>
+
+    <h2>测试结果记录</h2>
+    <p>请按照上述测试步骤逐一验证，记录每个功能的测试结果：</p>
+    <ul>
+        <li>✅ 通过</li>
+        <li>❌ 失败</li>
+        <li>⚠️ 部分通过</li>
+    </ul>
+</body>
+</html>

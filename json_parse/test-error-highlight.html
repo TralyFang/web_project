@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>错误高亮测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .test-case {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .error-line {
+            background: #f8d7da;
+            color: #721c24;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>错误高亮功能测试</h1>
+    
+    <div class="test-case">
+        <h3>测试用例1：缺失引号的属性名</h3>
+        <pre>
+{
+  name: "测试",
+  age: 25
+}
+        </pre>
+        <p>预期：第2行应该被高亮显示</p>
+    </div>
+
+    <div class="test-case">
+        <h3>测试用例2：单引号字符串</h3>
+        <pre>
+{
+  "name": '测试',
+  "data": 'value'
+}
+        </pre>
+        <p>预期：第2、3行应该被高亮显示</p>
+    </div>
+
+    <div class="test-case">
+        <h3>测试用例3：尾随逗号</h3>
+        <pre>
+{
+  "name": "测试",
+  "age": 25,
+}
+        </pre>
+        <p>预期：第3行应该被高亮显示</p>
+    </div>
+
+    <div class="test-case">
+        <h3>测试用例4：混合错误</h3>
+        <pre>
+{
+  name: '测试',
+  age: 25,
+  data: [1,2,3,],
+  active: true
+}
+        </pre>
+        <p>预期：第2、3、4行应该被高亮显示</p>
+    </div>
+
+    <p><strong>测试说明：</strong>将上述JSON字符串复制到JSON解析工具中，查看错误行是否被正确高亮显示。</p>
+</body>
+</html>

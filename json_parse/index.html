@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON在线解析工具</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JSON在线解析</h1>
+            <div class="header-info">
+                <span class="format-hint">(双击自动格式化)</span>
+                <div class="header-actions">
+                    <span>按（ctrl + D）或</span>
+                    <button class="favorite-btn">点击收藏</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="options-bar">
+            <button class="options-btn">选项 ▼</button>
+            <div class="options-menu" id="options-menu">
+                <label class="option-item">
+                    <input type="checkbox" id="compress-option" checked>
+                    <span>压缩</span>
+                </label>
+                <label class="option-item">
+                    <input type="checkbox" id="colorize-option" checked>
+                    <span>着色</span>
+                </label>
+                <label class="option-item">
+                    <input type="checkbox" id="show-types-option">
+                    <span>显示JS类型</span>
+                </label>
+                <label class="option-item">
+                    <input type="checkbox" id="show-indices-option">
+                    <span>显示数组索引</span>
+                </label>
+            </div>
+            <div class="options-indicators">
+                <span class="option-indicator active">●</span>
+                <span class="option-indicator">○</span>
+                <span class="option-indicator checked">✔</span>
+                <span class="option-indicator checked">✔</span>
+                <span class="option-indicator checked">✔</span>
+                <span class="option-indicator checked">✔</span>
+                <span class="option-indicator checked">✔</span>
+                <span class="option-indicator checked">✔</span>
+            </div>
+        </div>
+
+        <main>
+            <div class="input-section">
+                <div class="editor-container">
+                    <div class="line-numbers" id="line-numbers">
+                        <!-- 行号将动态生成 -->
+                    </div>
+                    <textarea 
+                        id="json-input" 
+                        class="json-input" 
+                        placeholder="请输入JSON字符串..."
+                        spellcheck="false"
+                    ></textarea>
+                </div>
+                <div class="status-bar">
+                    <span id="status-text">准备就绪</span>
+                    <span id="input-line-count" class="line-count">1 行</span>
+                </div>
+            </div>
+
+            <div class="resize-handle" id="resize-handle"></div>
+
+            <div class="result-section">
+                <div class="result-header">
+                    <div class="parse-info">
+                        <span>字符串解析出:</span>
+                        <span id="error-count" class="error-count">0 错误</span>
+                    </div>
+                    <div class="parse-methods">
+                        <span>JS eval</span>
+                        <span id="eval-status" class="eval-status">ready</span>
+                    </div>
+                </div>
+
+                <div class="result-content">
+                    <div class="result-toolbar">
+                        <button class="copy-btn" id="copy-btn" title="双击内容可复制">双击内容可复制</button>
+                        <span id="result-line-count" class="line-count">0 行</span>
+                    </div>
+                    <div id="parse-result" class="parse-result">
+                        <!-- 解析结果将在这里显示 -->
+                    </div>
+                    <div id="error-details" class="error-details">
+                        <!-- 错误详情将在这里显示 -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Copyright © 2024 JSON解析工具 All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="json-parser.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

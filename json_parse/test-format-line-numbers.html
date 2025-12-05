@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>格式化行号更新测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .test-title {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .test-step {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        .expected {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .issue {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .test-data {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>双击格式化行号更新修复验证</h1>
+    
+    <div class="test-section">
+        <div class="test-title">问题：双击格式化后没有更新行数</div>
+        <div class="test-step"><strong>原问题：</strong>双击格式化JSON后，左侧行号区域没有更新显示新的行数</div>
+        <div class="test-step"><strong>修复方案：</strong>在格式化方法中添加行号更新调用</div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">测试用例</div>
+        
+        <div class="test-step"><strong>测试用例1：压缩JSON格式化</strong></div>
+        <div class="test-data">{"name":"test","value":123,"enabled":true,"items":[1,2,3]}</div>
+        <div class="expected">预期：双击格式化后显示多行，行号更新</div>
+        
+        <div class="test-step"><strong>测试用例2：半格式化JSON</strong></div>
+        <div class="test-data">{"users":[{"id":1,"name":"张三"},{"id":2,"name":"李四"}],"metadata":{"total":2,"page":1}}</div>
+        <div class="expected">预期：双击格式化后显示完整格式化，行号更新</div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">验证步骤</div>
+        <ol>
+            <li>打开JSON解析工具</li>
+            <li>输入测试用例1的压缩JSON</li>
+            <li>记录当前行号显示（应该显示1行）</li>
+            <li>双击输入框进行格式化</li>
+            <li>确认左侧行号区域更新为多行</li>
+            <li>输入测试用例2的半格式化JSON</li>
+            <li>双击格式化</li>
+            <li>确认行号正确更新</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">技术实现细节</div>
+        <div class="test-step"><strong>修改的文件：</strong> <code>app.js</code></div>
+        
+        <div class="test-step"><strong>修改位置1：formatJSON() 方法</strong></div>
+        <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px;">
+if (result.success) {
+    const formatted = this.parser.formatJson(result.data);
+    this.jsonInput.value = formatted;
+    this.updateLineNumbers(); // 新增：更新行号显示
+    this.parseJSON();
+}
+        </pre>
+        
+        <div class="test-step"><strong>修改位置2：basicFormat() 方法</strong></div>
+        <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px;">
+this.jsonInput.value = formatted;
+this.updateLineNumbers(); // 新增：更新行号显示
+this.parseJSON();
+        </pre>
+    </div>
+
+    <h2>修复结果</h2>
+    <ul>
+        <li>✅ 格式化成功时更新行号 - 完成</li>
+        <li>✅ 基础格式化时更新行号 - 完成</li>
+        <li>✅ 双击格式化后行号实时更新 - 完成</li>
+    </ul>
+
+    <div class="test-section">
+        <div class="test-title">修复流程图</div>
+        <pre style="background: #f5f5f5; padding: 10px; border-radius: 4px;">
+用户双击输入框
+    ↓
+触发 formatJSON() 方法
+    ↓
+成功解析 → 格式化JSON → 更新输入框内容
+    ↓
+调用 updateLineNumbers() ← 新增：更新行号显示
+    ↓
+调用 parseJSON() 重新解析
+        </pre>
+    </div>
+</body>
+</html>
