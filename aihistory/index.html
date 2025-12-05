@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>中国历史学习助手 - 中国历史学习平台</title>
+    <title>中国历史学习助手</title>
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({ id: "3NJ6qob9tWWEj2g3", ck: "3NJ6qob9tWWEj2g3", autoTrack: true, hashMode: true })</script>
     <!-- Tailwind CSS v3 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
@@ -41,23 +44,28 @@
             background-color: #334155 !important;
             color: white !important;
         }
+
         .sidebar-menu-group {
             background-color: rgba(49, 65, 85, 0.9) !important;
         }
+
         .sidebar-submenu {
             background-color: #475569 !important;
         }
+
         .sidebar-menu-item i,
         .sidebar-submenu-item i {
             opacity: 1 !important;
             color: white !important;
         }
+
         .sidebar-text,
         .sidebar-submenu-item span {
             color: white !important;
         }
     </style>
 </head>
+
 <body class="bg-light">
     <div class="flex h-screen overflow-hidden">
         <!-- 侧边栏 -->
@@ -71,11 +79,12 @@
                     <i class="fa fa-bars"></i>
                 </button>
             </div>
-            
+
             <nav class="mt-6">
                 <!-- 基础学习 -->
                 <div class="sidebar-menu-group">
-                    <div class="sidebar-menu-item flex items-center justify-between py-2 px-4 hover:bg-dark-light cursor-pointer" onclick="toggleSubmenu('basic-study')">
+                    <div class="sidebar-menu-item flex items-center justify-between py-2 px-4 hover:bg-dark-light cursor-pointer"
+                        onclick="toggleSubmenu('basic-study')">
                         <div class="flex items-center">
                             <i class="fa fa-book sidebar-icon"></i>
                             <span class="sidebar-text">基础学习</span>
@@ -97,10 +106,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 专题学习 -->
                 <div class="sidebar-menu-group">
-                    <div class="sidebar-menu-item flex items-center justify-between py-2 px-4 hover:bg-dark-light cursor-pointer" onclick="toggleSubmenu('china-study')">
+                    <div class="sidebar-menu-item flex items-center justify-between py-2 px-4 hover:bg-dark-light cursor-pointer"
+                        onclick="toggleSubmenu('china-study')">
                         <div class="flex items-center">
                             <i class="fa fa-book sidebar-icon"></i>
                             <span class="sidebar-text">专题学习</span>
@@ -122,15 +132,17 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 互动练习 -->
                 <div class="sidebar-menu-group">
-                    <div class="sidebar-menu-item flex items-center justify-between py-2 px-4 hover:bg-dark-light cursor-pointer" onclick="toggleSubmenu('interactive-exercise')">
+                    <div class="sidebar-menu-item flex items-center justify-between py-2 px-4 hover:bg-dark-light cursor-pointer"
+                        onclick="toggleSubmenu('interactive-exercise')">
                         <div class="flex items-center">
                             <i class="fa fa-pencil-square-o sidebar-icon"></i>
                             <span class="sidebar-text">互动练习</span>
                         </div>
-                        <i id="interactive-exercise-arrow" class="fa fa-angle-down transition-transform duration-200"></i>
+                        <i id="interactive-exercise-arrow"
+                            class="fa fa-angle-down transition-transform duration-200"></i>
                     </div>
                     <div id="interactive-exercise-submenu" class="sidebar-submenu hidden">
                         <div class="sidebar-submenu-item flex items-center" data-target="ai-assistant">
@@ -139,17 +151,17 @@
                         </div>
                     </div>
                 </div>
-                
+
 
             </nav>
         </aside>
-        
+
         <!-- 主内容区 -->
         <main class="flex-1 overflow-y-auto bg-light">
             <!-- 朝代传承 -->
             <section id="dynasty-culture" class="p-6">
                 <h1 class="text-3xl font-bold mb-6 text-dark">中国历史朝代传承</h1>
-                
+
                 <!-- 时间轴 -->
                 <div class="timeline-container mb-8">
                     <div class="timeline">
@@ -215,20 +227,31 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 朝代筛选 -->
                 <div class="flex flex-wrap gap-2 mb-6">
-                    <button class="dynasty-filter-btn active px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors" data-filter="all">全部</button>
-                    <button class="dynasty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-filter="ancient">远古时期</button>
-                    <button class="dynasty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-filter="early">古代时期</button>
-                    <button class="dynasty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-filter="middle">中古时期</button>
-                    <button class="dynasty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-filter="late">近世时期</button>
+                    <button
+                        class="dynasty-filter-btn active px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors"
+                        data-filter="all">全部</button>
+                    <button
+                        class="dynasty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-filter="ancient">远古时期</button>
+                    <button
+                        class="dynasty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-filter="early">古代时期</button>
+                    <button
+                        class="dynasty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-filter="middle">中古时期</button>
+                    <button
+                        class="dynasty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-filter="late">近世时期</button>
                 </div>
-                
+
                 <!-- 朝代卡片 -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- 夏朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="xia" data-period="ancient">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="xia"
+                        data-period="ancient">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">夏朝 (约前2070年-前1600年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上第一个世袭制朝代，由禹建立。</p>
@@ -237,12 +260,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">约470年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">阳城</span>
                             </div>
-                            <button onclick="showDynastyDetails('xia')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('xia')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 商朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="shang" data-period="ancient">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="shang"
+                        data-period="ancient">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">商朝 (约前1600年-前1046年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上第二个朝代，青铜器制作技术达到很高水平。</p>
@@ -251,12 +276,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">约554年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">殷</span>
                             </div>
-                            <button onclick="showDynastyDetails('shang')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('shang')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 周朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="zhou" data-period="early">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="zhou"
+                        data-period="early">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">周朝 (前1046年-前256年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上最长的朝代，分为西周和东周两个时期。</p>
@@ -265,12 +292,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">约790年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">镐京、洛邑</span>
                             </div>
-                            <button onclick="showDynastyDetails('zhou')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('zhou')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 秦朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="qin" data-period="early">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="qin"
+                        data-period="early">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">秦朝 (前221年-前207年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上第一个统一的多民族的中央集权的封建国家。</p>
@@ -279,12 +308,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">15年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">咸阳</span>
                             </div>
-                            <button onclick="showDynastyDetails('qin')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('qin')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 汉朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="han" data-period="early">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="han"
+                        data-period="early">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">汉朝 (前202年-220年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上继秦朝之后的大一统王朝，分为西汉和东汉两个时期。</p>
@@ -293,12 +324,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">405年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">长安、洛阳</span>
                             </div>
-                            <button onclick="showDynastyDetails('han')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('han')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 三国 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="three_kingdoms" data-period="early">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden"
+                        data-dynasty="three_kingdoms" data-period="early">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">三国 (220年-280年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上魏、蜀、吴三个国家鼎立的时期。</p>
@@ -307,12 +340,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">60年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">洛阳、成都、建业</span>
                             </div>
-                            <button onclick="showDynastyDetails('three_kingdoms')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('three_kingdoms')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 晋朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="jin" data-period="early">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="jin"
+                        data-period="early">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">晋朝 (265年-420年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上分为西晋和东晋两个时期的朝代。</p>
@@ -321,12 +356,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">155年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">洛阳、建康</span>
                             </div>
-                            <button onclick="showDynastyDetails('jin')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('jin')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 南北朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="southern_northern" data-period="early">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden"
+                        data-dynasty="southern_northern" data-period="early">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">南北朝 (420年-589年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上南方与北方各自政权并立的时期。</p>
@@ -335,12 +372,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">169年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">建康、平城/洛阳</span>
                             </div>
-                            <button onclick="showDynastyDetails('southern_northern')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('southern_northern')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 隋朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="sui" data-period="early">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="sui"
+                        data-period="early">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">隋朝 (581年-618年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上继秦、汉之后的又一个统一的多民族的中央集权的封建国家。</p>
@@ -349,12 +388,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">37年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">大兴城、洛阳</span>
                             </div>
-                            <button onclick="showDynastyDetails('sui')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('sui')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 唐朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="tang" data-period="middle">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="tang"
+                        data-period="middle">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">唐朝 (618年-907年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上最强盛的朝代之一，文化艺术高度发达。</p>
@@ -363,12 +404,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">289年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">长安</span>
                             </div>
-                            <button onclick="showDynastyDetails('tang')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('tang')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 五代十国 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="five_dynasties" data-period="middle">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden"
+                        data-dynasty="five_dynasties" data-period="middle">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">五代十国 (907年-979年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上的一个分裂时期，中原地区先后出现了五个朝代。</p>
@@ -377,12 +420,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">72年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">开封、洛阳等</span>
                             </div>
-                            <button onclick="showDynastyDetails('five_dynasties')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('five_dynasties')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 宋朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="song" data-period="middle">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="song"
+                        data-period="middle">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">宋朝 (960年-1279年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上经济、科技、文化高度发达的时期。</p>
@@ -391,12 +436,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">319年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">开封、临安</span>
                             </div>
-                            <button onclick="showDynastyDetails('song')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('song')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 元朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="yuan" data-period="late">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="yuan"
+                        data-period="late">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">元朝 (1271年-1368年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上第一个由少数民族建立的大一统王朝。</p>
@@ -405,12 +452,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">97年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">大都</span>
                             </div>
-                            <button onclick="showDynastyDetails('yuan')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('yuan')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 明朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="ming" data-period="late">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="ming"
+                        data-period="late">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">明朝 (1368年-1644年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上最后一个由汉族建立的大一统王朝。</p>
@@ -419,12 +468,14 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">276年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">南京、北京</span>
                             </div>
-                            <button onclick="showDynastyDetails('ming')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('ming')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <!-- 清朝 -->
-                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="qing" data-period="late">
+                    <div class="dynasty-card bg-white rounded-lg shadow-md overflow-hidden" data-dynasty="qing"
+                        data-period="late">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2 text-dark">清朝 (1644年-1912年)</h3>
                             <p class="text-gray-600 mb-4">中国历史上最后一个封建王朝，由满族建立。</p>
@@ -433,35 +484,66 @@
                                 <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">268年</span>
                                 <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">北京</span>
                             </div>
-                            <button onclick="showDynastyDetails('qing')" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
+                            <button onclick="showDynastyDetails('qing')"
+                                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">查看详情</button>
                         </div>
                     </div>
                 </div>
             </section>
-            
+
             <!-- 朝代大事纪 -->
             <section id="dynasty-events" class="p-6 hidden">
                 <h1 class="text-3xl font-bold mb-6 text-dark">朝代大事纪</h1>
-                
+
                 <!-- 朝代选择器 -->
                 <div class="flex flex-wrap gap-2 mb-6">
-                    <button class="dynasty-btn active px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors" data-dynasty="xia">夏朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="shang">商朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="zhou">周朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="qin">秦朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="han">汉朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="three_kingdoms">三国</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="jin">晋朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="southern_northern">南北朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="sui">隋朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="tang">唐朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="five_dynasties">五代十国</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="song">宋朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="yuan">元朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="ming">明朝</button>
-                    <button class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="qing">清朝</button>
+                    <button
+                        class="dynasty-btn active px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors"
+                        data-dynasty="xia">夏朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="shang">商朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="zhou">周朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="qin">秦朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="han">汉朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="three_kingdoms">三国</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="jin">晋朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="southern_northern">南北朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="sui">隋朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="tang">唐朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="five_dynasties">五代十国</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="song">宋朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="yuan">元朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="ming">明朝</button>
+                    <button
+                        class="dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-dynasty="qing">清朝</button>
                 </div>
-                
+
                 <!-- 事件列表 -->
                 <div class="events-container">
                     <!-- 朝代事件容器 -->
@@ -482,36 +564,58 @@
                     <div class="dynasty-events hidden" id="qing-events"></div>
                 </div>
             </section>
-            
+
             <!-- 历史小故事 -->
             <section id="historical-stories" class="p-6 hidden">
                 <h1 class="text-3xl font-bold mb-6 text-dark">历史小故事</h1>
-                
+
                 <!-- 朝代导航 -->
                 <div class="flex justify-between items-center mb-6">
-                    <button id="prev-dynasty" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button id="prev-dynasty"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="fa fa-arrow-left mr-2"></i>上一个朝代
                     </button>
-                    
+
                     <!-- 朝代选择器 -->
                     <div class="flex flex-wrap gap-2">
-                        <button class="story-dynasty-btn active px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors" data-dynasty="xia">夏朝</button>
-                        <button class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="shang">商朝</button>
-                        <button class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="zhou">周朝</button>
-                        <button class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="qin">秦朝</button>
-                        <button class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="han">汉朝</button>
-                        <button class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="tang">唐朝</button>
-                        <button class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="song">宋朝</button>
-                        <button class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="yuan">元朝</button>
-                        <button class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="ming">明朝</button>
-                        <button class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-dynasty="qing">清朝</button>
+                        <button
+                            class="story-dynasty-btn active px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors"
+                            data-dynasty="xia">夏朝</button>
+                        <button
+                            class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                            data-dynasty="shang">商朝</button>
+                        <button
+                            class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                            data-dynasty="zhou">周朝</button>
+                        <button
+                            class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                            data-dynasty="qin">秦朝</button>
+                        <button
+                            class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                            data-dynasty="han">汉朝</button>
+                        <button
+                            class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                            data-dynasty="tang">唐朝</button>
+                        <button
+                            class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                            data-dynasty="song">宋朝</button>
+                        <button
+                            class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                            data-dynasty="yuan">元朝</button>
+                        <button
+                            class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                            data-dynasty="ming">明朝</button>
+                        <button
+                            class="story-dynasty-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                            data-dynasty="qing">清朝</button>
                     </div>
-                    
-                    <button id="next-dynasty" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+
+                    <button id="next-dynasty"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
                         下一个朝代<i class="fa fa-arrow-right ml-2"></i>
                     </button>
                 </div>
-                
+
                 <!-- 故事列表 -->
                 <div class="stories-container">
                     <!-- 夏朝故事 -->
@@ -519,146 +623,186 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="story-card bg-white rounded-lg shadow-md overflow-hidden">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="https://picsum.photos/seed/story1/600/400" alt="大禹治水" class="story-image w-full h-full object-cover">
+                                    <img src="https://picsum.photos/seed/story1/600/400" alt="大禹治水"
+                                        class="story-image w-full h-full object-cover">
                                 </div>
                                 <div class="p-6">
                                     <h3 class="text-xl font-bold mb-2 text-dark">大禹治水</h3>
-                                    <p class="text-gray-600 mb-4 line-clamp-3">大禹是夏朝的奠基者，也是中国古代著名的治水英雄。相传在尧、舜时期，洪水泛滥，百姓深受其害。大禹的父亲鲧治水九年，采用堵截的方法，结果失败被杀。大禹继承父志，改用疏导的方法治水。他带领民众开凿龙门，疏通九河，历时十三年，终于制服了洪水。在治水过程中，大禹"三过家门而不入"，表现出了公而忘私的精神。</p>
+                                    <p class="text-gray-600 mb-4 line-clamp-3">
+                                        大禹是夏朝的奠基者，也是中国古代著名的治水英雄。相传在尧、舜时期，洪水泛滥，百姓深受其害。大禹的父亲鲧治水九年，采用堵截的方法，结果失败被杀。大禹继承父志，改用疏导的方法治水。他带领民众开凿龙门，疏通九河，历时十三年，终于制服了洪水。在治水过程中，大禹"三过家门而不入"，表现出了公而忘私的精神。
+                                    </p>
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-500">寓意：坚持不懈，公而忘私，因地制宜</span>
-                                        <button onclick="showStoryDetails('xia', 0)" class="text-primary hover:text-blue-700">查看全文</button>
+                                        <button onclick="showStoryDetails('xia', 0)"
+                                            class="text-primary hover:text-blue-700">查看全文</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="story-card bg-white rounded-lg shadow-md overflow-hidden">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="https://picsum.photos/seed/story2/600/400" alt="禹传子启" class="story-image w-full h-full object-cover">
+                                    <img src="https://picsum.photos/seed/story2/600/400" alt="禹传子启"
+                                        class="story-image w-full h-full object-cover">
                                 </div>
                                 <div class="p-6">
                                     <h3 class="text-xl font-bold mb-2 text-dark">禹传子启</h3>
-                                    <p class="text-gray-600 mb-4 line-clamp-3">大禹治水有功，被舜禅让为天子。大禹在位期间，威望很高，诸侯都来朝贡。大禹晚年，按照禅让制的传统，推荐皋陶为继承人。但皋陶早逝，大禹又推荐伯益为继承人。然而，大禹的儿子启很有才能，得到了许多诸侯的支持。大禹死后，启继位为天子，开创了中国历史上第一个世袭制王朝——夏朝。这标志着中国社会从原始社会向奴隶社会的转变。</p>
+                                    <p class="text-gray-600 mb-4 line-clamp-3">
+                                        大禹治水有功，被舜禅让为天子。大禹在位期间，威望很高，诸侯都来朝贡。大禹晚年，按照禅让制的传统，推荐皋陶为继承人。但皋陶早逝，大禹又推荐伯益为继承人。然而，大禹的儿子启很有才能，得到了许多诸侯的支持。大禹死后，启继位为天子，开创了中国历史上第一个世袭制王朝——夏朝。这标志着中国社会从原始社会向奴隶社会的转变。
+                                    </p>
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-500">寓意：顺应历史潮流，才能赢得人心</span>
-                                        <button onclick="showStoryDetails('xia', 1)" class="text-primary hover:text-blue-700">查看全文</button>
+                                        <button onclick="showStoryDetails('xia', 1)"
+                                            class="text-primary hover:text-blue-700">查看全文</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="story-card bg-white rounded-lg shadow-md overflow-hidden">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="https://picsum.photos/seed/story3/600/400" alt="太康失国" class="story-image w-full h-full object-cover">
+                                    <img src="https://picsum.photos/seed/story3/600/400" alt="太康失国"
+                                        class="story-image w-full h-full object-cover">
                                 </div>
                                 <div class="p-6">
                                     <h3 class="text-xl font-bold mb-2 text-dark">太康失国</h3>
-                                    <p class="text-gray-600 mb-4 line-clamp-3">夏朝建立后，经历了大禹、启、太康等几代君主。太康在位期间，贪图享乐，不理朝政，经常外出打猎，数月不归。东夷族有穷氏首领后羿趁机率军攻占了夏朝的都城，太康被迫流亡在外，最终死在那里。这就是历史上著名的"太康失国"。后羿掌握了夏朝的政权，但他也沉迷于打猎，不问政事，后来被他的亲信寒浞所杀。</p>
+                                    <p class="text-gray-600 mb-4 line-clamp-3">
+                                        夏朝建立后，经历了大禹、启、太康等几代君主。太康在位期间，贪图享乐，不理朝政，经常外出打猎，数月不归。东夷族有穷氏首领后羿趁机率军攻占了夏朝的都城，太康被迫流亡在外，最终死在那里。这就是历史上著名的"太康失国"。后羿掌握了夏朝的政权，但他也沉迷于打猎，不问政事，后来被他的亲信寒浞所杀。
+                                    </p>
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-500">寓意：贪图享乐，不理朝政，终将导致亡国</span>
-                                        <button onclick="showStoryDetails('xia', 2)" class="text-primary hover:text-blue-700">查看全文</button>
+                                        <button onclick="showStoryDetails('xia', 2)"
+                                            class="text-primary hover:text-blue-700">查看全文</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="story-card bg-white rounded-lg shadow-md overflow-hidden">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="https://picsum.photos/seed/story4/600/400" alt="少康中兴" class="story-image w-full h-full object-cover">
+                                    <img src="https://picsum.photos/seed/story4/600/400" alt="少康中兴"
+                                        class="story-image w-full h-full object-cover">
                                 </div>
                                 <div class="p-6">
                                     <h3 class="text-xl font-bold mb-2 text-dark">少康中兴</h3>
-                                    <p class="text-gray-600 mb-4 line-clamp-3">太康失国后，夏朝的政权落入了寒浞手中。太康的弟弟仲康的孙子少康，在有虞氏的帮助下，逐渐积蓄力量，准备复国。少康首先派儿子季杼去迷惑寒浞的儿子浇，然后自己率军攻打寒浞。经过多年的战争，少康终于消灭了寒浞势力，恢复了夏朝的统治。少康在位期间，勤于政事，关心百姓，夏朝的国力得到了恢复和发展，史称"少康中兴"。</p>
+                                    <p class="text-gray-600 mb-4 line-clamp-3">
+                                        太康失国后，夏朝的政权落入了寒浞手中。太康的弟弟仲康的孙子少康，在有虞氏的帮助下，逐渐积蓄力量，准备复国。少康首先派儿子季杼去迷惑寒浞的儿子浇，然后自己率军攻打寒浞。经过多年的战争，少康终于消灭了寒浞势力，恢复了夏朝的统治。少康在位期间，勤于政事，关心百姓，夏朝的国力得到了恢复和发展，史称"少康中兴"。
+                                    </p>
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-500">寓意：忍辱负重，伺机而动，才能成就大业</span>
-                                        <button onclick="showStoryDetails('xia', 3)" class="text-primary hover:text-blue-700">查看全文</button>
+                                        <button onclick="showStoryDetails('xia', 3)"
+                                            class="text-primary hover:text-blue-700">查看全文</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="story-card bg-white rounded-lg shadow-md overflow-hidden">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="https://picsum.photos/seed/story5/600/400" alt="夏桀暴政" class="story-image w-full h-full object-cover">
+                                    <img src="https://picsum.photos/seed/story5/600/400" alt="夏桀暴政"
+                                        class="story-image w-full h-full object-cover">
                                 </div>
                                 <div class="p-6">
                                     <h3 class="text-xl font-bold mb-2 text-dark">夏桀暴政</h3>
-                                    <p class="text-gray-600 mb-4 line-clamp-3">夏朝末年，最后一个君主夏桀暴虐无道，荒淫无度。他宠爱妃子妹喜，为她建造了豪华的宫殿，无休止地征发百姓服劳役。夏桀还发明了一种叫做"炮烙"的酷刑，用来惩罚敢于劝谏他的大臣。夏桀的暴政引起了百姓的强烈不满，诸侯也纷纷背叛夏朝。商部落的首领商汤趁机崛起，率领诸侯攻打夏桀。最终，夏桀战败被俘，夏朝灭亡。</p>
+                                    <p class="text-gray-600 mb-4 line-clamp-3">
+                                        夏朝末年，最后一个君主夏桀暴虐无道，荒淫无度。他宠爱妃子妹喜，为她建造了豪华的宫殿，无休止地征发百姓服劳役。夏桀还发明了一种叫做"炮烙"的酷刑，用来惩罚敢于劝谏他的大臣。夏桀的暴政引起了百姓的强烈不满，诸侯也纷纷背叛夏朝。商部落的首领商汤趁机崛起，率领诸侯攻打夏桀。最终，夏桀战败被俘，夏朝灭亡。
+                                    </p>
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-500">寓意：暴虐无道，终将导致亡国</span>
-                                        <button onclick="showStoryDetails('xia', 4)" class="text-primary hover:text-blue-700">查看全文</button>
+                                        <button onclick="showStoryDetails('xia', 4)"
+                                            class="text-primary hover:text-blue-700">查看全文</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="story-card bg-white rounded-lg shadow-md overflow-hidden">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="https://picsum.photos/seed/story6/600/400" alt="妹喜亡夏" class="story-image w-full h-full object-cover">
+                                    <img src="https://picsum.photos/seed/story6/600/400" alt="妹喜亡夏"
+                                        class="story-image w-full h-full object-cover">
                                 </div>
                                 <div class="p-6">
                                     <h3 class="text-xl font-bold mb-2 text-dark">妹喜亡夏</h3>
-                                    <p class="text-gray-600 mb-4 line-clamp-3">妹喜是夏桀的宠妃，传说她是导致夏朝灭亡的祸水。妹喜喜欢听撕裂丝绸的声音，夏桀就命令宫女们每天撕裂大量的丝绸给她听。妹喜还喜欢看人们在酒池中饮酒作乐，夏桀就建造了一个巨大的酒池，让三千人同时在酒池中饮酒。这些奢侈的行为耗费了夏朝大量的财力和人力，加重了百姓的负担。最终，夏朝在夏桀和妹喜的统治下走向了灭亡。</p>
+                                    <p class="text-gray-600 mb-4 line-clamp-3">
+                                        妹喜是夏桀的宠妃，传说她是导致夏朝灭亡的祸水。妹喜喜欢听撕裂丝绸的声音，夏桀就命令宫女们每天撕裂大量的丝绸给她听。妹喜还喜欢看人们在酒池中饮酒作乐，夏桀就建造了一个巨大的酒池，让三千人同时在酒池中饮酒。这些奢侈的行为耗费了夏朝大量的财力和人力，加重了百姓的负担。最终，夏朝在夏桀和妹喜的统治下走向了灭亡。
+                                    </p>
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-500">寓意：红颜祸水，红颜祸国</span>
-                                        <button onclick="showStoryDetails('xia', 5)" class="text-primary hover:text-blue-700">查看全文</button>
+                                        <button onclick="showStoryDetails('xia', 5)"
+                                            class="text-primary hover:text-blue-700">查看全文</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="story-card bg-white rounded-lg shadow-md overflow-hidden">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="https://picsum.photos/seed/story7/600/400" alt="伊尹归商" class="story-image w-full h-full object-cover">
+                                    <img src="https://picsum.photos/seed/story7/600/400" alt="伊尹归商"
+                                        class="story-image w-full h-full object-cover">
                                 </div>
                                 <div class="p-6">
                                     <h3 class="text-xl font-bold mb-2 text-dark">伊尹归商</h3>
-                                    <p class="text-gray-600 mb-4 line-clamp-3">伊尹是夏朝末年的一位贤才，他原本是有莘氏的奴隶，后来被商汤发现并重用。伊尹曾经多次劝说夏桀改过自新，但夏桀不听。于是，伊尹决定离开夏朝，投奔商汤。商汤得到伊尹后，如虎添翼，在伊尹的辅佐下，商汤的势力日益强大。最终，商汤在伊尹的帮助下，推翻了夏朝，建立了商朝。伊尹也成为了商朝的开国功臣。</p>
+                                    <p class="text-gray-600 mb-4 line-clamp-3">
+                                        伊尹是夏朝末年的一位贤才，他原本是有莘氏的奴隶，后来被商汤发现并重用。伊尹曾经多次劝说夏桀改过自新，但夏桀不听。于是，伊尹决定离开夏朝，投奔商汤。商汤得到伊尹后，如虎添翼，在伊尹的辅佐下，商汤的势力日益强大。最终，商汤在伊尹的帮助下，推翻了夏朝，建立了商朝。伊尹也成为了商朝的开国功臣。
+                                    </p>
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-500">寓意：良禽择木而栖，贤臣择主而事</span>
-                                        <button onclick="showStoryDetails('xia', 6)" class="text-primary hover:text-blue-700">查看全文</button>
+                                        <button onclick="showStoryDetails('xia', 6)"
+                                            class="text-primary hover:text-blue-700">查看全文</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="story-card bg-white rounded-lg shadow-md overflow-hidden">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="https://picsum.photos/seed/story8/600/400" alt="商汤灭夏" class="story-image w-full h-full object-cover">
+                                    <img src="https://picsum.photos/seed/story8/600/400" alt="商汤灭夏"
+                                        class="story-image w-full h-full object-cover">
                                 </div>
                                 <div class="p-6">
                                     <h3 class="text-xl font-bold mb-2 text-dark">商汤灭夏</h3>
-                                    <p class="text-gray-600 mb-4 line-clamp-3">商汤是商部落的首领，他看到夏桀暴虐无道，百姓生活困苦，决定推翻夏朝的统治。商汤首先任用伊尹等贤才，发展生产，积蓄力量。然后，商汤率领诸侯军队攻打夏桀。在鸣条之战中，商汤的军队大败夏桀的军队。夏桀逃到南巢，最终死在那里。商汤灭夏后，建立了商朝，定都亳。这就是历史上著名的"商汤革命"。</p>
+                                    <p class="text-gray-600 mb-4 line-clamp-3">
+                                        商汤是商部落的首领，他看到夏桀暴虐无道，百姓生活困苦，决定推翻夏朝的统治。商汤首先任用伊尹等贤才，发展生产，积蓄力量。然后，商汤率领诸侯军队攻打夏桀。在鸣条之战中，商汤的军队大败夏桀的军队。夏桀逃到南巢，最终死在那里。商汤灭夏后，建立了商朝，定都亳。这就是历史上著名的"商汤革命"。
+                                    </p>
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-500">寓意：得道多助，失道寡助</span>
-                                        <button onclick="showStoryDetails('xia', 7)" class="text-primary hover:text-blue-700">查看全文</button>
+                                        <button onclick="showStoryDetails('xia', 7)"
+                                            class="text-primary hover:text-blue-700">查看全文</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="story-card bg-white rounded-lg shadow-md overflow-hidden">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="https://picsum.photos/seed/story9/600/400" alt="夏朝的青铜器" class="story-image w-full h-full object-cover">
+                                    <img src="https://picsum.photos/seed/story9/600/400" alt="夏朝的青铜器"
+                                        class="story-image w-full h-full object-cover">
                                 </div>
                                 <div class="p-6">
                                     <h3 class="text-xl font-bold mb-2 text-dark">夏朝的青铜器</h3>
-                                    <p class="text-gray-600 mb-4 line-clamp-3">夏朝时期，青铜器的制作技术已经有了很大的发展。考古学家在夏朝的遗址中发现了许多青铜器，如爵、斝、鼎等。这些青铜器制作精美，工艺复杂，说明夏朝的手工业已经有了很高的水平。青铜器的出现，不仅提高了生产效率，也促进了文化的发展。夏朝的青铜器上还刻有一些简单的符号，这可能是中国最早的文字雏形。</p>
+                                    <p class="text-gray-600 mb-4 line-clamp-3">
+                                        夏朝时期，青铜器的制作技术已经有了很大的发展。考古学家在夏朝的遗址中发现了许多青铜器，如爵、斝、鼎等。这些青铜器制作精美，工艺复杂，说明夏朝的手工业已经有了很高的水平。青铜器的出现，不仅提高了生产效率，也促进了文化的发展。夏朝的青铜器上还刻有一些简单的符号，这可能是中国最早的文字雏形。
+                                    </p>
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-500">寓意：科技进步是社会发展的重要推动力</span>
-                                        <button onclick="showStoryDetails('xia', 8)" class="text-primary hover:text-blue-700">查看全文</button>
+                                        <button onclick="showStoryDetails('xia', 8)"
+                                            class="text-primary hover:text-blue-700">查看全文</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="story-card bg-white rounded-lg shadow-md overflow-hidden">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="https://picsum.photos/seed/story10/600/400" alt="夏朝的历法" class="story-image w-full h-full object-cover">
+                                    <img src="https://picsum.photos/seed/story10/600/400" alt="夏朝的历法"
+                                        class="story-image w-full h-full object-cover">
                                 </div>
                                 <div class="p-6">
                                     <h3 class="text-xl font-bold mb-2 text-dark">夏朝的历法</h3>
-                                    <p class="text-gray-600 mb-4 line-clamp-3">夏朝时期，人们已经发明了历法，用来指导农业生产。夏朝的历法是以观测月亮的圆缺变化为基础的，叫做"夏历"。夏历把一年分为十二个月，每个月以新月出现的那一天为初一，以满月出现的那一天为十五。夏历还设置了闰月，用来调整月份和季节的关系。夏朝的历法对中国古代农业的发展起到了重要的作用，也为后世历法的发展奠定了基础。</p>
+                                    <p class="text-gray-600 mb-4 line-clamp-3">
+                                        夏朝时期，人们已经发明了历法，用来指导农业生产。夏朝的历法是以观测月亮的圆缺变化为基础的，叫做"夏历"。夏历把一年分为十二个月，每个月以新月出现的那一天为初一，以满月出现的那一天为十五。夏历还设置了闰月，用来调整月份和季节的关系。夏朝的历法对中国古代农业的发展起到了重要的作用，也为后世历法的发展奠定了基础。
+                                    </p>
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm text-gray-500">寓意：观察自然，顺应自然，才能更好地利用自然</span>
-                                        <button onclick="showStoryDetails('xia', 9)" class="text-primary hover:text-blue-700">查看全文</button>
+                                        <button onclick="showStoryDetails('xia', 9)"
+                                            class="text-primary hover:text-blue-700">查看全文</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- 其他朝代故事容器 -->
                     <div class="dynasty-stories hidden" id="shang-stories"></div>
                     <div class="dynasty-stories hidden" id="zhou-stories"></div>
@@ -671,11 +815,11 @@
                     <div class="dynasty-stories hidden" id="qing-stories"></div>
                 </div>
             </section>
-            
+
             <!-- 制度演变 -->
             <section id="institution-evolution" class="p-6 hidden">
                 <h1 class="text-3xl font-bold mb-6 text-dark">中国古代制度演变</h1>
-                
+
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h2 class="text-2xl font-bold mb-4 text-dark">中央官制演变</h2>
                     <div class="overflow-x-auto">
@@ -717,7 +861,7 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h2 class="text-2xl font-bold mb-4 text-dark">地方行政制度演变</h2>
                     <div class="overflow-x-auto">
@@ -725,7 +869,8 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">朝代</th>
-                                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">地方行政制度</th>
+                                    <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">地方行政制度
+                                    </th>
                                     <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">特点</th>
                                 </tr>
                             </thead>
@@ -759,7 +904,7 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h2 class="text-2xl font-bold mb-4 text-dark">选官制度演变</h2>
                     <div class="overflow-x-auto">
@@ -801,7 +946,7 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h2 class="text-2xl font-bold mb-4 text-dark">土地制度演变</h2>
                     <div class="overflow-x-auto">
@@ -849,28 +994,50 @@
                     </div>
                 </div>
             </section>
-            
+
             <!-- 对外条约 -->
             <section id="foreign-treaties" class="p-6 hidden">
                 <h1 class="text-3xl font-bold mb-6 text-dark">中国近代对外条约</h1>
 
                 <!-- 条约类型筛选 -->
                 <div class="flex flex-wrap gap-2 mb-4">
-                    <button class="treaty-filter-btn active px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-filter="all">全部</button>
-                    <button class="treaty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-filter="unequal">不平等条约</button>
-                    <button class="treaty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-filter="commerce">通商条约</button>
-                    <button class="treaty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-filter="border">边界条约</button>
-                    <button class="treaty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-filter="agreement">协定/议定书</button>
+                    <button
+                        class="treaty-filter-btn active px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-filter="all">全部</button>
+                    <button
+                        class="treaty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-filter="unequal">不平等条约</button>
+                    <button
+                        class="treaty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-filter="commerce">通商条约</button>
+                    <button
+                        class="treaty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-filter="border">边界条约</button>
+                    <button
+                        class="treaty-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-filter="agreement">协定/议定书</button>
                 </div>
 
                 <!-- 国家筛选 -->
                 <div class="flex flex-wrap gap-2 mb-6">
-                    <button class="country-filter-btn active px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-country="all">全部国家</button>
-                    <button class="country-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-country="uk">英国</button>
-                    <button class="country-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-country="france">法国</button>
-                    <button class="country-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-country="russia">俄国</button>
-                    <button class="country-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-country="usa">美国</button>
-                    <button class="country-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors" data-country="japan">日本</button>
+                    <button
+                        class="country-filter-btn active px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-country="all">全部国家</button>
+                    <button
+                        class="country-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-country="uk">英国</button>
+                    <button
+                        class="country-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-country="france">法国</button>
+                    <button
+                        class="country-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-country="russia">俄国</button>
+                    <button
+                        class="country-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-country="usa">美国</button>
+                    <button
+                        class="country-filter-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        data-country="japan">日本</button>
                 </div>
 
                 <!-- 时间轴（关键条约节点） -->
@@ -902,7 +1069,8 @@
                 <!-- 条约卡片列表 -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- 南京条约 1842 英国 -->
-                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="nanjing1842" data-type="unequal" data-country="uk">
+                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="nanjing1842"
+                        data-type="unequal" data-country="uk">
                         <h3 class="text-xl font-bold mb-2 text-dark">《南京条约》（1842）</h3>
                         <p class="text-gray-600 mb-4">中英签订的第一个不平等条约：割让香港岛，开放五口通商，赔款2100万银元等，标志中国近代史开端。</p>
                         <div class="flex flex-wrap gap-2">
@@ -913,7 +1081,8 @@
                     </div>
 
                     <!-- 天津条约 1858 英法美俄 -->
-                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="tianjin1858" data-type="unequal" data-country="france">
+                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="tianjin1858"
+                        data-type="unequal" data-country="france">
                         <h3 class="text-xl font-bold mb-2 text-dark">《天津条约》（1858）</h3>
                         <p class="text-gray-600 mb-4">第二次鸦片战争中与英、法、美、俄等签订，增开通商口岸、允许使节驻京、准传教、通行护照等，进一步扩大列强特权。</p>
                         <div class="flex flex-wrap gap-2">
@@ -924,7 +1093,8 @@
                     </div>
 
                     <!-- 北京条约 1860 英法俄 -->
-                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="beijing1860" data-type="unequal" data-country="uk">
+                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="beijing1860"
+                        data-type="unequal" data-country="uk">
                         <h3 class="text-xl font-bold mb-2 text-dark">《北京条约》（1860）</h3>
                         <p class="text-gray-600 mb-4">在英法联军入侵背景下签订，割九龙司地方给英国、增赔款、开放天津等，再度加深半殖民地化。</p>
                         <div class="flex flex-wrap gap-2">
@@ -935,7 +1105,8 @@
                     </div>
 
                     <!-- 瑷珲条约 1858 俄国 边界 -->
-                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="aigun1858" data-type="border" data-country="russia">
+                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="aigun1858"
+                        data-type="border" data-country="russia">
                         <h3 class="text-xl font-bold mb-2 text-dark">《瑷珲条约》（1858）</h3>
                         <p class="text-gray-600 mb-4">清与俄签订的边界条约，确定黑龙江、乌苏里江以北大片领土归俄，中方失地严重。</p>
                         <div class="flex flex-wrap gap-2">
@@ -946,7 +1117,8 @@
                     </div>
 
                     <!-- 马关条约 1895 日本 -->
-                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="shimonoseki1895" data-type="unequal" data-country="japan">
+                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6"
+                        data-treaty="shimonoseki1895" data-type="unequal" data-country="japan">
                         <h3 class="text-xl font-bold mb-2 text-dark">《马关条约》（1895）</h3>
                         <p class="text-gray-600 mb-4">甲午战争后与日本签订：割让台湾、澎湖列岛、辽东半岛（后赎回），巨额赔款，开放商埠，允许设厂等。</p>
                         <div class="flex flex-wrap gap-2">
@@ -957,7 +1129,8 @@
                     </div>
 
                     <!-- 虎门条约 1843 英国 -->
-                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="bogue1843" data-type="unequal" data-country="uk">
+                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="bogue1843"
+                        data-type="unequal" data-country="uk">
                         <h3 class="text-xl font-bold mb-2 text-dark">《虎门条约》（1843）</h3>
                         <p class="text-gray-600 mb-4">《南京条约》的补充条约，规定领事裁判权、片面最惠国待遇等，进一步扩大英方特权。</p>
                         <div class="flex flex-wrap gap-2">
@@ -968,7 +1141,8 @@
                     </div>
 
                     <!-- 望厦条约 1844 美国 -->
-                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="wangxia1844" data-type="commerce" data-country="usa">
+                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="wangxia1844"
+                        data-type="commerce" data-country="usa">
                         <h3 class="text-xl font-bold mb-2 text-dark">《望厦条约》（1844）</h3>
                         <p class="text-gray-600 mb-4">中美签订的通商条约，规定领事裁判权、五口通商等，美国获取与英方近似之特权。</p>
                         <div class="flex flex-wrap gap-2">
@@ -979,7 +1153,8 @@
                     </div>
 
                     <!-- 黄埔条约 1844 法国 -->
-                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="whampoa1844" data-type="commerce" data-country="france">
+                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="whampoa1844"
+                        data-type="commerce" data-country="france">
                         <h3 class="text-xl font-bold mb-2 text-dark">《黄埔条约》（1844）</h3>
                         <p class="text-gray-600 mb-4">中法签订的通商条约，除通商外亦赋予教士在华传教的便利，为日后传教活动铺路。</p>
                         <div class="flex flex-wrap gap-2">
@@ -990,7 +1165,8 @@
                     </div>
 
                     <!-- 中俄勘分西北界约记 1864 俄国 边界 -->
-                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="tarbagatai1864" data-type="border" data-country="russia">
+                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6"
+                        data-treaty="tarbagatai1864" data-type="border" data-country="russia">
                         <h3 class="text-xl font-bold mb-2 text-dark">《中俄勘分西北界约记》（1864）</h3>
                         <p class="text-gray-600 mb-4">进一步划定中俄西北边界，大量土地划归俄国，中方在西北边界再度失地。</p>
                         <div class="flex flex-wrap gap-2">
@@ -1001,7 +1177,8 @@
                     </div>
 
                     <!-- 辛丑条约 1901 多国 -->
-                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="xinchou1901" data-type="agreement" data-country="all">
+                    <div class="treaty-card bg-white rounded-lg shadow-md overflow-hidden p-6" data-treaty="xinchou1901"
+                        data-type="agreement" data-country="all">
                         <h3 class="text-xl font-bold mb-2 text-dark">《辛丑条约》（1901）</h3>
                         <p class="text-gray-600 mb-4">八国联军侵华后签订的《拳乱期间赔款专约》等议定书，巨额赔款、军事等限制，标志清政府主权进一步丧失。</p>
                         <div class="flex flex-wrap gap-2">
@@ -1012,17 +1189,19 @@
                     </div>
                 </div>
             </section>
-            
+
             <!-- 历史朝代歌 -->
             <section id="dynasty-song" class="p-6 hidden">
                 <h1 class="text-3xl font-bold mb-6 text-dark">历史朝代歌</h1>
-                
+
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h2 class="text-2xl font-bold mb-4 text-dark">人教版经典朝代歌</h2>
                     <div class="p-4 bg-blue-50 rounded-lg mb-4">
                         <div class="flex justify-between items-center mb-2">
                             <p class="text-lg font-medium text-center">人教版经典朝代歌</p>
-                            <button class="play-button px-3 py-1 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors" onclick="speakText('三皇五帝始，尧舜禹相传。夏商与西周，东周分两段。春秋和战国，一统秦两汉。三分魏蜀吴，两晋前后延。南北朝并立，隋唐五代传。宋元明清后，皇朝至此完。')">
+                            <button
+                                class="play-button px-3 py-1 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors"
+                                onclick="speakText('三皇五帝始，尧舜禹相传。夏商与西周，东周分两段。春秋和战国，一统秦两汉。三分魏蜀吴，两晋前后延。南北朝并立，隋唐五代传。宋元明清后，皇朝至此完。')">
                                 <i class="fa fa-volume-up"></i> 播放语音
                             </button>
                         </div>
@@ -1039,24 +1218,30 @@
                         <h3 class="text-xl font-semibold mb-2 text-dark">详细解析</h3>
                         <ul class="list-disc list-inside text-gray-600 space-y-2">
                             <li><strong>三皇五帝始，尧舜禹相传</strong>：讲述了中国古代传说中的三皇五帝时期，以及尧、舜、禹的禅让制度。</li>
-                            <li><strong>夏商与西周，东周分两段</strong>：夏朝是中国历史上第一个世袭制王朝，商朝是中国历史上第二个朝代，西周是中国历史上第三个朝代，东周分为春秋和战国两个时期。</li>
-                            <li><strong>春秋和战国，一统秦两汉</strong>：春秋时期是中国历史上诸侯争霸的时期，战国时期是中国历史上七雄并立的时期，秦朝统一了中国，汉朝分为西汉和东汉两个时期。</li>
+                            <li><strong>夏商与西周，东周分两段</strong>：夏朝是中国历史上第一个世袭制王朝，商朝是中国历史上第二个朝代，西周是中国历史上第三个朝代，东周分为春秋和战国两个时期。
+                            </li>
+                            <li><strong>春秋和战国，一统秦两汉</strong>：春秋时期是中国历史上诸侯争霸的时期，战国时期是中国历史上七雄并立的时期，秦朝统一了中国，汉朝分为西汉和东汉两个时期。
+                            </li>
                             <li><strong>三分魏蜀吴，两晋前后延</strong>：三国时期是中国历史上魏、蜀、吴三个国家鼎立的时期，晋朝分为西晋和东晋两个时期。</li>
-                            <li><strong>南北朝并立，隋唐五代传</strong>：南北朝是中国历史上南方与北方各自政权并立的时期，隋朝统一了中国，唐朝是中国历史上最强盛的朝代之一，五代十国是中国历史上的一个分裂时期。</li>
-                            <li><strong>宋元明清后，皇朝至此完</strong>：宋朝是中国历史上经济、科技、文化高度发达的时期，元朝是中国历史上第一个由少数民族建立的大一统王朝，明朝是中国历史上最后一个由汉族建立的大一统王朝，清朝是中国历史上最后一个封建王朝。</li>
+                            <li><strong>南北朝并立，隋唐五代传</strong>：南北朝是中国历史上南方与北方各自政权并立的时期，隋朝统一了中国，唐朝是中国历史上最强盛的朝代之一，五代十国是中国历史上的一个分裂时期。
+                            </li>
+                            <li><strong>宋元明清后，皇朝至此完</strong>：宋朝是中国历史上经济、科技、文化高度发达的时期，元朝是中国历史上第一个由少数民族建立的大一统王朝，明朝是中国历史上最后一个由汉族建立的大一统王朝，清朝是中国历史上最后一个封建王朝。
+                            </li>
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h2 class="text-2xl font-bold mb-4 text-dark">其他版本朝代歌</h2>
-                    
+
                     <div class="mb-6">
                         <h3 class="text-xl font-semibold mb-2 text-dark">苏教版朝代歌</h3>
                         <div class="p-4 bg-green-50 rounded-lg mb-4">
                             <div class="flex justify-between items-center mb-2">
                                 <p class="text-center">苏教版朝代歌</p>
-                                <button class="play-button px-3 py-1 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors" onclick="speakText('唐尧虞舜夏商周，春秋战国乱悠悠。秦汉三国晋统一，南朝北朝是对头。隋唐五代又十国，宋元明清帝王休。')">
+                                <button
+                                    class="play-button px-3 py-1 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors"
+                                    onclick="speakText('唐尧虞舜夏商周，春秋战国乱悠悠。秦汉三国晋统一，南朝北朝是对头。隋唐五代又十国，宋元明清帝王休。')">
                                     <i class="fa fa-volume-up"></i> 播放语音
                                 </button>
                             </div>
@@ -1067,13 +1252,15 @@
                             </p>
                         </div>
                     </div>
-                    
+
                     <div class="mb-6">
                         <h3 class="text-xl font-semibold mb-2 text-dark">简易版朝代歌</h3>
                         <div class="p-4 bg-yellow-50 rounded-lg mb-4">
                             <div class="flex justify-between items-center mb-2">
                                 <p class="text-center">简易版朝代歌</p>
-                                <button class="play-button px-3 py-1 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors" onclick="speakText('夏商西周继，春秋战国承。秦后西东汉，三国西东晋。两晋南北朝，隋唐大一统。五代和十国，宋辽与夏金。元明清三代，中国疆土定。')">
+                                <button
+                                    class="play-button px-3 py-1 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors"
+                                    onclick="speakText('夏商西周继，春秋战国承。秦后西东汉，三国西东晋。两晋南北朝，隋唐大一统。五代和十国，宋辽与夏金。元明清三代，中国疆土定。')">
                                     <i class="fa fa-volume-up"></i> 播放语音
                                 </button>
                             </div>
@@ -1086,13 +1273,15 @@
                             </p>
                         </div>
                     </div>
-                    
+
                     <div>
                         <h3 class="text-xl font-semibold mb-2 text-dark">网络流行版朝代歌</h3>
                         <div class="p-4 bg-purple-50 rounded-lg mb-4">
                             <div class="flex justify-between items-center mb-2">
                                 <p class="text-center">网络流行版朝代歌</p>
-                                <button class="play-button px-3 py-1 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors" onclick="speakText('夏商西周东周分，春秋战国秦一统。西汉东汉三国争，西晋东晋南北朝。隋唐盛世五代传，宋元明清帝王终。')">
+                                <button
+                                    class="play-button px-3 py-1 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors"
+                                    onclick="speakText('夏商西周东周分，春秋战国秦一统。西汉东汉三国争，西晋东晋南北朝。隋唐盛世五代传，宋元明清帝王终。')">
                                     <i class="fa fa-volume-up"></i> 播放语音
                                 </button>
                             </div>
@@ -1104,7 +1293,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h2 class="text-2xl font-bold mb-4 text-dark">记忆技巧</h2>
                     <ul class="list-disc list-inside text-gray-600 space-y-2">
@@ -1116,51 +1305,70 @@
                     </ul>
                 </div>
             </section>
-            
+
             <!-- AI历史问答 -->
             <section id="ai-assistant" class="p-6 hidden">
                 <h1 class="text-3xl font-bold mb-6 text-dark">AI历史问答</h1>
-                
+
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold mb-4 text-dark">历史问题咨询</h2>
                         <p class="text-gray-600 mb-4">你可以向AI助手咨询任何关于中国历史的问题，AI助手会尽力为你解答。</p>
-                        
+
                         <div class="mb-4">
                             <label for="user-question" class="block text-gray-700 mb-2">你的问题：</label>
                             <div class="flex">
-                                <input type="text" id="user-question" class="flex-1 border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="例如：请介绍一下丝绸之路...">
-                                <button id="send-question" class="bg-primary text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                                <input type="text" id="user-question"
+                                    class="flex-1 border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                    placeholder="例如：请介绍一下丝绸之路...">
+                                <button id="send-question"
+                                    class="bg-primary text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
                                     <i class="fa fa-paper-plane mr-2"></i>发送
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="mb-4">
                             <p class="text-gray-700 mb-2">推荐问题：</p>
                             <div class="flex flex-wrap gap-2">
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">请介绍一下丝绸之路</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">王安石变法的主要内容是什么</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">鸦片战争的原因和影响</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">三国时期有哪些主要人物</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">科举制度的发展历程</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">长城的修建历程与作用</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">秦朝统一与制度建设有哪些</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">汉武帝的改革和对外扩张</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">唐朝科举制度的特点与影响</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">宋朝的经济与科技成就</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">元朝的行省制度如何运作</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">明朝的海禁政策与郑和下西洋</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">清朝的闭关政策与洋务运动</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">太平天国运动的原因与影响</button>
-                                <button class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">戊戌变法的主要内容和失败原因</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">请介绍一下丝绸之路</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">王安石变法的主要内容是什么</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">鸦片战争的原因和影响</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">三国时期有哪些主要人物</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">科举制度的发展历程</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">长城的修建历程与作用</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">秦朝统一与制度建设有哪些</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">汉武帝的改革和对外扩张</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">唐朝科举制度的特点与影响</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">宋朝的经济与科技成就</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">元朝的行省制度如何运作</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">明朝的海禁政策与郑和下西洋</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">清朝的闭关政策与洋务运动</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">太平天国运动的原因与影响</button>
+                                <button
+                                    class="recommended-question px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm">戊戌变法的主要内容和失败原因</button>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div>
                         <h2 class="text-2xl font-bold mb-4 text-dark">对话记录</h2>
-                        <div id="chat-container" class="border border-gray-300 rounded-lg p-4 h-96 overflow-y-auto bg-gray-50">
+                        <div id="chat-container"
+                            class="border border-gray-300 rounded-lg p-4 h-96 overflow-y-auto bg-gray-50">
                             <div class="flex mb-4">
                                 <div class="bg-blue-100 rounded-lg p-3 max-w-[80%]">
                                     <p class="text-gray-800">你好！我是你的历史AI助手，可以回答你关于中国历史的问题。</p>
@@ -1181,7 +1389,7 @@
             </section>
         </main>
     </div>
-    
+
     <!-- 朝代详情模态框 -->
     <div id="dynasty-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full modal-container">
@@ -1196,14 +1404,15 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 故事详情模态框 -->
     <div id="story-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full modal-container">
             <div class="p-6 border-b border-gray-200 flex justify-between items-center modal-header">
                 <h2 id="story-modal-title" class="text-2xl font-bold text-dark">故事详情</h2>
                 <div class="flex items-center">
-                    <button id="play-story" class="play-button mr-4 px-3 py-1 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">
+                    <button id="play-story"
+                        class="play-button mr-4 px-3 py-1 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">
                         <i class="fa fa-volume-up"></i> 播放语音
                     </button>
                     <button id="close-story-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
@@ -1216,10 +1425,11 @@
             </div>
         </div>
     </div>
-    
+
     <!-- JavaScript -->
     <script src="js/data/dynastyData.js"></script>
     <script src="js/data/storyData.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
