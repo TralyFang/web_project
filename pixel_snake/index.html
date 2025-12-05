@@ -74,6 +74,30 @@
     .h1 {
       line-height:64px;
     }
+    
+    /* 移动端优化 */
+    @media (max-width: 640px) {
+      .mobile-text-sm {
+        font-size: 0.875rem;
+      }
+      .mobile-p-2 {
+        padding: 0.5rem;
+      }
+      .mobile-mt-4 {
+        margin-top: 1rem;
+      }
+    }
+    
+    /* 横屏优化 */
+    @media (orientation: landscape) and (max-height: 600px) {
+      .landscape-hide {
+        display: none;
+      }
+      .landscape-mt-2 {
+        margin-top: 0.5rem;
+      }
+    }
+    
     @layer utilities {
       .pixel-borders {
         box-shadow: 
@@ -139,57 +163,57 @@
 <body class="bg-dark min-h-screen flex flex-col items-center justify-center p-4 text-light overflow-hidden">
   <div class="w-full max-w-3xl mx-auto flex flex-col items-center">
     <!-- 游戏标题 -->
-    <h1 class="pixel-text text-4xl md:text-5xl font-bold text-center mb-4 text-accent line-height:64px" style="line-height: 64px;">SNAKE GAME</h1>
+    <h1 class="pixel-text text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-2 sm:mb-4 text-accent" style="line-height: 1.2;">SNAKE GAME</h1>
     
     <!-- 游戏容器 -->
-    <div id="game-container" class="relative overflow-hidden pixel-borders transition-all duration-300">
+    <div id="game-container" class="relative overflow-hidden pixel-borders transition-all duration-300 mx-auto" style="max-width: 100%;">
       <!-- 游戏画布 -->
-      <canvas id="gameCanvas" class="block bg-dark grid-pattern"></canvas>
+      <canvas id="gameCanvas" class="block bg-dark grid-pattern w-full h-full"></canvas>
       
       <!-- 分数显示 -->
-      <div id="score-container" class="absolute top-2 right-2 px-3 py-1 rounded glass-effect pixel-text text-xl">
-        分数: <span id="score" class="text-accent" style="color: rgb(14, 255, 55); font-size: 24px;">0</span>
+      <div id="score-container" class="absolute top-1 sm:top-2 right-1 sm:right-2 px-2 sm:px-3 py-0.5 sm:py-1 rounded glass-effect pixel-text text-base sm:text-xl">
+        分数: <span id="score" class="text-accent" style="color: rgb(14, 255, 55);">0</span>
       </div>
       
       <!-- 游戏开始遮罩 -->
       <div id="start-screen" class="absolute inset-0 flex flex-col items-center justify-center bg-dark bg-opacity-80 z-10">
-        <button id="start-button" class="pixel-button" style="font-size: 24px;">START</button>
+        <button id="start-button" class="pixel-button text-lg sm:text-xl md:text-2xl px-4 sm:px-6 py-2 sm:py-3">START</button>
       </div>
       
       <!-- 游戏结束遮罩 -->
       <div id="game-over-screen" class="absolute inset-0 flex flex-col items-center justify-center bg-dark bg-opacity-80 z-10 hidden">
-        <h2 class="pixel-text text-4xl mb-4 text-primary animate-blink" style="font-weight: bold;">GAME OVER</h2>
-        <p class="pixel-text text-xl mb-2">最终得分: <span id="final-score" class="text-accent">0</span></p>
-        <button id="restart-button" class="pixel-button mt-6" style="font-size: 24px;">RESTART</button>
+        <h2 class="pixel-text text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-4 text-primary animate-blink font-bold">GAME OVER</h2>
+        <p class="pixel-text text-base sm:text-lg md:text-xl mb-1 sm:mb-2">最终得分: <span id="final-score" class="text-accent">0</span></p>
+        <button id="restart-button" class="pixel-button text-lg sm:text-xl md:text-2xl px-4 sm:px-6 py-2 sm:py-3 mt-4 sm:mt-6">RESTART</button>
       </div>
     </div>
     
     <!-- 操作说明 -->
-    <div class="mt-6 px-4 py-3 glass-effect w-full pixel-text">
+    <div class="mt-4 sm:mt-6 px-3 sm:px-4 py-2 sm:py-3 glass-effect w-full pixel-text text-sm sm:text-base">
       <p class="text-center">使用 <span class="text-accent" style="color: rgb(14, 255, 55);">方向键 ↑ ↓ ← →</span> 控制蛇的移动，按空格键暂停</p>
-      <p class="text-center mt-2">吃到食物得分，蛇身会变长</p>
+      <p class="text-center mt-1 sm:mt-2">吃到食物得分，蛇身会变长</p>
     </div>
     
     <!-- 移动端控制按钮 -->
-    <div id="mobile-controls" class="mt-6 grid grid-cols-3 gap-3 w-full max-w-xs">
+    <div id="mobile-controls" class="mt-6 grid grid-cols-3 gap-3 w-full max-w-xs sm:max-w-sm">
       <div class="col-start-2">
-        <button id="up-button" class="w-full h-16 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
-          <i class="fa fa-arrow-up text-2xl"></i>
+        <button id="up-button" class="w-full h-16 sm:h-14 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
+          <i class="fa fa-arrow-up text-2xl sm:text-xl"></i>
         </button>
       </div>
       <div class="col-start-1">
-        <button id="left-button" class="w-full h-16 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
-          <i class="fa fa-arrow-left text-2xl"></i>
+        <button id="left-button" class="w-full h-16 sm:h-14 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
+          <i class="fa fa-arrow-left text-2xl sm:text-xl"></i>
         </button>
       </div>
       <div class="col-start-2">
-        <button id="down-button" class="w-full h-16 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
-          <i class="fa fa-arrow-down text-2xl"></i>
+        <button id="down-button" class="w-full h-16 sm:h-14 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
+          <i class="fa fa-arrow-down text-2xl sm:text-xl"></i>
         </button>
       </div>
       <div class="col-start-3">
-        <button id="right-button" class="w-full h-16 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
-          <i class="fa fa-arrow-right text-2xl"></i>
+        <button id="right-button" class="w-full h-16 sm:h-14 md:h-12 pixel-button flex items-center justify-center active:bg-opacity-70 active:scale-95">
+          <i class="fa fa-arrow-right text-2xl sm:text-xl"></i>
         </button>
       </div>
     </div>
@@ -259,6 +283,9 @@
     
     // 初始化游戏
     function initGame() {
+      // 检测设备类型并进行优化
+      optimizeForDevice();
+      
       // 设置画布
       setupCanvas();
       
@@ -272,6 +299,35 @@
       resetGameState();
     }
     
+    // 根据设备类型进行优化
+    function optimizeForDevice() {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const isTablet = /iPad|Android(?!.*Mobile)|Tablet|Silk/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        // 移动设备优化
+        document.body.classList.add('mobile-optimized');
+        
+        // 调整触摸目标大小
+        const style = document.createElement('style');
+        style.textContent = `
+          .mobile-optimized button {
+            min-height: 44px;
+            min-width: 44px;
+          }
+          .mobile-optimized #mobile-controls button {
+            min-height: 60px;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+      
+      if (isTablet) {
+        // 平板设备优化
+        document.body.classList.add('tablet-optimized');
+      }
+    }
+    
 
     
     // 设置画布
@@ -279,13 +335,77 @@
       gameState.canvas = elements.canvas;
       gameState.ctx = gameState.canvas.getContext('2d');
       
-      // 设置画布大小为750px x 540px（25x18格）
-      gameState.canvas.width = 750;
-      gameState.canvas.height = 540;
+      // 动态计算画布尺寸，适配手机屏幕
+      calculateCanvasSize();
       
-      // 计算网格数量（25x18）
+      // 计算网格数量
       gameState.gridWidth = Math.floor(gameState.canvas.width / config.gridSize);
       gameState.gridHeight = Math.floor(gameState.canvas.height / config.gridSize);
+    }
+    
+    // 动态计算画布尺寸
+    function calculateCanvasSize() {
+      // 获取游戏容器的可用空间
+      const container = elements.gameContainer;
+      const containerRect = container.getBoundingClientRect();
+      
+      // 计算可用空间（减去内边距）
+      const availableWidth = Math.min(containerRect.width, window.innerWidth - 32); // 减去16px边距
+      const availableHeight = Math.min(containerRect.height, window.innerHeight - 200); // 减去标题和按钮空间
+      
+      // 根据屏幕尺寸调整网格大小
+      adjustGridSizeForScreen();
+      
+      // 保持原始宽高比例（750:540 ≈ 1.3889）
+      const targetRatio = 750 / 540;
+      
+      let canvasWidth, canvasHeight;
+      
+      if (availableWidth / availableHeight > targetRatio) {
+        // 宽度充足，以高度为基准
+        canvasHeight = Math.floor(availableHeight);
+        canvasWidth = Math.floor(canvasHeight * targetRatio);
+      } else {
+        // 高度充足，以宽度为基准
+        canvasWidth = Math.floor(availableWidth);
+        canvasHeight = Math.floor(canvasWidth / targetRatio);
+      }
+      
+      // 确保画布尺寸是网格大小的整数倍
+      canvasWidth = Math.floor(canvasWidth / config.gridSize) * config.gridSize;
+      canvasHeight = Math.floor(canvasHeight / config.gridSize) * config.gridSize;
+      
+      // 设置最小尺寸
+      const minWidth = 15 * config.gridSize; // 至少15格宽
+      const minHeight = 10 * config.gridSize; // 至少10格高
+      
+      if (canvasWidth < minWidth) canvasWidth = minWidth;
+      if (canvasHeight < minHeight) canvasHeight = minHeight;
+      
+      // 设置画布尺寸
+      gameState.canvas.width = canvasWidth;
+      gameState.canvas.height = canvasHeight;
+      
+      // 更新游戏容器尺寸
+      container.style.width = canvasWidth + 'px';
+      container.style.height = canvasHeight + 'px';
+    }
+    
+    // 根据屏幕尺寸调整网格大小
+    function adjustGridSizeForScreen() {
+      const isMobile = window.innerWidth <= 768;
+      const isSmallScreen = window.innerWidth <= 480;
+      
+      if (isSmallScreen) {
+        // 超小屏幕使用更小的网格
+        config.gridSize = 24;
+      } else if (isMobile) {
+        // 移动设备使用中等网格
+        config.gridSize = 28;
+      } else {
+        // 桌面设备使用原始网格大小
+        config.gridSize = 30;
+      }
     }
     
     // 检查是否为移动设备
@@ -383,13 +503,79 @@
       document.getElementById('reset-food-image').addEventListener('click', resetFoodImage);
       
       // 窗口大小改变时重新设置画布
-      // 窗口大小改变时重新设置画布（保持750x540大小）
-      window.addEventListener('resize', () => {
-        if (!gameState.gameLoop) { // 只有在游戏未运行时才调整
-          setupCanvas();
-          drawGame();
+      // 窗口大小改变时重新设置画布
+      window.addEventListener('resize', handleResize);
+      
+      // 屏幕方向变化时重新设置画布
+      window.addEventListener('orientationchange', handleResize);
+    }
+    
+    // 处理窗口大小和方向变化
+    function handleResize() {
+      // 防抖处理，避免频繁重绘
+      clearTimeout(window.resizeTimer);
+      window.resizeTimer = setTimeout(() => {
+        // 保存旧的网格尺寸
+        const oldGridWidth = gameState.gridWidth;
+        const oldGridHeight = gameState.gridHeight;
+        
+        // 重新计算画布尺寸
+        calculateCanvasSize();
+        
+        // 更新网格数量
+        gameState.gridWidth = Math.floor(gameState.canvas.width / config.gridSize);
+        gameState.gridHeight = Math.floor(gameState.canvas.height / config.gridSize);
+        
+        // 如果游戏正在运行，需要调整游戏状态
+        if (gameState.gameLoop && !gameState.isGameOver && !gameState.isPaused) {
+          // 检查当前食物位置是否有效
+          const food = gameState.food;
+          if (food.x >= gameState.gridWidth || food.y >= gameState.gridHeight) {
+            generateFood();
+          }
+          
+          // 检查蛇的位置是否有效，如果无效则重置游戏
+          const snakeOutOfBounds = gameState.snake.some(segment => 
+            segment.x >= gameState.gridWidth || segment.y >= gameState.gridHeight
+          );
+          
+          if (snakeOutOfBounds) {
+            // 蛇超出边界，重新开始游戏
+            resetGameState();
+            gameLoop();
+          }
         }
-      });
+        
+        // 优化横屏显示
+        optimizeLandscapeDisplay();
+        
+        // 重绘游戏
+        drawGame();
+      }, 250);
+    }
+    
+    // 优化横屏显示
+    function optimizeLandscapeDisplay() {
+      const isLandscape = window.innerWidth > window.innerHeight;
+      const isSmallScreen = window.innerHeight < 600;
+      
+      if (isLandscape && isSmallScreen) {
+        // 横屏且屏幕较小时，隐藏一些元素以节省空间
+        document.querySelectorAll('.landscape-hide').forEach(el => {
+          el.style.display = 'none';
+        });
+        
+        // 调整游戏容器边距
+        elements.gameContainer.style.marginTop = '0.5rem';
+      } else {
+        // 恢复显示
+        document.querySelectorAll('.landscape-hide').forEach(el => {
+          el.style.display = '';
+        });
+        
+        // 恢复边距
+        elements.gameContainer.style.marginTop = '';
+      }
     }
     
     // 处理食物图片上传
@@ -519,14 +705,22 @@
     
     // 重置游戏状态
     function resetGameState() {
+      // 确保网格尺寸已更新
+      gameState.gridWidth = Math.floor(gameState.canvas.width / config.gridSize);
+      gameState.gridHeight = Math.floor(gameState.canvas.height / config.gridSize);
+      
       // 初始化蛇
       const centerX = Math.floor(gameState.gridWidth / 2);
       const centerY = Math.floor(gameState.gridHeight / 2);
       
+      // 确保蛇的初始位置在网格范围内
+      const startX = Math.max(2, Math.min(centerX, gameState.gridWidth - 3));
+      const startY = Math.max(0, Math.min(centerY, gameState.gridHeight - 1));
+      
       gameState.snake = [
-        { x: centerX, y: centerY },
-        { x: centerX - 1, y: centerY },
-        { x: centerX - 2, y: centerY }
+        { x: startX, y: startY },
+        { x: startX - 1, y: startY },
+        { x: startX - 2, y: startY }
       ];
       
       // 初始方向
