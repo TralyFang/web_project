@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>儿童数学练习</title>
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({ id: "3NJ6qob9tWWEj2g3", ck: "3NJ6qob9tWWEj2g3", autoTrack: true, hashMode: true })</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4285F4',
+                        secondary: '#EA4335',
+                        accent: '#FBBC05',
+                        success: '#34A853',
+                        light: '#F5F7FA',
+                        dark: '#202124',
+                    },
+                    fontFamily: {
+                        comic: ['"Comic Sans MS"', '"Marker Felt"', 'cursive'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .btn-hover {
+                @apply transform transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95;
+            }
+            .bounce-in {
+                animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            .shake {
+                animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+            }
+            .float {
+                animation: float 3s ease-in-out infinite;
+            }
+            @keyframes bounce-in {
+                0% { transform: scale(0); opacity: 0; }
+                60% { transform: scale(1.1); opacity: 1; }
+                100% { transform: scale(1); }
+            }
+            @keyframes shake {
+                10%, 90% { transform: translateX(-1px); }
+                20%, 80% { transform: translateX(2px); }
+                30%, 50%, 70% { transform: translateX(-4px); }
+                40%, 60% { transform: translateX(4px); }
+            }
+            @keyframes float {
+                0% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+                100% { transform: translateY(0px); }
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen font-comic text-dark">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- 顶部得分区域 -->
+        <header class="mb-8 bg-white rounded-2xl shadow-lg p-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fa fa-star text-accent text-3xl mr-2 float"></i>
+                <h1 class="text-2xl md:text-3xl font-bold text-primary">数学小天才</h1>
+            </div>
+            <div class="bg-light rounded-full px-6 py-2 flex items-center">
+                <i class="fa fa-trophy text-secondary text-2xl mr-2"></i>
+                <span class="text-xl md:text-2xl font-bold">得分: <span id="score" class="text-success">0</span></span>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <main class="bg-white rounded-3xl shadow-xl p-6 md:p-10 mb-8">
+            <!-- 装饰元素 -->
+            <div class="absolute -top-6 -right-6 md:-top-10 md:-right-10 text-6xl md:text-8xl text-primary/20">
+                <i class="fa fa-calculator"></i>
+            </div>
+            <div class="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 text-6xl md:text-8xl text-secondary/20">
+                <i class="fa fa-pencil"></i>
+            </div>
+
+            <!-- 题目区域 -->
+            <div id="question-container" class="text-center mb-10">
+                <p class="text-xl text-gray-600 mb-4">来做一道数学题吧！</p>
+                <div class="bg-light rounded-2xl p-6 md:p-10 inline-block">
+                    <p id="question" class="text-5xl md:text-7xl font-bold mb-6 bounce-in">3 + 5 = ?</p>
+                    <div class="flex flex-col items-center">
+                        <input type="number" id="answer" placeholder="输入你的答案" 
+                            class="w-full max-w-xs text-3xl md:text-4xl text-center border-4 border-primary/30 rounded-xl p-3 focus:outline-none focus:border-primary transition-all duration-300">
+                        <p id="feedback" class="mt-4 text-xl font-bold hidden"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 按钮区域 -->
+            <div class="flex justify-center space-x-4">
+                <button id="submit-btn" class="bg-success text-white text-xl md:text-2xl font-bold py-4 px-10 rounded-full shadow btn-hover">
+                    <i class="fa fa-check mr-2"></i>提交答案
+                </button>
+                <button id="next-btn" class="bg-primary text-white text-xl md:text-2xl font-bold py-4 px-10 rounded-full shadow btn-hover hidden">
+                    <i class="fa fa-arrow-right mr-2"></i>下一题
+                </button>
+            </div>
+        </main>
+
+        <!-- 底部信息 -->
+        <footer class="text-center text-gray-500 text-sm">
+            <p>每次答对都会获得一颗星星哦！继续加油！</p>
+        </footer>
+    </div>
+
+    <script>
+        // 初始化变量
+        let score = 0;
+        let currentAnswer = null;
+        const operators = ['+', '-', '*', '/'];
+        const maxNumber = 20; // 最大数字范围
+
+        // DOM 元素
+        const questionEl = document.getElementById('question');
+        const answerEl = document.getElementById('answer');
+        const feedbackEl = document.getElementById('feedback');
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const scoreEl = document.getElementById('score');
+
+        // 生成新题目
+        function generateQuestion() {
+            // 随机选择运算符
+            const operator = operators[Math.floor(Math.random() * operators.length)];
+            
+            // 根据运算符确定数字范围
+            let num1, num2;
+            if (operator === '/') {
+                // 除法确保结果是整数
+                num2 = Math.floor(Math.random() * 9) + 1; // 1-9
+                const quotient = Math.floor(Math.random() * 10) + 1; // 1-10
+                num1 = num2 * quotient;
+            } else if (operator === '-') {
+                // 减法确保结果为正数
+                num1 = Math.floor(Math.random() * maxNumber) + 1;
+                num2 = Math.floor(Math.random() * num1) + 1;
+            } else {
+                num1 = Math.floor(Math.random() * maxNumber) + 1;
+                num2 = Math.floor(Math.random() * maxNumber) + 1;
+                
+                // 乘法限制数字大小
+                if (operator === '*') {
+                    num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+                    num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+                }
+            }
+
+            // 计算正确答案
+            switch (operator) {
+                case '+':
+                    currentAnswer = num1 + num2;
+                    break;
+                case '-':
+                    currentAnswer = num1 - num2;
+                    break;
+                case '*':
+                    currentAnswer = num1 * num2;
+                    break;
+                case '/':
+                    currentAnswer = num1 / num2;
+                    break;
+            }
+
+            // 显示题目
+            questionEl.textContent = `${num1} ${operator} ${num2} = ?`;
+            questionEl.classList.remove('bounce-in');
+            void questionEl.offsetWidth; // 触发重绘
+            questionEl.classList.add('bounce-in');
+            
+            // 清空答案输入框并聚焦
+            answerEl.value = '';
+            answerEl.focus();
+            
+            // 隐藏反馈和下一题按钮
+            feedbackEl.classList.add('hidden');
+            submitBtn.classList.remove('hidden');
+            nextBtn.classList.add('hidden');
+        }
+
+        // 检查答案
+        function checkAnswer() {
+            const userAnswer = parseFloat(answerEl.value);
+            
+            // 检查输入是否有效
+            if (isNaN(userAnswer)) {
+                feedbackEl.textContent = '请输入一个有效的数字！';
+                feedbackEl.className = 'mt-4 text-xl font-bold text-secondary shake';
+                feedbackEl.classList.remove('hidden');
+                answerEl.classList.add('border-secondary');
+                answerEl.classList.remove('border-primary');
+                return;
+            }
+            
+            // 检查答案是否正确
+            if (userAnswer === currentAnswer) {
+                // 答案正确
+                score++;
+                scoreEl.textContent = score;
+                feedbackEl.textContent = '🎉 太棒了，答对了！🎉';
+                feedbackEl.className = 'mt-4 text-xl font-bold text-success bounce-in';
+                
+                // 添加星星动画
+                const starsContainer = document.createElement('div');
+                starsContainer.className = 'fixed inset-0 pointer-events-none flex justify-center items-center z-50';
+                for (let i = 0; i < 10; i++) {
+                    const star = document.createElement('i');
+                    star.className = `fa fa-star absolute text-accent text-2xl`;
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.opacity = '0';
+                    star.style.animation = `float ${3 + Math.random() * 2}s ease-in-out infinite, fadeInOut 2s ease-in-out forwards`;
+                    starsContainer.appendChild(star);
+                }
+                document.body.appendChild(starsContainer);
+                setTimeout(() => {
+                    document.body.removeChild(starsContainer);
+                }, 2000);
+                
+                // 显示下一题按钮
+                submitBtn.classList.add('hidden');
+                nextBtn.classList.remove('hidden');
+                
+                // 自动切换到下一题
+                setTimeout(generateQuestion, 1500);
+            } else {
+                // 答案错误
+                feedbackEl.textContent = '再试一次！';
+                feedbackEl.className = 'mt-4 text-xl font-bold text-secondary shake';
+                feedbackEl.classList.remove('hidden');
+                answerEl.classList.add('border-secondary');
+                answerEl.classList.remove('border-primary');
+                
+                // 抖动输入框
+                answerEl.classList.add('shake');
+                setTimeout(() => {
+                    answerEl.classList.remove('shake');
+                }, 500);
+            }
+        }
+
+        // 添加键盘事件监听
+        answerEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (submitBtn.classList.contains('hidden')) {
+                    generateQuestion();
+                } else {
+                    checkAnswer();
+                }
+            }
+        });
+
+        // 添加输入事件监听
+        answerEl.addEventListener('input', () => {
+            if (answerEl.classList.contains('border-secondary')) {
+                answerEl.classList.remove('border-secondary');
+                answerEl.classList.add('border-primary');
+                feedbackEl.classList.add('hidden');
+            }
+        });
+
+        // 添加按钮事件监听
+        submitBtn.addEventListener('click', checkAnswer);
+        nextBtn.addEventListener('click', generateQuestion);
+
+        // 添加淡入淡出动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInOut {
+                0%, 100% { opacity: 0; }
+                50% { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 初始化页面
+        generateQuestion();
+    </script>
+</body>
+</html>
