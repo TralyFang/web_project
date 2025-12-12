@@ -1,5 +1,5 @@
 name = "whoisunder-worker"
-main = "whoisunder/worker.js"
+main = "worker.js"
 compatibility_date = "2025-12-12"
 
 # 替换为你的 KV Namespace ID
