@@ -12,5 +12,5 @@ compatibility_date = "2025-12-12"
 # 然后将生成的 ID 替换下面的示例值
 [[kv_namespaces]]
 binding = "GAMES_KV"
-id = "your_kv_namespace_id_here"          # 替换为你的生产环境 KV ID
-preview_id = "your_preview_kv_id_here"    # 替换为你的预览环境 KV ID
+#id = "your_kv_namespace_id_here"          # 替换为你的生产环境 KV ID
+#preview_id = "your_preview_kv_id_here"    # 替换为你的预览环境 KV ID
