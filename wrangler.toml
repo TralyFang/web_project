@@ -1,0 +1,9 @@
+name = "whoisunder-worker"
+main = "whoisunder/worker.js"
+compatibility_date = "2025-12-12"
+
+# 替换为你的 KV Namespace ID
+kv_namespaces = [
+  { binding = "GAMES_KV", id = "<REPLACE_WITH_KV_NAMESPACE_ID>" }
+]
+
