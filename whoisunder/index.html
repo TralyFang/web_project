@@ -268,8 +268,17 @@
   </div>
 
   <script>
-    // Cloudflare Workers API 根路径（替换为你的实际域名）
-    const WORKER_BASE = 'https://your-worker-subdomain.workers.dev';
+    // Cloudflare API 根路径
+    // - 若与当前站点同域（Pages Functions 同源），可留空，自动走相对路径
+    // - 若独立 Workers 域名，请填完整，例如 https://xxx.workers.dev
+    // - 若仍为占位符则跳过云端调用，退回本地存储
+    const WORKER_BASE = '';
+
+    // 构建请求 URL（支持同源相对路径）
+    function apiUrl(path) {
+      if (!WORKER_BASE) return path;
+      return `${WORKER_BASE}${path}`;
+    }
 
     // 本地房主 ID（用于查询最近记录）
     function getHostId() {
@@ -313,7 +322,8 @@
 
     // ============ Cloudflare 接口封装 ============
     async function saveGameToCloud(forceNew = false) {
-      if (!WORKER_BASE) return null;
+      // 未配置或仍为占位符则跳过
+      if (WORKER_BASE.includes('your-worker-subdomain')) return null;
       const payload = {
         hostId: getHostId(),
         word1: gameState.word1,
@@ -323,7 +333,7 @@
         blank: gameState.blankPlayers,
       };
       const useExisting = gameState.gameId && !forceNew;
-      const url = useExisting ? `${WORKER_BASE}/games/${gameState.gameId}` : `${WORKER_BASE}/games`;
+      const url = useExisting ? apiUrl(`/games/${gameState.gameId}`) : apiUrl('/games');
       const method = useExisting ? 'PUT' : 'POST';
       try {
         const resp = await fetch(url, {
@@ -344,9 +354,9 @@
     }
 
     async function fetchGameFromCloud(gameId) {
-      if (!WORKER_BASE || !gameId) return null;
+      if (WORKER_BASE.includes('your-worker-subdomain') || !gameId) return null;
       try {
-        const resp = await fetch(`${WORKER_BASE}/games/${gameId}`);
+        const resp = await fetch(apiUrl(`/games/${gameId}`));
         if (!resp.ok) return null;
         return await resp.json();
       } catch (e) {
@@ -356,10 +366,10 @@
     }
 
     async function fetchRecentFromCloud() {
-      if (!WORKER_BASE) return [];
+      if (WORKER_BASE.includes('your-worker-subdomain')) return [];
       const hostId = getHostId();
       try {
-        const resp = await fetch(`${WORKER_BASE}/games/recent?hostId=${encodeURIComponent(hostId)}`);
+        const resp = await fetch(apiUrl(`/games/recent?hostId=${encodeURIComponent(hostId)}`));
         if (!resp.ok) return [];
         return await resp.json();
       } catch (e) {
@@ -410,7 +420,12 @@
     // 初始化游戏
     async function initGame() {
       gameState.gameId = null;
-      await saveGameToCloud(true);
+      const cloud = await saveGameToCloud(true);
+      // 云端失败则本地产生一个 ID，保证可用
+      if (!cloud && !gameState.gameId) {
+        gameState.gameId = generateGameId();
+        localStorage.setItem('currentGameId', gameState.gameId);
+      }
       updateGameSettings();
     }
 
@@ -623,8 +638,12 @@
         document.getElementById('blankPlayers').value = gameState.blankPlayers;
       }
 
-      // 同步到 Cloudflare（不存在则新建）
+      // 同步到 Cloudflare（不存在则新建），失败则保持本地
       await saveGameToCloud(!gameState.gameId);
+      if (!gameState.gameId) {
+        gameState.gameId = generateGameId();
+        localStorage.setItem('currentGameId', gameState.gameId);
+      }
 
       // 重新分配身份
       redealCards();
@@ -842,6 +861,10 @@
     async function shareGame() {
       if (!gameState.gameId) {
         await saveGameToCloud(true);
+        if (!gameState.gameId) {
+          gameState.gameId = generateGameId();
+          localStorage.setItem('currentGameId', gameState.gameId);
+        }
         redealCards();
       } else {
         await saveGameToCloud(false);
