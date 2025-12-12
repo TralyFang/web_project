@@ -1,11 +1,9 @@
 name = "whoisunder"
-main = "worker.js"
+main = "worker.js"                 # Pages Functions 入口（_worker.js 等效）
 compatibility_date = "2025-12-12"
 
-# 替换为你的 KV Namespace ID
-# kv_namespaces = [
-#  { binding = "GAMES_KV", id = "<REPLACE_WITH_KV_NAMESPACE_ID>" }
-#]
+# Pages 静态资源目录（此处用当前 whoisunder 目录作为构建输出）
+pages_build_output_dir = "."
 
 # KV 命名空间绑定
 # 请使用 wrangler kv:namespace create "GAMES_KV" 创建你自己的 KV 命名空间
