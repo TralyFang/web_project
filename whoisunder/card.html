@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>线下卧底发牌器</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- 顶部栏 -->
+  <div class="bg-white shadow-sm sticky top-0 z-30">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="index.html" class="text-gray-700 hover:text-black">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+      <h1 class="text-lg font-semibold text-gray-900">线下卧底发牌器</h1>
+      <a href="rules.html" class="text-gray-700 hover:text-black">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <div id="cardContainer" class="bg-white rounded-2xl shadow-md p-6 sm:p-10 flex flex-col items-center justify-center min-h-[60vh]">
+      <div id="position" class="text-4xl sm:text-5xl font-semibold text-gray-800 mb-6">1号位</div>
+      <div id="word" class="text-5xl sm:text-6xl font-bold text-gray-900 tracking-wide">词语</div>
+      <div id="role" class="mt-4 text-lg text-gray-600"></div>
+    </div>
+
+    <div class="mt-6 flex gap-3">
+      <button onclick="window.location.href='index.html'" class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg font-semibold text-gray-900">返回发牌页</button>
+      <button onclick="hideWord()" class="flex-1 py-3 bg-black hover:bg-gray-800 text-white rounded-lg font-semibold">遮住词语</button>
+      <button onclick="reshuffleAndShow()" class="flex-1 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold">刷新新身份</button>
+    </div>
+  </div>
+
+  <script>
+    function loadCard() {
+      const params = new URLSearchParams(window.location.search);
+      const position = params.get('pos');
+      const gameId = params.get('game');
+      const fromSession = sessionStorage.getItem('lastPlayerCard');
+      let sessionCard = null;
+      if (fromSession) {
+        try { sessionCard = JSON.parse(fromSession); } catch (e) { sessionCard = null; }
+      }
+
+      let wordText = params.get('word') || sessionCard?.word || '词语';
+      let roleText = params.get('role') || sessionCard?.role || '';
+      let posText = position || sessionCard?.position || '1';
+
+      // 若带 gameId 且本地有存档，则以存档为准（可支持刷新拿新身份）
+      if (gameId) {
+        const saved = localStorage.getItem('game_' + gameId);
+        if (saved) {
+          try {
+            const game = JSON.parse(saved);
+            const target = game.players.find(p => String(p.position) === String(posText));
+            if (target) {
+              wordText = target.word || '（白板）';
+              roleText = target.role || '';
+              posText = target.position;
+            }
+            // 缓存下来，方便遮挡/还原
+            sessionStorage.setItem('lastPlayerCard', JSON.stringify({
+              position: posText,
+              word: wordText,
+              role: roleText
+            }));
+          } catch (e) {
+            // ignore parse error
+          }
+        }
+      }
+
+      document.getElementById('position').textContent = `${posText}号位`;
+      document.getElementById('word').textContent = wordText;
+      document.getElementById('role').textContent = roleText ? `身份：${roleText === 'undercover' ? '卧底' : roleText === 'blank' ? '白板' : '平民'}` : '';
+    }
+
+    function hideWord() {
+      const wordEl = document.getElementById('word');
+      if (wordEl.dataset.hidden === '1') {
+        wordEl.textContent = wordEl.dataset.word || '词语';
+        wordEl.dataset.hidden = '0';
+      } else {
+        wordEl.dataset.word = wordEl.textContent;
+        wordEl.textContent = '点击查看';
+        wordEl.dataset.hidden = '1';
+      }
+    }
+
+    // 重新洗牌并显示当前号位的新身份词
+    function reshuffleAndShow() {
+      const params = new URLSearchParams(window.location.search);
+      const gameId = params.get('game');
+      const pos = params.get('pos') || '1';
+      if (!gameId) {
+        alert('缺少 game 参数，无法刷新身份');
+        return;
+      }
+      const saved = localStorage.getItem('game_' + gameId);
+      if (!saved) {
+        alert('本地没有该房间的记录，无法刷新身份');
+        return;
+      }
+      try {
+        const game = JSON.parse(saved);
+        // 根据当前配置重新生成身份池
+        const total = game.totalPlayers;
+        const undercover = game.undercoverPlayers;
+        const blank = game.blankPlayers;
+        const civilian = total - undercover - blank;
+
+        const roles = [];
+        for (let i = 0; i < civilian; i++) roles.push('civilian');
+        for (let i = 0; i < undercover; i++) roles.push('undercover');
+        for (let i = 0; i < blank; i++) roles.push('blank');
+        for (let i = roles.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [roles[i], roles[j]] = [roles[j], roles[i]];
+        }
+
+        // 给已有玩家依次重新分配身份
+        game.players.forEach((p, idx) => {
+          const role = roles[idx] || 'civilian';
+          p.role = role;
+          if (role === 'civilian') p.word = game.word1;
+          else if (role === 'undercover') p.word = game.word2;
+          else p.word = '';
+        });
+
+        localStorage.setItem('game_' + gameId, JSON.stringify(game));
+
+        // 更新当前卡片显示
+        const current = game.players.find(p => String(p.position) === String(pos));
+        if (current) {
+          sessionStorage.setItem('lastPlayerCard', JSON.stringify({
+            position: current.position,
+            word: current.word || '（白板）',
+            role: current.role
+          }));
+          document.getElementById('position').textContent = `${current.position}号位`;
+          document.getElementById('word').textContent = current.word || '（白板）';
+          document.getElementById('word').dataset.hidden = '0';
+          document.getElementById('role').textContent = current.role ? `身份：${current.role === 'undercover' ? '卧底' : current.role === 'blank' ? '白板' : '平民'}` : '';
+        }
+      } catch (e) {
+        alert('刷新身份失败，请重试');
+      }
+    }
+
+    loadCard();
+  </script>
+</body>
+</html>
+

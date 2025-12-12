@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>谁是卧底发牌助手</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    }
+    .word-input {
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+    }
+    .word-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    .player-card {
+      transition: all 0.3s ease;
+    }
+    .player-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .role-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .role-civilian {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    .role-undercover {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    .role-blank {
+      background-color: #f3f4f6;
+      color: #374151;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <!-- 顶部导航栏 -->
+  <div class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-center">
+      <h1 class="text-lg font-semibold text-gray-900">谁是卧底发牌助手</h1>
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 py-6">
+    <!-- 游戏介绍 -->
+    <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+      <div class="flex items-start gap-3">
+        <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+        <div class="flex-1">
+          <p class="text-gray-700 text-sm leading-relaxed">
+            请先选择参与人数；然后输入词语或者随机词语，最后分享给好友进行发牌！！！
+          </p>
+        </div>
+        <a href="rules.html" class="text-blue-500 hover:text-blue-600 flex-shrink-0">
+          <div class="text-center">
+            <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-xs text-gray-600">玩法介绍</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 游戏设置 -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">游戏设置</h2>
+      
+      <!-- 参与总人数 -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">请选择参与总人数</label>
+        <div class="flex items-center gap-2">
+          <button onclick="changeTotalPlayers(-1)" class="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+            </svg>
+          </button>
+          <input type="number" id="totalPlayers" value="4" min="3" max="20" 
+                 class="flex-1 h-10 px-4 rounded-lg border border-gray-300 text-center font-semibold"
+                 onchange="updateGameSettings()">
+          <button onclick="changeTotalPlayers(1)" class="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 卧底人数 -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">请选择卧底人数</label>
+        <div class="flex items-center gap-2">
+          <button onclick="changeUndercoverPlayers(-1)" class="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+            </svg>
+          </button>
+          <input type="number" id="undercoverPlayers" value="1" min="0" max="5" 
+                 class="flex-1 h-10 px-4 rounded-lg border border-gray-300 text-center font-semibold"
+                 onchange="updateGameSettings()">
+          <button onclick="changeUndercoverPlayers(1)" class="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 白板人数 -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">请选择白板人数</label>
+        <div class="flex items-center gap-2">
+          <button onclick="changeBlankPlayers(-1)" class="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+            </svg>
+          </button>
+          <input type="number" id="blankPlayers" value="0" min="0" max="3" 
+                 class="flex-1 h-10 px-4 rounded-lg border border-gray-300 text-center font-semibold"
+                 onchange="updateGameSettings()">
+          <button onclick="changeBlankPlayers(1)" class="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 词语输入 -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+        <h2 class="text-lg font-semibold text-gray-900">输入或随机词语</h2>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <input type="text" id="word1" placeholder="词语1" value="暗恋" 
+                 class="word-input" onchange="updateGameSettings()">
+        </div>
+        <div>
+          <input type="text" id="word2" placeholder="词语2" value="备胎" 
+                 class="word-input" onchange="updateGameSettings()">
+        </div>
+      </div>
+
+      <button onclick="randomWords()" class="w-full py-3 rounded-lg border-2 border-gray-300 hover:bg-gray-50 flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+        </svg>
+        <span>随机词汇</span>
+      </button>
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="space-y-3 mb-6">
+      <button onclick="shareGame()" class="w-full py-4 bg-gray-200 hover:bg-gray-300 rounded-lg font-semibold text-gray-900 transition-colors">
+        分享到群聊进行发牌
+      </button>
+      <button onclick="redealCards()" class="w-full py-4 bg-black hover:bg-gray-800 text-white rounded-lg font-semibold transition-colors">
+        重新发牌
+      </button>
+      <button onclick="showRecentGames()" class="w-full py-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg font-semibold transition-colors border border-blue-200">
+        查看最近游戏记录
+      </button>
+    </div>
+
+    <!-- 记词列表 -->
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <div class="flex items-start gap-2 mb-4">
+        <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+        <div class="flex-1">
+          <h2 class="text-lg font-semibold text-gray-900 mb-2">记词列表</h2>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            你可以分享到群聊中，系统进行分发词汇；亦可以在下面的记词列表中根据号位依次点开展示给每个人看进行发牌
+          </p>
+        </div>
+      </div>
+
+      <div id="playerList" class="space-y-3">
+        <!-- 玩家列表将在这里动态生成 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 分享模态框 -->
+  <div id="shareModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-md w-full p-6">
+      <h3 class="text-lg font-semibold mb-4">分享游戏链接</h3>
+      <div class="mb-4">
+        <input type="text" id="shareLink" readonly 
+               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-sm">
+      </div>
+      <div class="flex gap-3">
+        <button onclick="copyShareLink()" class="flex-1 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold">
+          复制链接
+        </button>
+        <button onclick="closeShareModal()" class="flex-1 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-semibold">
+          关闭
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最近记录模态框 -->
+  <div id="recentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-2xl w-full p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold">最近 24 小时游戏记录</h3>
+        <button onclick="closeRecentModal()" class="text-gray-500 hover:text-gray-700">关闭</button>
+      </div>
+      <div id="recentList" class="space-y-3 max-h-[60vh] overflow-y-auto text-sm text-gray-700">
+        <p class="text-gray-500">加载中...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 加入游戏模态框 -->
+  <div id="joinGameModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-md w-full p-6">
+      <h3 class="text-lg font-semibold mb-4">加入游戏</h3>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">请输入您的名字</label>
+        <input type="text" id="playerNameInput" placeholder="例如：张三" 
+               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+               onkeypress="if(event.key==='Enter') confirmJoinGame()">
+      </div>
+      <div class="flex gap-3">
+        <button onclick="confirmJoinGame()" class="flex-1 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold">
+          确认加入
+        </button>
+        <button onclick="cancelJoinGame()" class="flex-1 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-semibold">
+          取消
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 玩家卡片详情模态框 -->
+  <div id="playerCardModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg max-w-sm w-full p-6 text-center">
+      <div class="mb-4">
+        <div id="modalPosition" class="text-2xl font-bold text-gray-900 mb-2"></div>
+        <div id="modalRole" class="mb-2"></div>
+        <div id="modalWord" class="text-xl font-semibold text-gray-800"></div>
+      </div>
+      <button onclick="closePlayerCardModal()" class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold">
+        确定
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Cloudflare Workers API 根路径（替换为你的实际域名）
+    const WORKER_BASE = 'https://your-worker-subdomain.workers.dev';
+
+    // 本地房主 ID（用于查询最近记录）
+    function getHostId() {
+      let hostId = localStorage.getItem('whoisunder_host_id');
+      if (!hostId) {
+        hostId = 'host_' + crypto.randomUUID();
+        localStorage.setItem('whoisunder_host_id', hostId);
+      }
+      return hostId;
+    }
+
+    // 游戏状态
+    let gameState = {
+      totalPlayers: 4,
+      undercoverPlayers: 1,
+      blankPlayers: 0,
+      word1: '暗恋',
+      word2: '备胎',
+      players: [],
+      gameId: null
+    };
+
+    // 随机词语库
+    const wordPairs = [
+      ['暗恋', '备胎'],
+      ['苹果', '梨子'],
+      ['警察', '小偷'],
+      ['医生', '护士'],
+      ['老师', '学生'],
+      ['老板', '员工'],
+      ['手机', '电脑'],
+      ['汽车', '自行车'],
+      ['咖啡', '茶'],
+      ['电影', '电视剧'],
+      ['春天', '秋天'],
+      ['太阳', '月亮'],
+      ['猫', '狗'],
+      ['书', '杂志'],
+      ['音乐', '舞蹈']
+    ];
+
+    // ============ Cloudflare 接口封装 ============
+    async function saveGameToCloud(forceNew = false) {
+      if (!WORKER_BASE) return null;
+      const payload = {
+        hostId: getHostId(),
+        word1: gameState.word1,
+        word2: gameState.word2,
+        total: gameState.totalPlayers,
+        undercover: gameState.undercoverPlayers,
+        blank: gameState.blankPlayers,
+      };
+      const useExisting = gameState.gameId && !forceNew;
+      const url = useExisting ? `${WORKER_BASE}/games/${gameState.gameId}` : `${WORKER_BASE}/games`;
+      const method = useExisting ? 'PUT' : 'POST';
+      try {
+        const resp = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!resp.ok) throw new Error('save failed');
+        const data = await resp.json();
+        gameState.gameId = data.gameId;
+        localStorage.setItem('currentGameId', gameState.gameId);
+        localStorage.setItem('game_' + gameState.gameId, JSON.stringify({ ...gameState, players: [] }));
+        return data;
+      } catch (e) {
+        console.warn('保存到 Cloudflare 失败', e);
+        return null;
+      }
+    }
+
+    async function fetchGameFromCloud(gameId) {
+      if (!WORKER_BASE || !gameId) return null;
+      try {
+        const resp = await fetch(`${WORKER_BASE}/games/${gameId}`);
+        if (!resp.ok) return null;
+        return await resp.json();
+      } catch (e) {
+        console.warn('获取 Cloudflare 游戏失败', e);
+        return null;
+      }
+    }
+
+    async function fetchRecentFromCloud() {
+      if (!WORKER_BASE) return [];
+      const hostId = getHostId();
+      try {
+        const resp = await fetch(`${WORKER_BASE}/games/recent?hostId=${encodeURIComponent(hostId)}`);
+        if (!resp.ok) return [];
+        return await resp.json();
+      } catch (e) {
+        console.warn('获取最近记录失败', e);
+        return [];
+      }
+    }
+    // ============================================
+
+    // 当前加入的游戏ID
+    let pendingJoinGameId = null;
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', async function() {
+      // 检查URL参数，判断是否是加入游戏
+      const urlParams = new URLSearchParams(window.location.search);
+      const joinGameId = urlParams.get('join');
+      const gameId = urlParams.get('game');
+      const needRefresh = urlParams.get('refresh') === '1';
+
+      if (joinGameId) {
+        // 显示加入游戏模态框
+        pendingJoinGameId = joinGameId;
+        document.getElementById('joinGameModal').classList.remove('hidden');
+        document.getElementById('playerNameInput').focus();
+      } else if (gameId) {
+        // 加载已有游戏
+        await loadGame(gameId);
+        if (needRefresh) {
+          // 刷新时重新洗牌，保留现有玩家
+          redealCards();
+        }
+      } else {
+        // 检查是否有游戏ID（从localStorage恢复）
+        const savedGameId = localStorage.getItem('currentGameId');
+        if (savedGameId) {
+          await loadGame(savedGameId);
+          if (needRefresh) {
+            redealCards();
+          }
+        } else {
+          // 创建新游戏
+          await initGame();
+        }
+      }
+    });
+
+    // 初始化游戏
+    async function initGame() {
+      gameState.gameId = null;
+      await saveGameToCloud(true);
+      updateGameSettings();
+    }
+
+    // 生成游戏ID
+    function generateGameId() {
+      return 'game_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // 加载游戏
+    async function loadGame(gameId) {
+      // 优先云端获取
+      const cloud = await fetchGameFromCloud(gameId);
+      if (cloud) {
+        gameState = { ...gameState, ...cloud, players: gameState.players || [] };
+        gameState.gameId = cloud.gameId;
+        localStorage.setItem('currentGameId', gameState.gameId);
+        localStorage.setItem('game_' + gameState.gameId, JSON.stringify(gameState));
+        updateUI();
+        updatePlayerList();
+        return;
+      }
+      // 其次本地
+      const savedGame = localStorage.getItem('game_' + gameId);
+      if (savedGame) {
+        const game = JSON.parse(savedGame);
+        gameState = { ...gameState, ...game };
+        updateUI();
+        updatePlayerList();
+      } else {
+        await initGame();
+      }
+    }
+
+    // 确认加入游戏
+    function confirmJoinGame() {
+      const playerName = document.getElementById('playerNameInput').value.trim();
+      if (!playerName) {
+        alert('请输入您的名字！');
+        return;
+      }
+
+      if (pendingJoinGameId) {
+        joinGame(pendingJoinGameId, playerName);
+        document.getElementById('joinGameModal').classList.add('hidden');
+        pendingJoinGameId = null;
+      }
+    }
+
+    // 取消加入游戏
+    function cancelJoinGame() {
+      document.getElementById('joinGameModal').classList.add('hidden');
+      pendingJoinGameId = null;
+      window.location.href = 'index.html';
+    }
+
+    // 加入游戏
+    async function joinGame(gameId, playerName) {
+      // 先尝试云端
+      const cloud = await fetchGameFromCloud(gameId);
+      let game = null;
+      if (cloud) {
+        game = { ...cloud, players: [] };
+      } else {
+        const savedGame = localStorage.getItem('game_' + gameId);
+        if (savedGame) {
+          game = JSON.parse(savedGame);
+        }
+      }
+
+      if (!game) {
+        alert('游戏不存在或已过期！');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // 检查是否已满员
+      if (game.players.length >= game.totalPlayers) {
+        alert('游戏已满员，无法加入！');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // 检查玩家是否已加入（通过名字或IP判断）
+      const existingPlayer = game.players.find(p => p.name === playerName);
+      if (existingPlayer) {
+        alert('该名字已被使用，请使用其他名字！');
+        document.getElementById('joinGameModal').classList.remove('hidden');
+        return;
+      }
+
+      // 分配身份和词语
+      const player = assignRoleAndWord(game, playerName);
+      // 如果返回的玩家不在列表中，则添加
+      if (!game.players.find(p => p.position === player.position && p.name === playerName)) {
+        game.players.push(player);
+      }
+        
+      // 保存游戏状态到本地
+      gameState = { ...game };
+      gameState.gameId = gameId;
+      localStorage.setItem('game_' + gameId, JSON.stringify(gameState));
+      localStorage.setItem('currentGameId', gameId);
+
+      // 存储玩家卡片信息并跳转落地页
+      sessionStorage.setItem('lastPlayerCard', JSON.stringify({
+        position: player.position,
+        word: player.word,
+        role: player.role
+      }));
+      window.location.href = `card.html?game=${gameId}&pos=${player.position}&word=${encodeURIComponent(player.word)}&role=${player.role}`;
+    }
+
+    // 分配身份和词语
+    function assignRoleAndWord(game, playerName) {
+      // 找到第一个占位玩家位置，或者使用下一个位置
+      let position = game.players.length + 1;
+      let placeholderIndex = -1;
+      
+      // 查找占位玩家
+      for (let i = 0; i < game.players.length; i++) {
+        if (game.players[i].isPlaceholder) {
+          placeholderIndex = i;
+          position = game.players[i].position;
+          break;
+        }
+      }
+
+      // 统计已分配的身份（排除占位玩家）
+      let assignedUndercover = 0;
+      let assignedBlank = 0;
+      let assignedCivilian = 0;
+
+      game.players.forEach(p => {
+        if (!p.isPlaceholder) {
+          if (p.role === 'undercover') assignedUndercover++;
+          else if (p.role === 'blank') assignedBlank++;
+          else assignedCivilian++;
+        }
+      });
+
+      // 确定新玩家的身份
+      let role, word;
+
+      if (assignedUndercover < game.undercoverPlayers) {
+        role = 'undercover';
+        word = game.word2;
+      } else if (assignedBlank < game.blankPlayers) {
+        role = 'blank';
+        word = '';
+      } else {
+        role = 'civilian';
+        word = game.word1;
+      }
+
+      // 如果有占位玩家，替换它；否则添加新玩家
+      if (placeholderIndex >= 0) {
+        game.players[placeholderIndex] = {
+          position: position,
+          name: playerName,
+          role: role,
+          word: word,
+          isPlaceholder: false
+        };
+        return game.players[placeholderIndex];
+      } else {
+        return {
+          position: position,
+          name: playerName,
+          role: role,
+          word: word,
+          isPlaceholder: false
+        };
+      }
+    }
+
+    // 显示玩家卡片
+    function showPlayerCard(player, position) {
+      document.getElementById('modalPosition').textContent = position + '号位';
+      
+      const roleElement = document.getElementById('modalRole');
+      if (player.role === 'civilian') {
+        roleElement.innerHTML = '<span class="role-badge role-civilian">平民</span>';
+      } else if (player.role === 'undercover') {
+        roleElement.innerHTML = '<span class="role-badge role-undercover">卧底</span>';
+      } else {
+        roleElement.innerHTML = '<span class="role-badge role-blank">白板</span>';
+      }
+
+      document.getElementById('modalWord').textContent = player.word || '（白板）';
+      document.getElementById('playerCardModal').classList.remove('hidden');
+    }
+
+    // 关闭玩家卡片模态框
+    function closePlayerCardModal() {
+      document.getElementById('playerCardModal').classList.add('hidden');
+    }
+
+    // 更新游戏设置
+    async function updateGameSettings() {
+      gameState.totalPlayers = parseInt(document.getElementById('totalPlayers').value) || 4;
+      gameState.undercoverPlayers = parseInt(document.getElementById('undercoverPlayers').value) || 0;
+      gameState.blankPlayers = parseInt(document.getElementById('blankPlayers').value) || 0;
+      gameState.word1 = document.getElementById('word1').value || '暗恋';
+      gameState.word2 = document.getElementById('word2').value || '备胎';
+
+      // 验证设置
+      if (gameState.undercoverPlayers + gameState.blankPlayers >= gameState.totalPlayers) {
+        alert('卧底人数和白板人数之和不能大于等于总人数！');
+        gameState.blankPlayers = Math.max(0, gameState.totalPlayers - gameState.undercoverPlayers - 1);
+        document.getElementById('blankPlayers').value = gameState.blankPlayers;
+      }
+
+      // 同步到 Cloudflare（不存在则新建）
+      await saveGameToCloud(!gameState.gameId);
+
+      // 重新分配身份
+      redealCards();
+    }
+
+    // 更新UI
+    function updateUI() {
+      document.getElementById('totalPlayers').value = gameState.totalPlayers;
+      document.getElementById('undercoverPlayers').value = gameState.undercoverPlayers;
+      document.getElementById('blankPlayers').value = gameState.blankPlayers;
+      document.getElementById('word1').value = gameState.word1;
+      document.getElementById('word2').value = gameState.word2;
+    }
+
+    // 改变总人数
+    function changeTotalPlayers(delta) {
+      const current = parseInt(document.getElementById('totalPlayers').value) || 4;
+      const newValue = Math.max(3, Math.min(20, current + delta));
+      document.getElementById('totalPlayers').value = newValue;
+      updateGameSettings();
+    }
+
+    // 改变卧底人数
+    function changeUndercoverPlayers(delta) {
+      const current = parseInt(document.getElementById('undercoverPlayers').value) || 0;
+      const newValue = Math.max(0, Math.min(5, current + delta));
+      document.getElementById('undercoverPlayers').value = newValue;
+      updateGameSettings();
+    }
+
+    // 改变白板人数
+    function changeBlankPlayers(delta) {
+      const current = parseInt(document.getElementById('blankPlayers').value) || 0;
+      const newValue = Math.max(0, Math.min(3, current + delta));
+      document.getElementById('blankPlayers').value = newValue;
+      updateGameSettings();
+    }
+
+    // 随机词语
+    function randomWords() {
+      const pair = wordPairs[Math.floor(Math.random() * wordPairs.length)];
+      document.getElementById('word1').value = pair[0];
+      document.getElementById('word2').value = pair[1];
+      updateGameSettings();
+    }
+
+    // 重新发牌
+    function redealCards() {
+      const total = gameState.totalPlayers;
+      const undercover = gameState.undercoverPlayers;
+      const blank = gameState.blankPlayers;
+      const civilian = total - undercover - blank;
+
+      // 如果有已加入的玩家，只重新分配身份，保留玩家信息
+      if (gameState.players.length > 0) {
+        // 生成身份数组
+        const roles = [];
+        for (let i = 0; i < civilian; i++) roles.push('civilian');
+        for (let i = 0; i < undercover; i++) roles.push('undercover');
+        for (let i = 0; i < blank; i++) roles.push('blank');
+
+        // 打乱顺序
+        for (let i = roles.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [roles[i], roles[j]] = [roles[j], roles[i]];
+        }
+
+        // 只重新分配已加入玩家的身份
+        gameState.players.forEach((player, index) => {
+          if (index < roles.length) {
+            const role = roles[index];
+            player.role = role;
+            if (role === 'civilian') {
+              player.word = gameState.word1;
+            } else if (role === 'undercover') {
+              player.word = gameState.word2;
+            } else {
+              player.word = '';
+            }
+          }
+        });
+      } else {
+        // 如果没有已加入的玩家，创建占位玩家列表
+        const roles = [];
+        for (let i = 0; i < civilian; i++) roles.push('civilian');
+        for (let i = 0; i < undercover; i++) roles.push('undercover');
+        for (let i = 0; i < blank; i++) roles.push('blank');
+
+        // 打乱顺序
+        for (let i = roles.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [roles[i], roles[j]] = [roles[j], roles[i]];
+        }
+
+        // 创建占位玩家（这些会在玩家加入时被替换）
+        gameState.players = [];
+        for (let i = 0; i < total; i++) {
+          let role = roles[i];
+          let word = '';
+          if (role === 'civilian') {
+            word = gameState.word1;
+          } else if (role === 'undercover') {
+            word = gameState.word2;
+          }
+
+          gameState.players.push({
+            position: i + 1,
+            name: `待加入`,
+            role: role,
+            word: word,
+            isPlaceholder: true
+          });
+        }
+      }
+
+      // 保存游戏状态
+      if (gameState.gameId) {
+        localStorage.setItem('game_' + gameState.gameId, JSON.stringify(gameState));
+      }
+
+      updatePlayerList();
+    }
+
+    // 更新玩家列表
+    function updatePlayerList() {
+      const container = document.getElementById('playerList');
+      container.innerHTML = '';
+
+      if (gameState.players.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">暂无玩家，请分享链接邀请好友加入</p>';
+        return;
+      }
+
+      gameState.players.forEach(player => {
+        const card = document.createElement('div');
+        const isPlaceholder = player.isPlaceholder;
+        card.className = `player-card rounded-lg p-4 border ${isPlaceholder ? 'bg-gray-100 border-gray-300 border-dashed' : 'bg-gray-50 border-gray-200 cursor-pointer'}`;
+        
+        if (!isPlaceholder) {
+          card.onclick = () => showPlayerCard(player, player.position);
+        }
+
+        let roleBadge = '';
+        if (player.role === 'civilian') {
+          roleBadge = '<span class="role-badge role-civilian">平民</span>';
+        } else if (player.role === 'undercover') {
+          roleBadge = '<span class="role-badge role-undercover">卧底</span>';
+        } else {
+          roleBadge = '<span class="role-badge role-blank">白板</span>';
+        }
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="font-semibold text-gray-900">${player.position}号位</span>
+                ${roleBadge}
+              </div>
+              <div class="text-sm ${isPlaceholder ? 'text-gray-400' : 'text-gray-600'}">${player.name}</div>
+              ${!isPlaceholder ? `<div class="text-lg font-semibold text-gray-800 mt-1">${player.word || '（白板）'}</div>` : '<div class="text-sm text-gray-400 mt-1">等待玩家加入</div>'}
+            </div>
+            ${!isPlaceholder ? `
+            <button onclick="event.stopPropagation(); removePlayer(${player.position})" 
+                    class="text-red-500 hover:text-red-600 p-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+            ` : ''}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      // 显示剩余名额
+      const remaining = gameState.totalPlayers - gameState.players.length;
+      if (remaining > 0) {
+        const remainingCard = document.createElement('div');
+        remainingCard.className = 'bg-blue-50 border-2 border-dashed border-blue-300 rounded-lg p-4 text-center';
+        remainingCard.innerHTML = `
+          <p class="text-blue-700 font-semibold">还有 ${remaining} 个名额</p>
+          <p class="text-blue-600 text-sm mt-1">分享链接邀请好友加入</p>
+        `;
+        container.appendChild(remainingCard);
+      } else {
+        const fullCard = document.createElement('div');
+        fullCard.className = 'bg-green-50 border-2 border-green-300 rounded-lg p-4 text-center';
+        fullCard.innerHTML = `
+          <p class="text-green-700 font-semibold">✓ 游戏已满员</p>
+          <p class="text-green-600 text-sm mt-1">可以开始发牌了</p>
+        `;
+        container.appendChild(fullCard);
+      }
+    }
+
+    // 移除玩家
+    function removePlayer(position) {
+      if (confirm('确定要移除该玩家吗？')) {
+        gameState.players = gameState.players.filter(p => p.position !== position);
+        // 重新编号
+        gameState.players.forEach((p, index) => {
+          p.position = index + 1;
+        });
+        
+        if (gameState.gameId) {
+          localStorage.setItem('game_' + gameState.gameId, JSON.stringify(gameState));
+        }
+        
+        updatePlayerList();
+      }
+    }
+
+    // 分享游戏
+    async function shareGame() {
+      if (!gameState.gameId) {
+        await saveGameToCloud(true);
+        redealCards();
+      } else {
+        await saveGameToCloud(false);
+      }
+
+      // 保存游戏状态
+      if (gameState.gameId) {
+        localStorage.setItem('game_' + gameState.gameId, JSON.stringify(gameState));
+      }
+
+      // 生成分享链接（不包含name参数，让用户自己输入）
+      const baseUrl = window.location.origin + window.location.pathname;
+      const shareLink = `${baseUrl}?join=${gameState.gameId}`;
+      
+      document.getElementById('shareLink').value = shareLink;
+      document.getElementById('shareModal').classList.remove('hidden');
+    }
+
+    // 复制分享链接
+    function copyShareLink() {
+      const linkInput = document.getElementById('shareLink');
+      linkInput.select();
+      document.execCommand('copy');
+      alert('链接已复制到剪贴板！');
+    }
+
+    // 关闭分享模态框
+    function closeShareModal() {
+      document.getElementById('shareModal').classList.add('hidden');
+    }
+
+    // 最近记录
+    async function showRecentGames() {
+      const listEl = document.getElementById('recentList');
+      listEl.innerHTML = '<p class="text-gray-500">加载中...</p>';
+      document.getElementById('recentModal').classList.remove('hidden');
+      const data = await fetchRecentFromCloud();
+      if (!data || data.length === 0) {
+        listEl.innerHTML = '<p class="text-gray-500">暂无记录</p>';
+        return;
+      }
+      listEl.innerHTML = '';
+      data.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'border border-gray-200 rounded-lg p-3';
+        const date = new Date(item.createdAt);
+        div.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div class="font-semibold text-gray-800">游戏ID：${item.gameId}</div>
+            <div class="text-xs text-gray-500">${date.toLocaleString()}</div>
+          </div>
+          <div class="text-gray-600 mt-1">词汇：${item.word1} / ${item.word2}</div>
+          <div class="text-gray-600 text-xs mt-1">人数：${item.total}，卧底：${item.undercover}，白板：${item.blank}</div>
+          <div class="mt-2 text-right">
+            <a class="text-blue-600 hover:underline text-sm" href="?game=${item.gameId}">打开</a>
+          </div>
+        `;
+        listEl.appendChild(div);
+      });
+    }
+
+    function closeRecentModal() {
+      document.getElementById('recentModal').classList.add('hidden');
+    }
+
+    // 检查URL参数，加载已有游戏（在DOMContentLoaded中已处理）
+  </script>
+</body>
+</html>
+
